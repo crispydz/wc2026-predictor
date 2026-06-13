@@ -36,13 +36,16 @@ function pmf(k, lam) {
 export function computeMatch(teamA, teamB) {
   const a = TD[teamA] || {elo:1600,att:0.90,def:1.05}
   const b = TD[teamB] || {elo:1600,att:0.90,def:1.05}
-  const eloAdj = 1 / (1 + Math.pow(10, (b.elo - a.elo) / 400))
-  const lamA = Math.max(0.25, a.att * b.def * (0.55 + eloAdj * 0.90))
-  const lamB = Math.max(0.25, b.att * a.def * (0.55 + (1 - eloAdj) * 0.90))
-  const rho = -0.12
-  const N = 9
 
-  // Build score matrix
+  const eloAdj  = 1 / (1 + Math.pow(10, (b.elo - a.elo) / 400))
+  const eloBoost = (eloAdj - 0.5) * 0.6  // ±0.30 max — soft ELO influence
+
+  const lamA = Math.max(0.30, Math.min(3.50, a.att * b.def * (1 + eloBoost)))
+  const lamB = Math.max(0.30, Math.min(3.50, b.att * a.def * (1 - eloBoost)))
+  const rho  = -0.12
+  const N    = 9
+
+  // Score matrix
   const mat = Array.from({length:N}, (_, i) =>
     Array.from({length:N}, (__, j) => {
       let p = pmf(i, lamA) * pmf(j, lamB)
@@ -53,41 +56,41 @@ export function computeMatch(teamA, teamB) {
       return Math.max(0, p)
     })
   )
-  const sum = mat.flat().reduce((s,v) => s+v, 0)
-  mat.forEach(row => row.forEach((_,j) => { row[j] /= sum }))
+  const total = mat.flat().reduce((s,v) => s+v, 0)
+  mat.forEach(row => row.forEach((_,j) => { row[j] /= total }))
 
   let hw=0, d=0, aw=0
   for (let i=0;i<N;i++) for (let j=0;j<N;j++) {
-    if (i>j) hw+=mat[i][j]; else if (i===j) d+=mat[i][j]; else aw+=mat[i][j]
+    if (i>j) hw+=mat[i][j]
+    else if (i===j) d+=mat[i][j]
+    else aw+=mat[i][j]
   }
 
-  // Most likely score CONSISTENT with most likely outcome
-  const outcome = hw>=d && hw>=aw ? 'home' : aw>=d && aw>=hw ? 'away' : 'draw'
+  // ✅ Score le plus probable GLOBAL (pas contraint à l'issue) → permet les nuls
   let maxP=0, bestI=1, bestJ=0
   for (let i=0;i<N;i++) for (let j=0;j<N;j++) {
-    const o = i>j?'home':i<j?'away':'draw'
-    if (o===outcome && mat[i][j]>maxP) { maxP=mat[i][j]; bestI=i; bestJ=j }
+    if (mat[i][j] > maxP) { maxP=mat[i][j]; bestI=i; bestJ=j }
   }
 
-  // Percentages that sum to exactly 100
+  // Top 5 scores
+  const scores = []
+  for (let i=0;i<N;i++) for (let j=0;j<N;j++)
+    scores.push({s:`${i}-${j}`, p:mat[i][j]})
+  scores.sort((a,b) => b.p - a.p)
+  const top5 = scores.slice(0,5).map(x => `${x.s} (${(x.p*100).toFixed(1)}%)`)
+
+  // ✅ Pourcentages qui font exactement 100%
   const hwR = Math.round(hw * 100)
   const awR = Math.round(aw * 100)
   const dR  = Math.max(0, 100 - hwR - awR)
 
-  // Top 5 most likely scores
-  const allScores = []
-  for (let i=0;i<N;i++) for (let j=0;j<N;j++)
-    allScores.push({score:`${i}-${j}`, p:mat[i][j]})
-  allScores.sort((a,b)=>b.p-a.p)
-  const top5 = allScores.slice(0,5).map(x=>`${x.score} (${(x.p*100).toFixed(1)}%)`)
-
   return {
     team_a: teamA, team_b: teamB,
-    home_win_prob:  hwR/100,
-    draw_prob:      dR/100,
-    away_win_prob:  awR/100,
-    expected_goals_a: Math.round(lamA*100)/100,
-    expected_goals_b: Math.round(lamB*100)/100,
+    home_win_prob:  hwR / 100,
+    draw_prob:      dR  / 100,
+    away_win_prob:  awR / 100,
+    expected_goals_a: Math.round(lamA * 100) / 100,
+    expected_goals_b: Math.round(lamB * 100) / 100,
     most_likely_score: `${bestI}-${bestJ}`,
     top5_scores: top5,
   }

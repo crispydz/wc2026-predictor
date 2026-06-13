@@ -213,30 +213,50 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ─── STAGE PROBABILITIES ─────────────────────── */}
-      <div className="card" style={{padding:'28px'}}>
-        <div style={{fontSize:18,fontWeight:800,color:'var(--text1)',marginBottom:20}}>
-          📊 Probabilités par phase — Top 8 favoris
-        </div>
-        <div style={{display:'flex',flexDirection:'column',gap:18}}>
-          {contenders.slice(0,8).map((c,i)=>(
-            <div key={c.team} style={{display:'flex',alignItems:'center',gap:14}}>
-              <span style={{color:'var(--text3)',fontSize:12,fontWeight:700,width:18}}>{i+1}</span>
-              <span style={{fontSize:28}}>{getFlag(c.team)}</span>
-              <span style={{fontSize:14,fontWeight:700,color:'var(--text1)',width:130,flexShrink:0}}>{c.team}</span>
-              <div style={{flex:1,display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:12}}>
-                {[['R16',c.qualify_r16,'#4D9FFF'],['QF',c.qualify_qf,'#7C3AED'],
-                  ['SF',c.qualify_sf,'#F97316'],['🏆',c.win_tournament,'#F5A623']].map(([l,v,col])=>(
-                  <div key={l}>
-                    <div style={{fontSize:10,color:'var(--text3)',marginBottom:3,fontWeight:600}}>{l}</div>
-                    <ProbabilityBar value={v} color={col} showPct/>
-                  </div>
-                ))}
+    {/* ─── STAGE PROBABILITIES ─────────────────────────── */}
+<div className="card" style={{ padding: '28px' }}>
+  <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text1)', marginBottom: 20 }}>
+    📊 Probabilités par phase — Top 8
+  </div>
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+    {contenders.slice(0, 8).map((c, i) => (
+      <div key={c.team} style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <span style={{ color: 'var(--text3)', fontSize: 12, fontWeight: 700, width: 20 }}>{i + 1}</span>
+        <span style={{ fontSize: 28 }}>{getFlag(c.team)}</span>
+        <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text1)', width: 130, flexShrink: 0 }}>
+          {c.team}
+        </span>
+        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14 }}>
+          {[
+            ['R16', c.qualify_r16,     '#4D9FFF'],
+            ['QF',  c.qualify_qf,      '#7C3AED'],
+            ['SF',  c.qualify_sf,      '#F97316'],
+            ['🏆',  c.win_tournament,  '#F5A623'],
+          ].map(([label, val, color]) => {
+            const pct = Math.min(100, Math.max(0, Math.round((val || 0) * 100)))
+            return (
+              <div key={label}>
+                <div style={{ display: 'flex', justifyContent: 'space-between',
+                              fontSize: 11, color: 'var(--text3)', marginBottom: 4 }}>
+                  <span style={{ fontWeight: 600 }}>{label}</span>
+                  <span style={{ fontWeight: 700, color }}>{pct}%</span>
+                </div>
+                <div style={{ height: 6, borderRadius: 99,
+                              background: 'rgba(255,255,255,0.07)', overflow: 'hidden' }}>
+                  <div style={{
+                    width: `${pct}%`, height: '100%', borderRadius: 99,
+                    background: `linear-gradient(90deg,${color}88,${color})`,
+                    transition: 'width 1s ease',
+                  }} />
+                </div>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
       </div>
+    ))}
+  </div>
+</div>
 
       {/* ─── GROUPES DE LA MORT ──────────────────────── */}
       <div className="card" style={{padding:'28px'}}>
