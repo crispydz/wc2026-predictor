@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { GROUPS, getFlag } from '../data/tournament'
 import { getChampionProb, computeMatch } from '../data/predictions_static'
-import ScoreHeatmap from '../components/ScoreHeatmap'
 import RadarComparison from '../components/RadarComparison'
 
 const ALL_TEAMS = Object.values(GROUPS).flatMap(g => g.teams).sort()
@@ -84,7 +83,6 @@ function computeAdjusted(teamA, teamB, injuredA, injuredB) {
 
 const TABS = [
   { id: 'proba',   label: '📊 Probabilités' },
-  { id: 'heatmap', label: '🔥 Heatmap' },
   { id: 'radar',   label: '🕸️ Radar' },
 ]
 
@@ -181,7 +179,7 @@ export default function Simulator() {
           ⚽ Simulateur de Match
         </h1>
         <p style={{ fontSize: 14, color: 'var(--text2)' }}>
-          Simule n'importe quel match · Gère les blessures · Heatmap de scores · Radar
+          Simule n'importe quel match · Gère les blessures · Radar
         </p>
       </div>
 
@@ -362,19 +360,6 @@ export default function Simulator() {
                 </div>
               </div>
             )}
-          </div>
-        )}
-
-        {tab === 'heatmap' && (
-          <div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text1)', marginBottom: 20 }}>
-              🔥 Heatmap — Probabilité de chaque score
-            </div>
-            <ScoreHeatmap
-              teamA={teamA} teamB={teamB}
-              lamA={result.expected_goals_a}
-              lamB={result.expected_goals_b}
-            />
           </div>
         )}
 
