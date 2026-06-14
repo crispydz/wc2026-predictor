@@ -6,38 +6,113 @@ import RadarComparison from '../components/RadarComparison'
 const ALL_TEAMS = Object.values(GROUPS).flatMap(g => g.teams).sort()
 
 const KEY_PLAYERS = {
-  Argentina: ['L. Messi', 'L. Martínez', 'J. Álvarez'],
-  France:    ['K. Mbappé', 'A. Griezmann', 'A. Tchouaméni'],
-  Brazil:    ['Vinícius Jr.', 'Rodrygo', 'Raphinha'],
-  England:   ['J. Bellingham', 'H. Kane', 'P. Foden'],
-  Spain:     ['Pedri', 'Gavi', 'L. Yamal'],
-  Portugal:  ['C. Ronaldo', 'B. Fernandes', 'R. Leão'],
-  Germany:   ['J. Musiala', 'F. Wirtz', 'M. Neuer'],
-  Belgium:   ['K. De Bruyne', 'R. Lukaku', 'T. Courtois'],
+  // ── Europe ──
+  France:      ['K. Mbappé', 'O. Dembélé', 'M. Olise', 'D. Doué'],
+  England:     ['J. Bellingham', 'H. Kane', 'P. Foden'],
+  Spain:       ['L. Yamal', 'Pedri', 'Gavi'],
+  Portugal:    ['C. Ronaldo', 'B. Fernandes', 'R. Leão'],
+  Germany:     ['J. Musiala', 'F. Wirtz', 'M. Neuer'],
+  Belgium:     ['K. De Bruyne', 'R. Lukaku', 'T. Courtois'],
   Netherlands: ['V. van Dijk', 'C. Gakpo', 'F. de Jong'],
-  Norway:    ['E. Haaland', 'M. Ødegaard', 'A. Sørloth'],
-  Egypt:     ['M. Salah', 'M. El-Shenawy'],
-  'South Korea': ['H. Son', 'M. Kim'],
-  Türkiye:   ['A. Güler', 'H. Çalhanoğlu'],
-  Colombia:  ['L. Díaz', 'J. Rodríguez'],
-  Uruguay:   ['D. Núñez', 'F. Valverde'],
-  Morocco:   ['A. Hakimi', 'H. Ziyech'],
-  Senegal:   ['S. Mané', 'I. Gueye'],
-  Japan:     ['T. Kubo', 'D. Kamada'],
-  Croatia:   ['L. Modrić', 'I. Perišić'],
+  Croatia:     ['L. Modrić', 'I. Gvardiol'],
+  Switzerland: ['G. Xhaka', 'N. Elvedi'],
+  Norway:      ['E. Haaland', 'M. Ødegaard'],
+  Austria:     ['M. Sabitzer', 'C. Baumgartner'],
+  Türkiye:     ['A. Güler', 'H. Çalhanoğlu'],
+  Sweden:      ['A. Isak', 'D. Kulusevski'],
+  Czechia:     ['P. Schick', 'T. Souček'],
+  Scotland:    ['A. Robertson', 'S. McTominay'],
+
+  // ── Amérique du Sud ──
+  Argentina:   ['L. Messi', 'L. Martínez', 'J. Álvarez', 'A. Mac Allister'],
+  Brazil:      ['Vinícius Jr.', 'Neymar', 'Raphinha'],
+  Uruguay:     ['D. Núñez', 'F. Valverde'],
+  Colombia:    ['L. Díaz', 'J. Rodríguez'],
+  Ecuador:     ['M. Caicedo', 'E. Valencia'],
+
+  // ── Amérique du Nord ──
+  USA:         ['C. Pulisic', 'W. McKennie', 'G. Reyna'],
+  Mexico:      ['H. Lozano', 'E. Álvarez'],
+  Canada:      ['A. Davies', 'J. David'],
+
+  // ── Afrique ──
+  Morocco:     ['A. Hakimi', 'H. Ziyech'],
+  Senegal:     ['S. Mané', 'I. Gueye'],
+  Egypt:       ['M. Salah', 'M. Maignan'],
+  "Ivory Coast":['S. Haller', 'F. Kessié'],
+  Algeria:     ['R. Mahrez', 'M. Amoura'],
+  Ghana:       ['M. Kudus', 'T. Partey'],
+
+  // ── Asie ──
+  Japan:       ['T. Kubo', 'D. Kamada'],
+  'South Korea':['H. Son', 'M. Kim'],
+  Iran:        ['M. Taremi', 'S. Azmoun'],
+  Australia:   ['M. Ryan', 'M. Duke'],
+  "Saudi Arabia":['S. Al-Dawsari'],
 }
 
 const INJURY_IMPACT = {
-  'L. Messi': 0.22, 'K. Mbappé': 0.19, 'E. Haaland': 0.28, 'M. Salah': 0.30,
-  'H. Son': 0.20, 'V. van Dijk': 0.12, 'K. De Bruyne': 0.18, 'J. Bellingham': 0.17,
-  'L. Díaz': 0.14, 'D. Núñez': 0.15, 'A. Güler': 0.14, 'Pedri': 0.13,
-  'J. Musiala': 0.15, 'B. Fernandes': 0.14, 'C. Ronaldo': 0.14, 'R. Lukaku': 0.12,
-  'Vinícius Jr.': 0.16, 'Rodrygo': 0.10, 'F. Wirtz': 0.12, 'L. Martínez': 0.13,
-  'A. Griezmann': 0.12, 'J. Álvarez': 0.10, 'H. Kane': 0.14, 'P. Foden': 0.11,
-  'L. Yamal': 0.14, 'Gavi': 0.11, 'M. Ødegaard': 0.14, 'A. Sørloth': 0.08,
-  'F. Valverde': 0.10, 'J. Rodríguez': 0.13, 'C. Gakpo': 0.11, 'F. de Jong': 0.10,
-  'A. Hakimi': 0.13, 'H. Ziyech': 0.11, 'S. Mané': 0.17, 'I. Gueye': 0.08,
-  'T. Kubo': 0.12, 'D. Kamada': 0.09, 'L. Modrić': 0.16, 'I. Perišić': 0.10,
+  // France — sans Griezmann
+  'K. Mbappé':   0.22, 'O. Dembélé': 0.16, 'M. Olise': 0.13, 'D. Doué': 0.10,
+
+  // Angleterre
+  'J. Bellingham': 0.17, 'H. Kane': 0.14, 'P. Foden': 0.11,
+
+  // Espagne
+  'L. Yamal': 0.18, 'Pedri': 0.13, 'Gavi': 0.11,
+
+  // Portugal
+  'C. Ronaldo': 0.14, 'B. Fernandes': 0.14, 'R. Leão': 0.12,
+
+  // Allemagne
+  'J. Musiala': 0.16, 'F. Wirtz': 0.14, 'M. Neuer': 0.08,
+
+  // Belgique
+  'K. De Bruyne': 0.19, 'R. Lukaku': 0.13, 'T. Courtois': 0.09,
+
+  // Pays-Bas
+  'V. van Dijk': 0.12, 'C. Gakpo': 0.11, 'F. de Jong': 0.10,
+
+  // Autres Europe
+  'L. Modrić': 0.17, 'I. Gvardiol': 0.09,
+  'G. Xhaka': 0.13, 'N. Elvedi': 0.08,
+  'E. Haaland': 0.30, 'M. Ødegaard': 0.14,
+  'A. Güler': 0.15, 'H. Çalhanoğlu': 0.12,
+  'A. Isak': 0.16, 'D. Kulusevski': 0.10,
+  'P. Schick': 0.14, 'T. Souček': 0.10,
+  'A. Robertson': 0.10, 'S. McTominay': 0.12,
+  'M. Sabitzer': 0.11, 'C. Baumgartner': 0.09,
+
+  // Argentine
+  'L. Messi': 0.24, 'L. Martínez': 0.14,
+  'J. Álvarez': 0.12, 'A. Mac Allister': 0.13,
+
+  // Brésil
+  'Vinícius Jr.': 0.20, 'Neymar': 0.16, 'Raphinha': 0.11,
+
+  // Autres Amérique du Sud
+  'D. Núñez': 0.15, 'F. Valverde': 0.12,
+  'L. Díaz': 0.14, 'J. Rodríguez': 0.13,
+  'M. Caicedo': 0.13, 'E. Valencia': 0.11,
+
+  // USA / Canada / Mexique
+  'C. Pulisic': 0.17, 'W. McKennie': 0.10, 'G. Reyna': 0.11,
+  'A. Davies': 0.18, 'J. David': 0.14,
+  'H. Lozano': 0.12, 'E. Álvarez': 0.10,
+
+  // Afrique
+  'A. Hakimi': 0.13, 'H. Ziyech': 0.11,
+  'S. Mané': 0.18, 'I. Gueye': 0.08,
+  'M. Salah': 0.30, 'R. Mahrez': 0.16,
+  'M. Kudus': 0.15, 'T. Partey': 0.10,
+  'S. Haller': 0.13, 'F. Kessié': 0.10,
+
+  // Asie
+  'H. Son': 0.22, 'M. Kim': 0.09,
+  'T. Kubo': 0.12, 'D. Kamada': 0.09,
+  'M. Taremi': 0.15, 'S. Azmoun': 0.10,
+  'M. Ryan': 0.07, 'M. Duke': 0.11,
+  'S. Al-Dawsari': 0.15,
 }
 
 function pmf(k, lam) {
