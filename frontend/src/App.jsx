@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, NavLink } from 'react-router-dom'
 import Dashboard    from './pages/Dashboard'
 import GroupStage   from './pages/GroupStage'
@@ -7,72 +7,86 @@ import TeamAnalysis from './pages/TeamAnalysis'
 import Simulator    from './pages/Simulator'
 
 const NAV = [
-  { to: '/',         label: 'Dashboard', icon: '📊' },
-  { to: '/groups',   label: 'Groupes',   icon: '🗂️' },
-  { to: '/knockout', label: 'Tableau',   icon: '🏆' },
-  { to: '/simulate', label: 'Simuler',   icon: '⚽' },
-  { to: '/teams',    label: 'Équipes',   icon: '🌍' },
+  { to:'/',         label:'Dashboard', icon:'📊' },
+  { to:'/groups',   label:'Groupes',   icon:'🗂️' },
+  { to:'/knockout', label:'Tableau',   icon:'🏆' },
+  { to:'/simulate', label:'Simuler',   icon:'⚽' },
+  { to:'/teams',    label:'Équipes',   icon:'🌍' },
 ]
 
 export default function App() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
+  useEffect(() => {
+    const fn = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', fn)
+    return () => window.removeEventListener('resize', fn)
+  }, [])
+
   return (
     <BrowserRouter>
-      <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
+      <div style={{ minHeight:'100vh', background:'var(--bg)' }}>
 
         <header className="glass sticky top-0 z-50">
           <div style={{
-            maxWidth: 1360, margin: '0 auto', padding: '0 24px',
-            display: 'flex', alignItems: 'center', gap: 20, height: 66,
+            maxWidth:1360, margin:'0 auto',
+            padding: isMobile ? '0 12px' : '0 24px',
+            display:'flex', alignItems:'center',
+            justifyContent:'space-between', height: isMobile ? 56 : 66,
           }}>
             {/* Logo */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+            <div style={{ display:'flex', alignItems:'center', gap:8, flexShrink:0 }}>
               <div style={{
-                width: 42, height: 42, borderRadius: 12,
-                background: 'linear-gradient(135deg,#E8271B,#FF5A50)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 22, boxShadow: '0 4px 16px rgba(232,39,27,0.4)',
+                width: isMobile?34:42, height: isMobile?34:42, borderRadius:10,
+                background:'linear-gradient(135deg,#E8271B,#FF5A50)',
+                display:'flex', alignItems:'center', justifyContent:'center',
+                fontSize: isMobile?18:22,
+                boxShadow:'0 4px 16px rgba(232,39,27,0.4)',
               }}>🏆</div>
               <div>
-                <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1 }}>
-                  <span style={{ color: 'var(--text1)' }}>WC</span>
+                <div style={{ fontSize: isMobile?15:18, fontWeight:900, letterSpacing:'-0.03em', lineHeight:1 }}>
+                  <span style={{ color:'var(--text1)' }}>WC</span>
                   <span className="gold-grad">2026</span>
                 </div>
-                <div style={{ fontSize: 10, color: 'var(--text3)', fontWeight: 600, marginTop: 1 }}>
-                  🇺🇸 🇨🇦 🇲🇽 AI PREDICTOR
-                </div>
+                {!isMobile && (
+                  <div style={{ fontSize:10, color:'var(--text3)', fontWeight:600, marginTop:1 }}>
+                    🇺🇸 🇨🇦 🇲🇽 AI PREDICTOR
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Nav */}
-            <nav style={{ display: 'flex', gap: 2, flex: 1, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <nav style={{ display:'flex', gap: isMobile?1:2 }}>
               {NAV.map(n => (
-                <NavLink key={n.to} to={n.to} end={n.to === '/'}>
+                <NavLink key={n.to} to={n.to} end={n.to==='/'}>
                   {({ isActive }) => (
                     <div style={{
-                      display: 'flex', alignItems: 'center', gap: 6,
-                      padding: '7px 14px', borderRadius: 10,
-                      fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                      transition: 'all 0.15s ease',
+                      display:'flex', alignItems:'center',
+                      gap: isMobile?0:6,
+                      padding: isMobile ? '6px 8px' : '7px 14px',
+                      borderRadius:10,
+                      fontSize: isMobile?13:13,
+                      fontWeight:600, cursor:'pointer',
+                      transition:'all 0.15s ease',
                       background: isActive ? 'rgba(232,39,27,0.15)' : 'transparent',
                       color: isActive ? '#FF6B62' : 'var(--text2)',
                       border: isActive ? '1px solid rgba(232,39,27,0.3)' : '1px solid transparent',
                     }}>
-                      <span style={{ fontSize: 14 }}>{n.icon}</span>
-                      <span>{n.label}</span>
+                      <span style={{ fontSize: isMobile?18:14 }}>{n.icon}</span>
+                      {!isMobile && <span>{n.label}</span>}
                     </div>
                   )}
                 </NavLink>
               ))}
             </nav>
-
-            <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
-              <div className="badge badge-gold">50K Sims</div>
-            </div>
           </div>
-          <div style={{ height: 2, background: 'linear-gradient(90deg,var(--red),var(--gold),var(--blue),transparent)' }} />
+          <div style={{ height:2, background:'linear-gradient(90deg,var(--red),var(--gold),var(--blue),transparent)' }}/>
         </header>
 
-        <main style={{ maxWidth: 1360, margin: '0 auto', padding: '32px 24px 100px' }}>
+        <main style={{
+          maxWidth:1360, margin:'0 auto',
+          padding: isMobile ? '16px 12px 80px' : '32px 24px 100px',
+        }}>
           <Routes>
             <Route path="/"         element={<Dashboard />} />
             <Route path="/groups"   element={<GroupStage />} />
@@ -83,10 +97,10 @@ export default function App() {
         </main>
 
         <footer style={{
-          borderTop: '1px solid var(--border)', padding: '18px 24px',
-          textAlign: 'center', color: 'var(--text3)', fontSize: 12,
+          borderTop:'1px solid var(--border)', padding:'14px 16px',
+          textAlign:'center', color:'var(--text3)', fontSize:11,
         }}>
-          ⚽ WC 2026 AI Predictor · Dixon-Coles + ELO + Monte Carlo · 50,000 simulations · 🇺🇸 🇨🇦 🇲🇽
+          ⚽ WC 2026 AI Predictor · Dixon-Coles + ELO + Monte Carlo · 🇺🇸 🇨🇦 🇲🇽
         </footer>
       </div>
     </BrowserRouter>

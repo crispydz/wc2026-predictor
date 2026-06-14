@@ -95,9 +95,7 @@ export default function GroupStage() {
               display:'flex',alignItems:'center',gap:10,
             }}>
               <span style={{fontSize:18,fontWeight:900,color:'var(--red)',width:24}}>{i+1}</span>
-              <span style={{fontSize:22}}>{/* getFlag works for all */}
-                {['🇲🇽','🇧🇷','🇨🇳','🇺🇸','🇩🇪','🇳🇱','🇧🇪','🇪🇸'][i]||'🏳️'}
-              </span>
+              <span style={{fontSize:22}}>{getFlag(team)}</span>
               <div>
                 <div style={{fontSize:13,fontWeight:700,color:'var(--text1)'}}>{team}</div>
                 <div className="badge badge-red" style={{marginTop:4,fontSize:10}}>✓ Qualifié</div>

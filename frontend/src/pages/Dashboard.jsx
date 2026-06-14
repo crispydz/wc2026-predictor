@@ -3,6 +3,7 @@ import { getTopContenders, predictions, computeMatch } from '../data/predictions
 import { GROUPS, getFlag } from '../data/tournament'
 import ProbabilityBar from '../components/ProbabilityBar'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 const COLORS = ['#E8271B','#FF6B40','#F5A623','#0066CC','#4D9FFF','#7C3AED','#059669','#D97706','#94A3B8','#64748B']
 
@@ -43,6 +44,7 @@ const CustomTooltip = ({active,payload}) => {
 }
 
 export default function Dashboard() {
+  const isMobile = useIsMobile()
   const contenders = getTopContenders(10)
   const chartData  = contenders.map(c=>({
     ...c, pct:parseFloat((c.win_tournament*100).toFixed(1)),
@@ -103,42 +105,46 @@ export default function Dashboard() {
       </div>
 
       {/* ─── PODIUM ──────────────────────────────────── */}
-      <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:16}}>
-        {top3.map((c,i)=>{
-          const medals=['🥇','🥈','🥉']
-          const borders=['rgba(245,166,35,0.35)','rgba(192,192,192,0.25)','rgba(180,83,9,0.25)']
-          const bgs=['rgba(245,166,35,0.08)','rgba(192,192,192,0.05)','rgba(180,83,9,0.05)']
-          return (
-            <div key={c.team} className="card-hover" style={{
-              padding:'28px 20px', textAlign:'center', borderRadius:20,
-              background:bgs[i], border:`1px solid ${borders[i]}`,
-            }}>
-              <div style={{fontSize:36,marginBottom:10}}>{medals[i]}</div>
-              <div style={{fontSize:10,color:'var(--text3)',fontWeight:700,
-                           letterSpacing:'0.1em',marginBottom:12}}>
-                {i===0?'CHAMPION PRÉDIT':i===1?'FINALISTE PROBABLE':'3ème PLACE'}
-              </div>
-              <div style={{fontSize:60,marginBottom:10,lineHeight:1}}>{getFlag(c.team)}</div>
-              <div style={{fontSize:17,fontWeight:900,color:'var(--text1)',marginBottom:6}}>{c.team}</div>
-              <div style={{fontSize:30,fontWeight:900,color:'var(--gold)'}}>{(c.win_tournament*100).toFixed(1)}%</div>
-              <div style={{fontSize:11,color:'var(--text3)',marginTop:4}}>probabilité de titre</div>
-              {/* Mini stage bars */}
-              <div style={{marginTop:14,display:'flex',flexDirection:'column',gap:4}}>
-                {[['SF',c.qualify_sf,'#F97316'],['Finale',c.qualify_final,'#E8271B']].map(([l,v,col])=>(
-                  <div key={l} style={{display:'flex',alignItems:'center',gap:6,fontSize:11}}>
-                    <span style={{color:'var(--text3)',width:40}}>{l}</span>
-                    <div style={{flex:1,height:4,borderRadius:99,background:'rgba(255,255,255,0.06)',overflow:'hidden'}}>
-                      <div style={{width:`${Math.round(v*100)}%`,height:'100%',
-                                   borderRadius:99,background:col,transition:'width 1s ease'}}/>
-                    </div>
-                    <span style={{color:col,fontWeight:700,width:28}}>{Math.round(v*100)}%</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )
-        })}
+      <div style={{
+  display:'grid',
+  gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr',
+  gap:16
+}}>
+  {top3.map((c,i) => {
+    const medals = ['🥇','🥈','🥉']
+    const borders = ['rgba(245,166,35,0.35)','rgba(192,192,192,0.25)','rgba(180,83,9,0.25)']
+    const bgs = ['rgba(245,166,35,0.08)','rgba(192,192,192,0.05)','rgba(180,83,9,0.05)']
+    return (
+      <div key={c.team} className="card-hover" style={{
+        padding: isMobile?'20px 16px':'28px 20px',
+        textAlign:'center', borderRadius:20,
+        background:bgs[i], border:`1px solid ${borders[i]}`,
+        display:'flex', alignItems:'center',
+        flexDirection: isMobile ? 'row' : 'column',
+        gap: isMobile ? 16 : 0,
+      }}>
+        <div style={{ fontSize: isMobile?36:36 }}>{medals[i]}</div>
+        <div style={{ flex: isMobile?1:undefined, textAlign: isMobile?'left':'center' }}>
+          <div style={{ fontSize:10, color:'var(--text3)', fontWeight:700,
+                        letterSpacing:'0.1em', marginBottom: isMobile?4:12 }}>
+            {i===0?'CHAMPION PRÉDIT':i===1?'FINALISTE':'3ème PLACE'}
+          </div>
+          <div style={{ fontSize: isMobile?36:60, lineHeight:1, marginBottom: isMobile?0:10 }}>
+            {getFlag(c.team)}
+          </div>
+          <div style={{ fontSize: isMobile?15:17, fontWeight:900, color:'var(--text1)',
+                        marginBottom:4, marginTop: isMobile?0:6 }}>{c.team}</div>
+        </div>
+        <div style={{ textAlign: isMobile?'right':'center' }}>
+          <div style={{ fontSize: isMobile?24:30, fontWeight:900, color:'var(--gold)' }}>
+            {(c.win_tournament*100).toFixed(1)}%
+          </div>
+          <div style={{ fontSize:11, color:'var(--text3)' }}>titre</div>
+        </div>
       </div>
+    )
+  })}
+</div>
 
       {/* ─── CHART ───────────────────────────────────── */}
       <div className="card" style={{padding:'28px'}}>
@@ -214,47 +220,48 @@ export default function Dashboard() {
       </div>
 
     {/* ─── STAGE PROBABILITIES ─────────────────────────── */}
-<div className="card" style={{ padding: '28px' }}>
-  <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text1)', marginBottom: 20 }}>
+<div className="card" style={{ padding: isMobile?'16px':28 }}>
+  <div style={{ fontSize:18, fontWeight:800, color:'var(--text1)', marginBottom:20 }}>
     📊 Probabilités par phase — Top 8
   </div>
-  <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-    {contenders.slice(0, 8).map((c, i) => (
-      <div key={c.team} style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-        <span style={{ color: 'var(--text3)', fontSize: 12, fontWeight: 700, width: 20 }}>{i + 1}</span>
-        <span style={{ fontSize: 28 }}>{getFlag(c.team)}</span>
-        <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text1)', width: 130, flexShrink: 0 }}>
-          {c.team}
-        </span>
-        <div style={{ flex: 1, display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14 }}>
-          {[
-            ['R16', c.qualify_r16,     '#4D9FFF'],
-            ['QF',  c.qualify_qf,      '#7C3AED'],
-            ['SF',  c.qualify_sf,      '#F97316'],
-            ['🏆',  c.win_tournament,  '#F5A623'],
-          ].map(([label, val, color]) => {
-            const pct = Math.min(100, Math.max(0, Math.round((val || 0) * 100)))
-            return (
-              <div key={label}>
-                <div style={{ display: 'flex', justifyContent: 'space-between',
-                              fontSize: 11, color: 'var(--text3)', marginBottom: 4 }}>
-                  <span style={{ fontWeight: 600 }}>{label}</span>
-                  <span style={{ fontWeight: 700, color }}>{pct}%</span>
+  <div style={{ display:'flex', flexDirection:'column', gap: isMobile?14:20 }}>
+    {contenders.slice(0,8).map((c,i) => {
+      const stages = isMobile
+        ? [['SF', c.qualify_sf,'#F97316'],['🏆', c.win_tournament,'#F5A623']]
+        : [['R16',c.qualify_r16,'#4D9FFF'],['QF',c.qualify_qf,'#7C3AED'],['SF',c.qualify_sf,'#F97316'],['🏆',c.win_tournament,'#F5A623']]
+      return (
+        <div key={c.team} style={{ display:'flex', alignItems:'center', gap: isMobile?8:14 }}>
+          <span style={{ color:'var(--text3)', fontSize:11, fontWeight:700, width:18 }}>{i+1}</span>
+          <span style={{ fontSize: isMobile?22:28 }}>{getFlag(c.team)}</span>
+          <span style={{ fontSize: isMobile?12:14, fontWeight:700, color:'var(--text1)',
+                         width: isMobile?80:130, flexShrink:0,
+                         overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
+            {c.team}
+          </span>
+          <div style={{ flex:1, display:'grid',
+                         gridTemplateColumns:`repeat(${stages.length},1fr)`, gap: isMobile?6:14 }}>
+            {stages.map(([label, val, color]) => {
+              const pct = Math.min(100, Math.max(0, Math.round((val||0)*100)))
+              return (
+                <div key={label}>
+                  <div style={{ display:'flex', justifyContent:'space-between',
+                                fontSize:10, color:'var(--text3)', marginBottom:3 }}>
+                    <span style={{ fontWeight:600 }}>{label}</span>
+                    <span style={{ fontWeight:700, color }}>{pct}%</span>
+                  </div>
+                  <div style={{ height:5, borderRadius:99,
+                                background:'rgba(255,255,255,0.07)', overflow:'hidden' }}>
+                    <div style={{ width:`${pct}%`, height:'100%', borderRadius:99,
+                                   background:`linear-gradient(90deg,${color}88,${color})`,
+                                   transition:'width 1s ease' }}/>
+                  </div>
                 </div>
-                <div style={{ height: 6, borderRadius: 99,
-                              background: 'rgba(255,255,255,0.07)', overflow: 'hidden' }}>
-                  <div style={{
-                    width: `${pct}%`, height: '100%', borderRadius: 99,
-                    background: `linear-gradient(90deg,${color}88,${color})`,
-                    transition: 'width 1s ease',
-                  }} />
-                </div>
-              </div>
-            )
-          })}
+              )
+            })}
+          </div>
         </div>
-      </div>
-    ))}
+      )
+    })}
   </div>
 </div>
 

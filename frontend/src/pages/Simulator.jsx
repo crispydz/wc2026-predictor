@@ -2,6 +2,7 @@ import React, { useState, useMemo } from 'react'
 import { GROUPS, getFlag } from '../data/tournament'
 import { getChampionProb, computeMatch } from '../data/predictions_static'
 import RadarComparison from '../components/RadarComparison'
+import { useIsMobile } from '../hooks/useIsMobile'
 
 const ALL_TEAMS = Object.values(GROUPS).flatMap(g => g.teams).sort()
 
@@ -162,6 +163,7 @@ const TABS = [
 ]
 
 export default function Simulator() {
+  const isMobile = useIsMobile()
   const [teamA,    setTeamA]    = useState('France')
   const [teamB,    setTeamB]    = useState('Argentina')
   const [injuredA, setInjuredA] = useState([])
@@ -260,30 +262,38 @@ export default function Simulator() {
 
       {/* Team selectors */}
       <div className="card" style={{ padding: '24px', marginBottom: 20 }}>
-        <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
-          <TeamSelector team={teamA} setTeam={setTeamA} injured={injuredA}
-                        side="A" color="var(--red)" />
-          {/* Center */}
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center',
-                        justifyContent: 'center', gap: 12, paddingTop: 48, flexShrink: 0 }}>
-            <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--text3)' }}>VS</div>
-            <div style={{ padding: '10px 18px', background: 'var(--surface3)',
-                          borderRadius: 12, border: '1px solid var(--border2)', textAlign: 'center' }}>
-              <div style={{ fontSize: 10, color: 'var(--text3)', fontWeight: 700,
-                            letterSpacing: '0.06em', marginBottom: 4 }}>SCORE PRÉDIT</div>
-              <div style={{ fontSize: 26, fontWeight: 900, color: 'var(--gold)',
-                            fontFamily: 'monospace' }}>
-                {result.most_likely_score}
-              </div>
-            </div>
-            {hasInj && (
-              <div className="badge badge-red" style={{ fontSize: 10 }}>⚠️ Blessures actives</div>
-            )}
-          </div>
-          <TeamSelector team={teamB} setTeam={setTeamB} injured={injuredB}
-                        side="B" color="var(--blue-light)" />
-        </div>
+        <div style={{
+  display:'flex', gap:20, alignItems:'flex-start',
+  flexDirection: isMobile ? 'column' : 'row',
+}}>
+  <TeamSelector team={teamA} setTeam={setTeamA} injured={injuredA}
+                side="A" color="var(--red)" />
+  {/* Center */}
+  <div style={{
+    display:'flex', flexDirection: isMobile?'row':'column',
+    alignItems:'center', justifyContent:'center',
+    gap:12, paddingTop: isMobile?0:48, flexShrink:0,
+    width: isMobile?'100%':'auto',
+  }}>
+    <div style={{ fontSize:18, fontWeight:900, color:'var(--text3)' }}>VS</div>
+    <div style={{
+      padding:'10px 18px', background:'var(--surface3)',
+      borderRadius:12, border:'1px solid var(--border2)', textAlign:'center',
+      flex: isMobile?1:undefined,
+    }}>
+      <div style={{ fontSize:10, color:'var(--text3)', fontWeight:700,
+                    letterSpacing:'0.06em', marginBottom:4 }}>SCORE PRÉDIT</div>
+      <div style={{ fontSize:26, fontWeight:900, color:'var(--gold)', fontFamily:'monospace' }}>
+        {result.most_likely_score}
       </div>
+    </div>
+    {hasInj && (
+      <div className="badge badge-red" style={{ fontSize:10 }}>⚠️ Blessures</div>
+    )}
+  </div>
+  <TeamSelector team={teamB} setTeam={setTeamB} injured={injuredB}
+                side="B" color="var(--blue-light)" />
+</div>
 
       {/* Blessures impact */}
       {hasInj && (
