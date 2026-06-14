@@ -267,7 +267,7 @@ export default function Simulator() {
   flexDirection: isMobile ? 'column' : 'row',
 }}>
   <TeamSelector team={teamA} setTeam={setTeamA} injured={injuredA}
-                side="A" color="var(--red)" />
+                side="A" color="var(--red)" /> </div>
   {/* Center */}
   <div style={{
     display:'flex', flexDirection: isMobile?'row':'column',
