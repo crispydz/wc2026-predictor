@@ -5,14 +5,12 @@ import GroupStage   from './pages/GroupStage'
 import Knockout     from './pages/Knockout'
 import TeamAnalysis from './pages/TeamAnalysis'
 import Simulator    from './pages/Simulator'
-import PathToGlory  from './pages/PathToGlory'
 
 const NAV = [
   { to: '/',         label: 'Dashboard', icon: '📊' },
   { to: '/groups',   label: 'Groupes',   icon: '🗂️' },
   { to: '/knockout', label: 'Tableau',   icon: '🏆' },
   { to: '/simulate', label: 'Simuler',   icon: '⚽' },
-  { to: '/path',     label: 'Parcours',  icon: '🛤️' },
   { to: '/teams',    label: 'Équipes',   icon: '🌍' },
 ]
 
@@ -80,7 +78,6 @@ export default function App() {
             <Route path="/groups"   element={<GroupStage />} />
             <Route path="/knockout" element={<Knockout />} />
             <Route path="/simulate" element={<Simulator />} />
-            <Route path="/path"     element={<PathToGlory />} />
             <Route path="/teams"    element={<TeamAnalysis />} />
           </Routes>
         </main>
