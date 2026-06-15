@@ -261,35 +261,35 @@ export default function Simulator() {
       </div>
 
       {/* Team selectors */}
-      <div className="card" style={{ padding: '24px', marginBottom: 20 }}>
-        <div style={{
-  display:'flex', gap:20, alignItems:'flex-start',
+      <div style={{
+  display: 'flex', gap: 20, alignItems: 'flex-start',
+  // ← desktop: row | mobile: column
   flexDirection: isMobile ? 'column' : 'row',
 }}>
   <TeamSelector team={teamA} setTeam={setTeamA} injured={injuredA}
-                side="A" color="var(--red)" /> </div>
-  {/* Center */}
+                side="A" color="var(--red)" />
   <div style={{
-    display:'flex', flexDirection: isMobile?'row':'column',
-    alignItems:'center', justifyContent:'center',
-    gap:12, paddingTop: isMobile?0:48, flexShrink:0,
-    width: isMobile?'100%':'auto',
+    display: 'flex',
+    flexDirection: isMobile ? 'row' : 'column',
+    alignItems: 'center', justifyContent: 'center',
+    gap: 12,
+    paddingTop: isMobile ? 0 : 48,
+    flexShrink: 0,
+    width: isMobile ? '100%' : 'auto',
   }}>
-    <div style={{ fontSize:18, fontWeight:900, color:'var(--text3)' }}>VS</div>
+    <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--text3)' }}>VS</div>
     <div style={{
-      padding:'10px 18px', background:'var(--surface3)',
-      borderRadius:12, border:'1px solid var(--border2)', textAlign:'center',
-      flex: isMobile?1:undefined,
+      padding: '10px 18px', background: 'var(--surface3)',
+      borderRadius: 12, border: '1px solid var(--border2)',
+      textAlign: 'center', flex: isMobile ? 1 : undefined,
     }}>
-      <div style={{ fontSize:10, color:'var(--text3)', fontWeight:700,
-                    letterSpacing:'0.06em', marginBottom:4 }}>SCORE PRÉDIT</div>
-      <div style={{ fontSize:26, fontWeight:900, color:'var(--gold)', fontFamily:'monospace' }}>
+      <div style={{ fontSize: 10, color: 'var(--text3)', fontWeight: 700,
+                    letterSpacing: '0.06em', marginBottom: 4 }}>SCORE PRÉDIT</div>
+      <div style={{ fontSize: 26, fontWeight: 900, color: 'var(--gold)', fontFamily: 'monospace' }}>
         {result.most_likely_score}
       </div>
     </div>
-    {hasInj && (
-      <div className="badge badge-red" style={{ fontSize:10 }}>⚠️ Blessures</div>
-    )}
+    {hasInj && <div className="badge badge-red" style={{ fontSize: 10 }}>⚠️ Blessures</div>}
   </div>
   <TeamSelector team={teamB} setTeam={setTeamB} injured={injuredB}
                 side="B" color="var(--blue-light)" />

@@ -106,40 +106,48 @@ export default function Dashboard() {
 
       {/* ─── PODIUM ──────────────────────────────────── */}
       <div style={{
-  display:'grid',
+  display: 'grid',
+  // ← desktop: 3 colonnes | mobile: 1 colonne
   gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr',
-  gap:16
+  gap: 16,
 }}>
-  {top3.map((c,i) => {
+  {top3.map((c, i) => {
     const medals = ['🥇','🥈','🥉']
     const borders = ['rgba(245,166,35,0.35)','rgba(192,192,192,0.25)','rgba(180,83,9,0.25)']
     const bgs = ['rgba(245,166,35,0.08)','rgba(192,192,192,0.05)','rgba(180,83,9,0.05)']
     return (
       <div key={c.team} className="card-hover" style={{
-        padding: isMobile?'20px 16px':'28px 20px',
-        textAlign:'center', borderRadius:20,
-        background:bgs[i], border:`1px solid ${borders[i]}`,
-        display:'flex', alignItems:'center',
+        // ← desktop: padding 28px, flex col, centré | mobile: padding 16px, flex row
+        padding: isMobile ? '16px 20px' : '28px 20px',
+        textAlign: isMobile ? 'left' : 'center',
+        borderRadius: 20, background: bgs[i],
+        border: `1px solid ${borders[i]}`,
+        display: 'flex',
         flexDirection: isMobile ? 'row' : 'column',
+        alignItems: 'center',
         gap: isMobile ? 16 : 0,
       }}>
-        <div style={{ fontSize: isMobile?36:36 }}>{medals[i]}</div>
-        <div style={{ flex: isMobile?1:undefined, textAlign: isMobile?'left':'center' }}>
-          <div style={{ fontSize:10, color:'var(--text3)', fontWeight:700,
-                        letterSpacing:'0.1em', marginBottom: isMobile?4:12 }}>
+        <div style={{ fontSize: isMobile ? 32 : 36 }}>{medals[i]}</div>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 10, color: 'var(--text3)', fontWeight: 700,
+                        letterSpacing: '0.1em',
+                        marginBottom: isMobile ? 4 : 12 }}>
             {i===0?'CHAMPION PRÉDIT':i===1?'FINALISTE':'3ème PLACE'}
           </div>
-          <div style={{ fontSize: isMobile?36:60, lineHeight:1, marginBottom: isMobile?0:10 }}>
+          <div style={{ fontSize: isMobile ? 36 : 60, lineHeight: 1,
+                        marginBottom: isMobile ? 2 : 10 }}>
             {getFlag(c.team)}
           </div>
-          <div style={{ fontSize: isMobile?15:17, fontWeight:900, color:'var(--text1)',
-                        marginBottom:4, marginTop: isMobile?0:6 }}>{c.team}</div>
+          <div style={{ fontSize: isMobile ? 14 : 17, fontWeight: 900,
+                        color: 'var(--text1)' }}>
+            {c.team}
+          </div>
         </div>
-        <div style={{ textAlign: isMobile?'right':'center' }}>
-          <div style={{ fontSize: isMobile?24:30, fontWeight:900, color:'var(--gold)' }}>
+        <div style={{ textAlign: isMobile ? 'right' : 'center' }}>
+          <div style={{ fontSize: isMobile ? 22 : 30, fontWeight: 900, color: 'var(--gold)' }}>
             {(c.win_tournament*100).toFixed(1)}%
           </div>
-          <div style={{ fontSize:11, color:'var(--text3)' }}>titre</div>
+          <div style={{ fontSize: 11, color: 'var(--text3)' }}>titre</div>
         </div>
       </div>
     )
@@ -220,40 +228,47 @@ export default function Dashboard() {
       </div>
 
     {/* ─── STAGE PROBABILITIES ─────────────────────────── */}
-<div className="card" style={{ padding: isMobile?'16px':28 }}>
-  <div style={{ fontSize:18, fontWeight:800, color:'var(--text1)', marginBottom:20 }}>
+<div className="card" style={{ padding: isMobile ? '16px' : '28px' }}>
+  <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text1)', marginBottom: 20 }}>
     📊 Probabilités par phase — Top 8
   </div>
-  <div style={{ display:'flex', flexDirection:'column', gap: isMobile?14:20 }}>
-    {contenders.slice(0,8).map((c,i) => {
+  <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 14 : 20 }}>
+    {contenders.slice(0, 8).map((c, i) => {
+      // ← desktop: 4 colonnes | mobile: 2 colonnes (SF + Titre seulement)
       const stages = isMobile
-        ? [['SF', c.qualify_sf,'#F97316'],['🏆', c.win_tournament,'#F5A623']]
-        : [['R16',c.qualify_r16,'#4D9FFF'],['QF',c.qualify_qf,'#7C3AED'],['SF',c.qualify_sf,'#F97316'],['🏆',c.win_tournament,'#F5A623']]
+        ? [['SF', c.qualify_sf, '#F97316'], ['🏆', c.win_tournament, '#F5A623']]
+        : [['R16', c.qualify_r16, '#4D9FFF'], ['QF', c.qualify_qf, '#7C3AED'],
+           ['SF', c.qualify_sf, '#F97316'], ['🏆', c.win_tournament, '#F5A623']]
       return (
-        <div key={c.team} style={{ display:'flex', alignItems:'center', gap: isMobile?8:14 }}>
-          <span style={{ color:'var(--text3)', fontSize:11, fontWeight:700, width:18 }}>{i+1}</span>
-          <span style={{ fontSize: isMobile?22:28 }}>{getFlag(c.team)}</span>
-          <span style={{ fontSize: isMobile?12:14, fontWeight:700, color:'var(--text1)',
-                         width: isMobile?80:130, flexShrink:0,
-                         overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
-            {c.team}
-          </span>
-          <div style={{ flex:1, display:'grid',
-                         gridTemplateColumns:`repeat(${stages.length},1fr)`, gap: isMobile?6:14 }}>
+        <div key={c.team} style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 8 : 14 }}>
+          <span style={{ color: 'var(--text3)', fontSize: 11, fontWeight: 700, width: 18 }}>{i+1}</span>
+          <span style={{ fontSize: isMobile ? 20 : 28 }}>{getFlag(c.team)}</span>
+          <span style={{
+            fontSize: isMobile ? 11 : 14, fontWeight: 700, color: 'var(--text1)',
+            width: isMobile ? 70 : 130, flexShrink: 0,
+            overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+          }}>{c.team}</span>
+          <div style={{
+            flex: 1, display: 'grid',
+            gridTemplateColumns: `repeat(${stages.length}, 1fr)`,
+            gap: isMobile ? 8 : 14,
+          }}>
             {stages.map(([label, val, color]) => {
-              const pct = Math.min(100, Math.max(0, Math.round((val||0)*100)))
+              const pct = Math.min(100, Math.max(0, Math.round((val || 0) * 100)))
               return (
                 <div key={label}>
-                  <div style={{ display:'flex', justifyContent:'space-between',
-                                fontSize:10, color:'var(--text3)', marginBottom:3 }}>
-                    <span style={{ fontWeight:600 }}>{label}</span>
-                    <span style={{ fontWeight:700, color }}>{pct}%</span>
+                  <div style={{ display: 'flex', justifyContent: 'space-between',
+                                fontSize: 10, color: 'var(--text3)', marginBottom: 3 }}>
+                    <span style={{ fontWeight: 600 }}>{label}</span>
+                    <span style={{ fontWeight: 700, color }}>{pct}%</span>
                   </div>
-                  <div style={{ height:5, borderRadius:99,
-                                background:'rgba(255,255,255,0.07)', overflow:'hidden' }}>
-                    <div style={{ width:`${pct}%`, height:'100%', borderRadius:99,
-                                   background:`linear-gradient(90deg,${color}88,${color})`,
-                                   transition:'width 1s ease' }}/>
+                  <div style={{ height: 5, borderRadius: 99,
+                                background: 'rgba(255,255,255,0.07)', overflow: 'hidden' }}>
+                    <div style={{
+                      width: `${pct}%`, height: '100%', borderRadius: 99,
+                      background: `linear-gradient(90deg,${color}88,${color})`,
+                      transition: 'width 1s ease',
+                    }} />
                   </div>
                 </div>
               )
