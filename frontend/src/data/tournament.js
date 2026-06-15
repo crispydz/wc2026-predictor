@@ -3,7 +3,7 @@ export const TOURNAMENT = {
   hosts: ["USA", "Canada", "Mexico"],
   dates: { start: "Jun 11, 2026", final: "Jul 19, 2026" },
   totalMatches: 104,
-};
+}
 
 export const GROUPS = {
   A: { teams: ["Mexico","South Africa","South Korea","Czechia"] },
@@ -18,21 +18,32 @@ export const GROUPS = {
   J: { teams: ["Argentina","Algeria","Austria","Jordan"] },
   K: { teams: ["Portugal","Uzbekistan","Colombia","Congo DR"] },
   L: { teams: ["England","Croatia","Ghana","Panama"] },
-};
+}
 
-export const TEAM_FLAGS = {
-  Argentina:"🇦🇷", France:"🇫🇷", Brazil:"🇧🇷", England:"🏴󠁧󠁢󠁥󠁮󠁧󠁿", Spain:"🇪🇸",
-  Portugal:"🇵🇹", Germany:"🇩🇪", Belgium:"🇧🇪", Netherlands:"🇳🇱", Uruguay:"🇺🇾",
-  Colombia:"🇨🇴", Morocco:"🇲🇦", Senegal:"🇸🇳", Japan:"🇯🇵", Switzerland:"🇨🇭",
-  Croatia:"🇭🇷", Mexico:"🇲🇽", Norway:"🇳🇴", USA:"🇺🇸", "South Korea":"🇰🇷",
-  Austria:"🇦🇹", Ecuador:"🇪🇨", Sweden:"🇸🇪", "Ivory Coast":"🇨🇮", Canada:"🇨🇦",
-  Australia:"🇦🇺", Türkiye:"🇹🇷", Algeria:"🇩🇿", Tunisia:"🇹🇳", Egypt:"🇪🇬",
-  Iran:"🇮🇷", Ghana:"🇬🇭", Czechia:"🇨🇿", Scotland:"🏴󠁧󠁢󠁳󠁣󠁴󠁿", "Congo DR":"🇨🇩",
-  Paraguay:"🇵🇾", "Bosnia-Herzegovina":"🇧🇦", "Saudi Arabia":"🇸🇦", Uzbekistan:"🇺🇿",
-  Qatar:"🇶🇦", Iraq:"🇮🇶", "South Africa":"🇿🇦", Jordan:"🇯🇴", "Cabo Verde":"🇨🇻",
-  Panama:"🇵🇦", "New Zealand":"🇳🇿", Haiti:"🇭🇹", "Curaçao":"🇨🇼",
-};
+// Codes ISO 3166-1 pour flagcdn.com
+export const COUNTRY_CODES = {
+  Argentina: 'ar', France: 'fr', Brazil: 'br', England: 'gb-eng',
+  Spain: 'es', Portugal: 'pt', Germany: 'de', Belgium: 'be',
+  Netherlands: 'nl', Uruguay: 'uy', Colombia: 'co', Morocco: 'ma',
+  Senegal: 'sn', Japan: 'jp', Croatia: 'hr', Switzerland: 'ch',
+  Mexico: 'mx', Norway: 'no', USA: 'us', 'South Korea': 'kr',
+  Austria: 'at', Ecuador: 'ec', Türkiye: 'tr', Sweden: 'se',
+  'Ivory Coast': 'ci', Canada: 'ca', Australia: 'au', Czechia: 'cz',
+  Algeria: 'dz', Tunisia: 'tn', Egypt: 'eg', 'South Africa': 'za',
+  Scotland: 'gb-sct', Ghana: 'gh', Iran: 'ir', 'Congo DR': 'cd',
+  Paraguay: 'py', 'Bosnia-Herzegovina': 'ba', 'Saudi Arabia': 'sa',
+  Uzbekistan: 'uz', Qatar: 'qa', Iraq: 'iq', Jordan: 'jo',
+  'Cabo Verde': 'cv', Panama: 'pa', 'New Zealand': 'nz',
+  Haiti: 'ht', 'Curaçao': 'cw',
+}
 
-export const getFlag = (name) => TEAM_FLAGS[name] || "🏳";
+export const getFlagUrl = (team) => {
+  const code = COUNTRY_CODES[team]
+  return code ? `https://flagcdn.com/w40/${code}.png` : null
+}
+
+// Gardé pour compatibilité mais ne plus utiliser directement
+export const getFlag = (team) => COUNTRY_CODES[team] ? team : '?'
+
 export const getGroupForTeam = (name) =>
-  Object.entries(GROUPS).find(([,g]) => g.teams.includes(name))?.[0] || null;
+  Object.entries(GROUPS).find(([, g]) => g.teams.includes(name))?.[0] || null

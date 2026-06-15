@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { predictions, computeMatch } from '../data/predictions_static'
-import { GROUPS, getFlag } from '../data/tournament'
+import Flag from '../components/Flag'
 
 const ALL_TEAMS = Object.values(GROUPS).flatMap(g=>g.teams).sort()
 const cp = predictions.champion_probabilities

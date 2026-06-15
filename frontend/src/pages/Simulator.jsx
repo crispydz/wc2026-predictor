@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react'
-import { GROUPS, getFlag } from '../data/tournament'
+import Flag from '../components/Flag'
 import { getChampionProb, computeMatch } from '../data/predictions_static'
 import RadarComparison from '../components/RadarComparison'
 import { useIsMobile } from '../hooks/useIsMobile'

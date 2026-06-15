@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { GROUPS, getFlag } from '../data/tournament'
+import Flag from '../components/Flag'
 import { getChampionProb } from '../data/predictions_static'
 import ProbabilityBar from '../components/ProbabilityBar'
 

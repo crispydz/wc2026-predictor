@@ -1,6 +1,6 @@
 import React from 'react'
 import { RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, Legend } from 'recharts'
-import { getFlag } from '../data/tournament'
+import Flag from '../components/Flag'
 
 const TD = {
   Argentina:{elo:2055,att:1.85,def:0.60,wc:18,titles:3},

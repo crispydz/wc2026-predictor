@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { predictions } from '../data/predictions_static'
-import { getFlag } from '../data/tournament'
+import Flag from '../components/Flag'
 import ProbabilityBar from '../components/ProbabilityBar'
 
 const cp = predictions.champion_probabilities || {}

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
 import { getTopContenders, predictions, computeMatch } from '../data/predictions_static'
-import { GROUPS, getFlag } from '../data/tournament'
+import Flag from '../components/Flag'
 import ProbabilityBar from '../components/ProbabilityBar'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 import { useIsMobile } from '../hooks/useIsMobile'
