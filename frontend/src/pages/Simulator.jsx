@@ -3,6 +3,7 @@ import { GROUPS } from '../data/tournament'
 import { getChampionProb, computeMatch } from '../data/predictions_static'
 import Flag from '../components/Flag'
 import { useIsMobile } from '../hooks/useIsMobile'
+import RadarComparison from '../components/RadarComparison'
 
 const ALL_TEAMS = Object.values(GROUPS).flatMap(g=>g.teams).sort()
 
@@ -265,64 +266,220 @@ export default function Simulator(){
         )}
       </div>
 
+      {/* Tabs */}
+<div style={{display:'flex',gap:8,marginBottom:20}}>
+  {TABS.map(t=>(
+    <button
+      key={t.id}
+      onClick={()=>setTab(t.id)}
+      style={{
+        padding:'10px 20px',
+        borderRadius:10,
+        border:'none',
+        cursor:'pointer',
+        fontSize:13,
+        fontWeight:600,
+        transition:'all .15s',
+        background:tab===t.id
+          ? 'rgba(232,39,27,0.15)'
+          : 'var(--surface2)',
+        color:tab===t.id
+          ? 'var(--red)'
+          : 'var(--text2)',
+        outline:tab===t.id
+          ? '1px solid rgba(232,39,27,0.3)'
+          : '1px solid var(--border)',
+      }}
+    >
+      {t.label}
+    </button>
+  ))}
+</div>
+
       {/* Tab content */}
-      <div className="card" style={{padding:'28px'}}>
-        <div style={{fontSize:16,fontWeight:800,color:'var(--text1)',marginBottom:20}}>
-          📊 Analyse détaillée
-        </div>
-        <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:16,marginBottom:24}}>
-          {[
-            {l:`✅ ${teamA} gagne`,v:hw,c:'#3b82f6'},
-            {l:'🤝 Match nul',v:dw,c:'#64748b'},
-            {l:`✅ ${teamB} gagne`,v:aw,c:'#ef4444'},
-          ].map(({l,v,c})=>(
-            <div key={l} style={{textAlign:'center',padding:'20px',borderRadius:14,
-                                 background:'var(--surface3)',border:'1px solid var(--border)'}}>
-              <div style={{fontSize:11,color:'var(--text2)',marginBottom:10,fontWeight:600}}>{l}</div>
-              <div style={{fontSize:isMobile?28:36,fontWeight:900,color:c}}>{v}%</div>
-              <div style={{height:4,borderRadius:99,background:'rgba(255,255,255,0.06)',
-                           overflow:'hidden',marginTop:10}}>
-                <div style={{width:`${v}%`,height:'100%',background:c,borderRadius:99,
-                             transition:'width 0.9s ease'}}/>
-              </div>
+<div className="card" style={{padding:'28px'}}>
+
+  {tab==='proba' && (
+    <>
+      <div style={{
+        fontSize:16,
+        fontWeight:800,
+        color:'var(--text1)',
+        marginBottom:20
+      }}>
+        📊 Analyse détaillée
+      </div>
+
+      <div style={{
+        display:'grid',
+        gridTemplateColumns:'1fr 1fr 1fr',
+        gap:16,
+        marginBottom:24
+      }}>
+        {[
+          {l:`✅ ${teamA} gagne`,v:hw,c:'#3b82f6'},
+          {l:'🤝 Match nul',v:dw,c:'#64748b'},
+          {l:`✅ ${teamB} gagne`,v:aw,c:'#ef4444'},
+        ].map(({l,v,c})=>(
+          <div
+            key={l}
+            style={{
+              textAlign:'center',
+              padding:'20px',
+              borderRadius:14,
+              background:'var(--surface3)',
+              border:'1px solid var(--border)'
+            }}
+          >
+            <div style={{
+              fontSize:11,
+              color:'var(--text2)',
+              marginBottom:10,
+              fontWeight:600
+            }}>
+              {l}
             </div>
-          ))}
-        </div>
-        {result.top5_scores&&(
-          <div>
-            <div style={{fontSize:14,fontWeight:700,color:'var(--text2)',marginBottom:12}}>
-              ⚽ Scores les plus probables
+
+            <div style={{
+              fontSize:isMobile?28:36,
+              fontWeight:900,
+              color:c
+            }}>
+              {v}%
             </div>
-            <div style={{display:'grid',gridTemplateColumns:`repeat(${isMobile?3:5},1fr)`,gap:10}}>
-              {result.top5_scores.slice(0,isMobile?3:5).map((s,i)=>{
-                const[score,prob]=s.split(' ')
-                const[ga,gb]=score.split('-').map(Number)
-                const col=ga>gb?'#3b82f6':ga<gb?'#ef4444':'#64748b'
+
+            <div style={{
+              height:4,
+              borderRadius:99,
+              background:'rgba(255,255,255,0.06)',
+              overflow:'hidden',
+              marginTop:10
+            }}>
+              <div
+                style={{
+                  width:`${v}%`,
+                  height:'100%',
+                  background:c,
+                  borderRadius:99,
+                  transition:'width .9s ease'
+                }}
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {result.top5_scores && (
+        <div>
+          <div style={{
+            fontSize:14,
+            fontWeight:700,
+            color:'var(--text2)',
+            marginBottom:12
+          }}>
+            ⚽ Scores les plus probables
+          </div>
+
+          <div style={{
+            display:'grid',
+            gridTemplateColumns:`repeat(${isMobile?3:5},1fr)`,
+            gap:10
+          }}>
+            {result.top5_scores
+              .slice(0,isMobile?3:5)
+              .map((s,i)=>{
+                const [score,prob]=s.split(' ')
+                const [ga,gb]=score.split('-').map(Number)
+
+                const col=
+                  ga>gb
+                    ? '#3b82f6'
+                    : ga<gb
+                    ? '#ef4444'
+                    : '#64748b'
+
                 return(
-                  <div key={i} style={{
-                    padding:'14px 8px',borderRadius:12,textAlign:'center',
-                    background:i===0?'rgba(245,166,35,0.12)':'var(--surface3)',
-                    border:`1px solid ${i===0?'rgba(245,166,35,0.35)':'var(--border)'}`,
-                  }}>
-                    {i===0&&<div style={{fontSize:9,color:'var(--gold)',fontWeight:700,marginBottom:4}}>
-                      + PROBABLE
-                    </div>}
-                    <div style={{fontSize:20,fontWeight:900,color:'var(--text1)',fontFamily:'monospace'}}>
+                  <div
+                    key={i}
+                    style={{
+                      padding:'14px 8px',
+                      borderRadius:12,
+                      textAlign:'center',
+                      background:i===0
+                        ? 'rgba(245,166,35,0.12)'
+                        : 'var(--surface3)',
+                      border:`1px solid ${
+                        i===0
+                          ? 'rgba(245,166,35,0.35)'
+                          : 'var(--border)'
+                      }`
+                    }}
+                  >
+                    {i===0 && (
+                      <div style={{
+                        fontSize:9,
+                        color:'var(--gold)',
+                        fontWeight:700,
+                        marginBottom:4
+                      }}>
+                        + PROBABLE
+                      </div>
+                    )}
+
+                    <div style={{
+                      fontSize:20,
+                      fontWeight:900,
+                      color:'var(--text1)',
+                      fontFamily:'monospace'
+                    }}>
                       {score}
                     </div>
-                    <div style={{fontSize:10,color:col,fontWeight:600,marginTop:4}}>
+
+                    <div style={{
+                      fontSize:10,
+                      color:col,
+                      fontWeight:600,
+                      marginTop:4
+                    }}>
                       {ga>gb?teamA:ga<gb?teamB:'Nul'}
                     </div>
-                    <div style={{fontSize:12,fontWeight:700,color:'var(--gold)',marginTop:4}}>
+
+                    <div style={{
+                      fontSize:12,
+                      fontWeight:700,
+                      color:'var(--gold)',
+                      marginTop:4
+                    }}>
                       {prob}
                     </div>
                   </div>
                 )
               })}
-            </div>
           </div>
-        )}
+        </div>
+      )}
+    </>
+  )}
+
+  {tab==='radar' && (
+    <div>
+      <div style={{
+        fontSize:16,
+        fontWeight:800,
+        color:'var(--text1)',
+        marginBottom:20
+      }}>
+        🕸️ Comparaison Radar — 5 dimensions
       </div>
+
+      <RadarComparison
+        teamA={teamA}
+        teamB={teamB}
+      />
     </div>
-  )
+  )}
+
+</div>
+</div>
+)
 }
