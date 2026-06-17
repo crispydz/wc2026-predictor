@@ -5,7 +5,7 @@ import GroupStage   from './pages/GroupStage'
 import Knockout     from './pages/Knockout'
 import TeamAnalysis from './pages/TeamAnalysis'
 import Simulator    from './pages/Simulator'
-import RadarComparison from '../components/RadarComparison'
+
 
 const NAV = [
   { to: '/',         label: 'Dashboard', icon: '📊' },
