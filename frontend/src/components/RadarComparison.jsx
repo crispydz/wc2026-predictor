@@ -89,7 +89,7 @@ export default function RadarComparison({ teamA, teamB }) {
       <div style={{ display:'flex', justifyContent:'space-around', marginBottom:16 }}>
         {[teamA, teamB].map((t,i)=>(
           <div key={t} style={{ textAlign:'center' }}>
-            <div style={{ fontSize:36 }}>{getFlag(t)}</div>
+            <Flag team={t} size={36} />
             <div style={{ fontSize:14, fontWeight:800, color:'var(--text1)', marginTop:4 }}>{t}</div>
             <div style={{ width:60, height:4, borderRadius:99, margin:'8px auto 0',
                           background: i===0?'#E8271B':'#0066CC' }}/>
@@ -105,9 +105,19 @@ export default function RadarComparison({ teamA, teamB }) {
             stroke="#E8271B" fill="#E8271B" fillOpacity={0.18} strokeWidth={2.5} dot />
           <Radar name={teamB} dataKey={teamB}
             stroke="#0066CC" fill="#0066CC" fillOpacity={0.18} strokeWidth={2.5} dot />
-          <Legend formatter={(v) => (
-            <span style={{color:'var(--text2)',fontSize:13,fontWeight:600}}>{getFlag(v)} {v}</span>
-          )}/>
+          <Legend
+  formatter={(value) => (
+    <span
+      style={{
+        color: 'var(--text2)',
+        fontSize: 13,
+        fontWeight: 600,
+      }}
+    >
+      {value}
+    </span>
+  )}
+/>
         </RadarChart>
       </ResponsiveContainer>
 
