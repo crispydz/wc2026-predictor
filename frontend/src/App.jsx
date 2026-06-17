@@ -114,7 +114,6 @@ export default function App() {
             <Route path="/groups"   element={<GroupStage />} />
             <Route path="/knockout" element={<Knockout />} />
             <Route path="/simulate" element={<Simulator />} />
-            <Route path="/path"     element={<PathToGlory />} />
             <Route path="/teams"    element={<TeamAnalysis />} />
           </Routes>
         </main>
