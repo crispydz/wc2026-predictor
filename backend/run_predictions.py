@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 """
-WC 2026 PREDICTION RUNNER — Full pipeline with improvements
+WC 2026 PREDICTION RUNNER
 Usage:
-  python run_predictions.py              # full run (50k sims)
-  python run_predictions.py --fast       # 10k sims (quick test)
-  python run_predictions.py --full       # 100k sims (most accurate)
-  python run_predictions.py --collect    # re-collect match data
-  python run_predictions.py --fit        # re-fit MLE parameters
-  python run_predictions.py --validate   # backtest on WC 2022
-  python run_predictions.py --all        # collect + fit + validate + predict
+  python run_predictions.py              # predictions standards (50k sims)
+  python run_predictions.py --fast       # 10k sims (rapide)
+  python run_predictions.py --full       # 100k sims (précis)
+  python run_predictions.py --live       # Fetch résultats live PUIS prédit
+  python run_predictions.py --live --fast# Live update + prédictions rapides
 """
-import sys, json, argparse, datetime, os
+import sys, json, argparse, datetime
 from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent))
-from dotenv import load_dotenv
-load_dotenv()
 
 from models.enhanced_predictor import load_all_data, compute_match_probabilities, run_group_stage_predictions
 from models.simulator import run_simulation
@@ -22,86 +18,97 @@ from models.simulator import run_simulation
 OUTPUT = Path(__file__).parent.parent / "frontend" / "src" / "data" / "predictions.js"
 
 
+def step_live_update():
+    """Fetch vrais résultats WC 2026 et met à jour wc2026_data.json."""
+    print("\n" + "="*55)
+    print("  🔄 ÉTAPE 1/5 — LIVE RESULTS UPDATE")
+    print("="*55)
+    try:
+        from collectors.wc2026_live import run as live_run
+        wc_data = live_run(use_known=True, use_api=True)
+        print("\n  ✅ Données mises à jour avec résultats réels")
+        return wc_data
+    except Exception as e:
+        print(f"\n  ⚠ Live update error: {e}")
+        print("  → Utilisation des données existantes")
+        return None
+
+
 def step_collect():
     print("\n" + "="*55)
-    print("  STEP 1/4 — COLLECT MATCH HISTORY DATA")
+    print("  📡 ÉTAPE 2/5 — COLLECT MATCH HISTORY (pour MLE)")
     print("="*55)
     from collectors.match_history import collect_all
-    api_key = os.getenv("FOOTBALL_DATA_API_KEY","")
     collect_all()
 
 
 def step_fit():
     print("\n" + "="*55)
-    print("  STEP 2/4 — FIT DIXON-COLES MLE PARAMETERS")
+    print("  🔬 ÉTAPE 3/5 — FIT DIXON-COLES MLE")
     print("="*55)
     from models.mle_fitter import run_fitting
-    params = run_fitting(min_year=2020)
+    params = run_fitting(min_year=2022)
     if params:
-        print(f"\n  ✅ Fitted {params['n_teams_fitted']} teams from {params['n_matches_used']} matches")
-        print(f"  ✅ {len(params.get('teams_using_defaults',[]))} teams using fallback parameters")
+        print(f"  ✅ {params['n_teams_fitted']} équipes fittées ({params['n_matches_used']} matchs)")
     return params
 
 
 def step_validate():
     print("\n" + "="*55)
-    print("  STEP 3/4 — VALIDATE ON WC 2022 RESULTS")
+    print("  📊 ÉTAPE 4/5 — VALIDATION WC 2022")
     print("="*55)
     from models.validator import validate
+    from models.enhanced_predictor import compute_match_probabilities
     wc_data, fitted, squad = load_all_data()
     report = validate(compute_match_probabilities, wc_data["teams"], fitted, squad)
     return report
 
 
-def step_predict(n_sims):
+def step_predict(n_sims, live_data=None):
     print("\n" + "="*55)
-    print(f"  STEP 4/4 — PREDICT WC 2026 ({n_sims:,} SIMULATIONS)")
+    print(f"  🎲 ÉTAPE 5/5 — PREDICT WC 2026 ({n_sims:,} SIMS)")
     print("="*55)
 
     wc_data, fitted, squad = load_all_data()
-    status = "✅ MLE-fitted" if fitted else "⚠ Hardcoded (run --fit for better accuracy)"
-    print(f"\n  Parameters: {status}")
-    print(f"  Squad data: {'✅ Loaded' if squad else '⚠ Not found'}")
+    status = "✅ MLE-fitted" if fitted else "⚠ Hardcoded params"
+    squad_s = "✅ Loaded" if squad else "⚠ Not found"
+    live_s  = "✅ Live results integrated" if live_data else "📦 Static data"
 
-    # Group predictions
-    print("\n  [1/2] Computing group stage predictions...")
+    print(f"\n  Params:   {status}")
+    print(f"  Squad:    {squad_s}")
+    print(f"  Live:     {live_s}")
+
+    print("\n  [1/2] Computing group predictions...")
     group_preds = run_group_stage_predictions(wc_data, fitted, squad)
 
-    # Monte Carlo simulation
-    print(f"\n  [2/2] Running {n_sims:,} tournament simulations...")
-    # Import simulator with enhanced predictor
-    from models import simulator as sim_mod
-    # Patch simulator to use enhanced predictor
-    import models.enhanced_predictor as ep
-    def enhanced_predict_fn(ta, tb, td, **kwargs):
-        return compute_match_probabilities(ta, tb, td, fitted, squad)
-    sim_mod._predict_fn = enhanced_predict_fn
-
+    print(f"  [2/2] Running {n_sims:,} simulations...")
     champ_probs = run_simulation(n_simulations=n_sims, data=wc_data)
 
-    # Build predicted bracket
+    # Bracket
     bracket = {}
     thirds  = []
     for gid, gp in group_preds.items():
         s = gp["predicted_standings"]
-        bracket[f"1{gid}"] = s[0] if len(s)>0 else None
-        bracket[f"2{gid}"] = s[1] if len(s)>1 else None
-        if len(s)>2:
-            thirds.append((s[2], gp["expected_points"].get(s[2],0), gid))
-    thirds.sort(key=lambda x:x[1], reverse=True)
+        bracket[f"1{gid}"] = s[0] if s else None
+        bracket[f"2{gid}"] = s[1] if len(s) > 1 else None
+        if len(s) > 2:
+            thirds.append((s[2], gp["expected_points"].get(s[2], 0), gid))
+    thirds.sort(key=lambda x: x[1], reverse=True)
     bracket["best_thirds"] = [t[0] for t in thirds[:8]]
 
-    # Export to frontend
+    # Export
+    now = datetime.datetime.now()
     payload = {
         "meta": {
-            "n_simulations": n_sims,
-            "generated_at": datetime.datetime.now().isoformat(),
-            "model": "Dixon-Coles MLE + ELO + Squad Quality + Monte Carlo",
-            "fitted_params": fitted is not None,
-            "n_teams_fitted": fitted.get("n_teams_fitted",0) if fitted else 0,
+            "n_simulations":  n_sims,
+            "generated_at":   now.isoformat(),
+            "model":          "Dixon-Coles MLE + ELO + Squad Quality + Monte Carlo",
+            "fitted_params":  fitted is not None,
+            "live_results":   live_data is not None,
+            "last_updated":   now.strftime("%Y-%m-%d %H:%M"),
         },
-        "teams": wc_data["teams"],
-        "groups": wc_data["groups"],
+        "teams":             wc_data["teams"],
+        "groups":            wc_data["groups"],
         "group_predictions": {
             gid: {
                 "predicted_standings": gp["predicted_standings"],
@@ -110,13 +117,12 @@ def step_predict(n_sims):
             } for gid, gp in group_preds.items()
         },
         "champion_probabilities": champ_probs,
-        "predicted_bracket": bracket,
+        "predicted_bracket":      bracket,
     }
 
-    js = f"""// Auto-generated by run_predictions.py
-// Model: Dixon-Coles MLE + ELO + Squad Quality + Monte Carlo ({n_sims:,} sims)
-// Generated: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M")}
-// MLE Fitted: {fitted is not None} ({fitted.get('n_teams_fitted',0) if fitted else 0} teams from {fitted.get('n_matches_used',0) if fitted else 0} matches)
+    js_content = f"""// Auto-generated by run_predictions.py
+// {now.strftime("%Y-%m-%d %H:%M")} | {n_sims:,} simulations
+// Live results: {live_data is not None} | MLE fitted: {fitted is not None}
 
 export const predictions = {json.dumps(payload, indent=2, ensure_ascii=False)};
 
@@ -127,32 +133,32 @@ export const getTopContenders = (n=10) =>
     .map(([team,prob]) => ({{team,...prob,...predictions.teams[team]}}));
 
 export const getGroupPrediction = (gid) => predictions.group_predictions[gid];
-export const getChampionProb = (team) => predictions.champion_probabilities[team] || null;
+export const getChampionProb    = (team) => predictions.champion_probabilities[team] || null;
 """
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT.write_text(js, encoding="utf-8")
+    OUTPUT.write_text(js_content, encoding="utf-8")
 
-    # Print leaderboard
-    print("\n  🏆 TOP 10 PREDICTED CHAMPIONS:")
-    sorted_p = sorted(champ_probs.items(), key=lambda x:x[1]["win_tournament"], reverse=True)
-    for i,(team,prob) in enumerate(sorted_p[:10],1):
-        flag = wc_data["teams"][team]["flag"]
-        pct  = prob["win_tournament"]*100
-        bar  = "█"*int(pct*1.8) + "░"*(30-int(pct*1.8))
+    # Leaderboard
+    print("\n  🏆 TOP 10 CHAMPIONS PRÉDITS:")
+    sorted_p = sorted(champ_probs.items(), key=lambda x: x[1]["win_tournament"], reverse=True)
+    for i, (team, prob) in enumerate(sorted_p[:10], 1):
+        flag = wc_data["teams"].get(team, {}).get("flag", "")
+        pct  = prob["win_tournament"] * 100
+        bar  = "█" * int(pct * 2) + "░" * max(0, 30 - int(pct * 2))
         print(f"  {i:2}. {flag} {team:<22} {bar} {pct:.1f}%")
 
-    print(f"\n  ✅ Exported to frontend/src/data/predictions.js")
+    print(f"\n  ✅ Exporté → frontend/src/data/predictions.js")
     return champ_probs
 
 
 def main():
-    p = argparse.ArgumentParser()
-    p.add_argument("--fast",     action="store_true")
-    p.add_argument("--full",     action="store_true")
-    p.add_argument("--collect",  action="store_true")
-    p.add_argument("--fit",      action="store_true")
-    p.add_argument("--validate", action="store_true")
-    p.add_argument("--all",      action="store_true")
+    p = argparse.ArgumentParser(description="WC 2026 Prediction Runner")
+    p.add_argument("--fast",     action="store_true", help="10k sims")
+    p.add_argument("--full",     action="store_true", help="100k sims")
+    p.add_argument("--live",     action="store_true", help="Fetch live WC results first")
+    p.add_argument("--collect",  action="store_true", help="Collect match history")
+    p.add_argument("--fit",      action="store_true", help="Run MLE fitting")
+    p.add_argument("--validate", action="store_true", help="Backtest on WC 2022")
     args = p.parse_args()
 
     n = 10000 if args.fast else (100000 if args.full else 50000)
@@ -161,11 +167,19 @@ def main():
     print("  🏆 FIFA WORLD CUP 2026 — AI PREDICTION ENGINE")
     print("█"*55)
 
-    if args.all or args.collect:  step_collect()
-    if args.all or args.fit:      step_fit()
-    if args.all or args.validate: step_validate()
-    if not (args.collect or args.fit or args.validate) or args.all:
-        step_predict(n)
+    live_data = None
+    if args.live:
+        live_data = step_live_update()
+
+    if args.collect:  step_collect()
+    if args.fit:      step_fit()
+    if args.validate: step_validate()
+
+    step_predict(n, live_data=live_data)
+
+    print("\n" + "█"*55)
+    print("  ✅ TERMINÉ !")
+    print("█"*55)
 
 
 if __name__ == "__main__":
