@@ -22,26 +22,84 @@ API_KEY   = os.getenv("FOOTBALL_DATA_API_KEY", "")
 # Format: {h, a, hg, ag, date, stage}
 # stage: "GROUP" | "R32" | "R16" | "QF" | "SF" | "FINAL"
 KNOWN_RESULTS = [
-    # ── MATCHDAY 1 ──────────────────────────────────────────────────────
+    # ════════════════════════════════════════════════════
+    # MATCHDAY 1
+    # ════════════════════════════════════════════════════
+
     # Groupe A — 11 juin
-    {"h":"Mexico",       "a":"South Africa",      "hg":2,"ag":0,"date":"2026-06-11","stage":"GROUP"},
-    {"h":"South Korea",  "a":"Czechia",            "hg":2,"ag":1,"date":"2026-06-11","stage":"GROUP"},
+    {"h":"Mexico",        "a":"South Africa",       "hg":2,"ag":0,"date":"2026-06-11","stage":"GROUP"},
+    {"h":"South Korea",   "a":"Czechia",             "hg":2,"ag":1,"date":"2026-06-11","stage":"GROUP"},
+
     # Groupe B — 12 juin
-    {"h":"Canada",       "a":"Bosnia-Herzegovina", "hg":1,"ag":1,"date":"2026-06-12","stage":"GROUP"},
-    # Groupe D — 12 juin
-    {"h":"USA",          "a":"Paraguay",           "hg":2,"ag":0,"date":"2026-06-12","stage":"GROUP"},
+    {"h":"Canada",        "a":"Bosnia-Herzegovina",  "hg":1,"ag":1,"date":"2026-06-12","stage":"GROUP"},
+    {"h":"Switzerland",   "a":"Qatar",               "hg":1,"ag":1,"date":"2026-06-13","stage":"GROUP"},
+
     # Groupe C — 13 juin
-    {"h":"Brazil",       "a":"Morocco",            "hg":1,"ag":1,"date":"2026-06-13","stage":"GROUP"},
-    {"h":"Scotland",     "a":"Haiti",              "hg":1,"ag":0,"date":"2026-06-13","stage":"GROUP"},
+    {"h":"Brazil",        "a":"Morocco",             "hg":1,"ag":1,"date":"2026-06-13","stage":"GROUP"},
+    {"h":"Scotland",      "a":"Haiti",               "hg":1,"ag":0,"date":"2026-06-13","stage":"GROUP"},
+
+    # Groupe D — 12-13 juin
+    {"h":"USA",           "a":"Paraguay",            "hg":4,"ag":1,"date":"2026-06-12","stage":"GROUP"},  # ✅ corrigé 4-1
+    {"h":"Australia",     "a":"Türkiye",             "hg":2,"ag":0,"date":"2026-06-13","stage":"GROUP"},
+
     # Groupe E — 14 juin
-    {"h":"Germany",      "a":"Curaçao",            "hg":7,"ag":1,"date":"2026-06-14","stage":"GROUP"},
-    {"h":"Ivory Coast",  "a":"Ecuador",            "hg":1,"ag":0,"date":"2026-06-14","stage":"GROUP"},
+    {"h":"Germany",       "a":"Curaçao",             "hg":7,"ag":1,"date":"2026-06-14","stage":"GROUP"},
+    {"h":"Ivory Coast",   "a":"Ecuador",             "hg":1,"ag":0,"date":"2026-06-14","stage":"GROUP"},
+
     # Groupe F — 14 juin
-    {"h":"Netherlands",  "a":"Japan",              "hg":2,"ag":2,"date":"2026-06-14","stage":"GROUP"},
+    {"h":"Netherlands",   "a":"Japan",               "hg":2,"ag":2,"date":"2026-06-14","stage":"GROUP"},
+    {"h":"Sweden",        "a":"Tunisia",             "hg":5,"ag":1,"date":"2026-06-14","stage":"GROUP"},
+
+    # Groupe G — 15 juin
+    {"h":"Belgium",       "a":"Egypt",               "hg":1,"ag":1,"date":"2026-06-15","stage":"GROUP"},
+    {"h":"Iran",          "a":"New Zealand",         "hg":2,"ag":2,"date":"2026-06-15","stage":"GROUP"},
+
+    # Groupe H — 15 juin
+    {"h":"Spain",         "a":"Cabo Verde",          "hg":0,"ag":0,"date":"2026-06-15","stage":"GROUP"},
+    {"h":"Saudi Arabia",  "a":"Uruguay",             "hg":1,"ag":1,"date":"2026-06-15","stage":"GROUP"},
+
     # Groupe I — 16 juin
-    {"h":"France",       "a":"Senegal",            "hg":3,"ag":1,"date":"2026-06-16","stage":"GROUP"},
-    # ── AJOUTER ICI les résultats des prochains matchs au fur et à mesure ──
-    # Format: {"h":"Equipe1","a":"Equipe2","hg":X,"ag":Y,"date":"YYYY-MM-DD","stage":"GROUP"},
+    {"h":"France",        "a":"Senegal",             "hg":3,"ag":1,"date":"2026-06-16","stage":"GROUP"},
+    {"h":"Norway",        "a":"Iraq",                "hg":4,"ag":1,"date":"2026-06-16","stage":"GROUP"},
+
+    # Groupe J — 16 juin
+    {"h":"Argentina",     "a":"Algeria",             "hg":4,"ag":0,"date":"2026-06-16","stage":"GROUP"},  # Messi hat-trick
+
+    # ════════════════════════════════════════════════════
+    # MATCHDAY 2
+    # ════════════════════════════════════════════════════
+
+    # Groupe K — 17 juin
+    {"h":"Portugal",      "a":"Congo DR",            "hg":1,"ag":1,"date":"2026-06-17","stage":"GROUP"},
+    {"h":"Uzbekistan",    "a":"Colombia",            "hg":1,"ag":3,"date":"2026-06-17","stage":"GROUP"},
+
+    # Groupe L — 17 juin
+    {"h":"England",       "a":"Croatia",             "hg":4,"ag":2,"date":"2026-06-17","stage":"GROUP"},
+    {"h":"Ghana",         "a":"Panama",              "hg":1,"ag":0,"date":"2026-06-17","stage":"GROUP"},
+
+    # Groupe B — 18 juin
+    {"h":"Switzerland",   "a":"Bosnia-Herzegovina",  "hg":4,"ag":1,"date":"2026-06-18","stage":"GROUP"},
+    {"h":"Canada",        "a":"Qatar",               "hg":6,"ag":0,"date":"2026-06-18","stage":"GROUP"},
+
+    # Groupe C — 19 juin
+    {"h":"Scotland",      "a":"Morocco",             "hg":0,"ag":1,"date":"2026-06-19","stage":"GROUP"},
+    {"h":"Brazil",        "a":"Haiti",               "hg":3,"ag":0,"date":"2026-06-19","stage":"GROUP"},
+
+    # Groupe D — 19 juin
+    {"h":"USA",           "a":"Australia",           "hg":2,"ag":0,"date":"2026-06-19","stage":"GROUP"},
+    {"h":"Türkiye",       "a":"Paraguay",            "hg":0,"ag":1,"date":"2026-06-19","stage":"GROUP"},
+
+    # Groupe F — 20 juin
+    {"h":"Netherlands",   "a":"Sweden",              "hg":5,"ag":1,"date":"2026-06-20","stage":"GROUP"},
+    {"h":"Japan",         "a":"Tunisia",             "hg":4,"ag":0,"date":"2026-06-20","stage":"GROUP"},
+
+    # Groupe E — 20-21 juin
+    {"h":"Germany",       "a":"Ivory Coast",         "hg":2,"ag":1,"date":"2026-06-20","stage":"GROUP"},
+
+    # ════════════════════════════════════════════════════
+    # AJOUTER ICI les prochains résultats au fur et à mesure
+    # Format : {"h":"Equipe1","a":"Equipe2","hg":X,"ag":Y,"date":"YYYY-MM-DD","stage":"GROUP"},
+    # ════════════════════════════════════════════════════
 ]
 
 # Correspondance noms API → nos noms

@@ -118,10 +118,11 @@
       "flag": "🇦🇷",
       "confederation": "CONMEBOL",
       "fifa_rank": 1,
-      "elo": 2055,
-      "attack": 1.85,
-      "defense": 0.6,
+      "elo": 2058.2,
+      "attack": 1.918,
+      "defense": 0.57,
       "recent_form": [
+        2,
         2,
         1,
         2,
@@ -130,8 +131,7 @@
         2,
         0,
         2,
-        1,
-        2
+        1
       ],
       "wc_wins": 3,
       "best_result": "Winner (1978,1986,2022)",
@@ -140,9 +140,10 @@
         "L. Martínez",
         "J. Álvarez"
       ],
-      "avg_goals_scored": 2.3,
-      "avg_goals_conceded": 0.6,
-      "injury_factor": 0.97
+      "avg_goals_scored": 4.0,
+      "avg_goals_conceded": 0.0,
+      "injury_factor": 0.97,
+      "matches_played_wc": 1
     },
     "France": {
       "flag": "🇫🇷",
@@ -179,10 +180,11 @@
       "flag": "🇧🇷",
       "confederation": "CONMEBOL",
       "fifa_rank": 5,
-      "elo": 2005.5,
-      "attack": 1.704,
-      "defense": 0.658,
+      "elo": 2006.9,
+      "attack": 1.874,
+      "defense": 0.625,
       "recent_form": [
+        2,
         1,
         1,
         2,
@@ -191,8 +193,7 @@
         2,
         0,
         1,
-        2,
-        1
+        2
       ],
       "wc_wins": 5,
       "best_result": "Winner (1958,1962,1970,1994,2002)",
@@ -201,19 +202,20 @@
         "Rodrygo",
         "Raphinha"
       ],
-      "avg_goals_scored": 1.0,
-      "avg_goals_conceded": 1.0,
+      "avg_goals_scored": 2.0,
+      "avg_goals_conceded": 0.5,
       "injury_factor": 0.97,
-      "matches_played_wc": 1
+      "matches_played_wc": 2
     },
     "England": {
       "flag": "🏴󠁧󠁢󠁥󠁮󠁧󠁿",
       "confederation": "UEFA",
       "fifa_rank": 5,
-      "elo": 1985,
-      "attack": 1.65,
-      "defense": 0.7,
+      "elo": 1993.5,
+      "attack": 1.732,
+      "defense": 0.752,
       "recent_form": [
+        2,
         2,
         2,
         1,
@@ -222,8 +224,7 @@
         0,
         2,
         1,
-        2,
-        1
+        2
       ],
       "wc_wins": 1,
       "best_result": "Winner (1966)",
@@ -232,18 +233,20 @@
         "H. Kane",
         "P. Foden"
       ],
-      "avg_goals_scored": 2.0,
-      "avg_goals_conceded": 0.8,
-      "injury_factor": 0.98
+      "avg_goals_scored": 4.0,
+      "avg_goals_conceded": 2.0,
+      "injury_factor": 0.98,
+      "matches_played_wc": 1
     },
     "Spain": {
       "flag": "🇪🇸",
       "confederation": "UEFA",
       "fifa_rank": 8,
-      "elo": 1940,
-      "attack": 1.65,
-      "defense": 0.68,
+      "elo": 1932.3,
+      "attack": 1.567,
+      "defense": 0.646,
       "recent_form": [
+        1,
         2,
         2,
         1,
@@ -252,8 +255,7 @@
         2,
         1,
         2,
-        1,
-        2
+        1
       ],
       "wc_wins": 1,
       "best_result": "Winner (2010)",
@@ -262,28 +264,29 @@
         "Gavi",
         "L. Yamal"
       ],
-      "avg_goals_scored": 2.0,
-      "avg_goals_conceded": 0.7,
-      "injury_factor": 0.99
+      "avg_goals_scored": 0.0,
+      "avg_goals_conceded": 0.0,
+      "injury_factor": 0.99,
+      "matches_played_wc": 1
     },
     "Portugal": {
       "flag": "🇵🇹",
       "confederation": "UEFA",
       "fifa_rank": 6,
-      "elo": 1945,
-      "attack": 1.7,
-      "defense": 0.67,
+      "elo": 1938.3,
+      "attack": 1.655,
+      "defense": 0.684,
       "recent_form": [
-        2,
-        1,
-        2,
-        1,
         1,
         2,
         1,
         2,
-        0,
-        2
+        1,
+        1,
+        2,
+        1,
+        2,
+        0
       ],
       "wc_wins": 0,
       "best_result": "Third place (1966)",
@@ -292,18 +295,20 @@
         "B. Fernandes",
         "R. Leão"
       ],
-      "avg_goals_scored": 2.1,
-      "avg_goals_conceded": 0.7,
-      "injury_factor": 0.98
+      "avg_goals_scored": 1.0,
+      "avg_goals_conceded": 1.0,
+      "injury_factor": 0.98,
+      "matches_played_wc": 1
     },
     "Germany": {
       "flag": "🇩🇪",
       "confederation": "UEFA",
       "fifa_rank": 12,
-      "elo": 1952.3,
-      "attack": 1.8,
+      "elo": 1956.7,
+      "attack": 1.736,
       "defense": 0.709,
       "recent_form": [
+        2,
         2,
         2,
         1,
@@ -312,7 +317,6 @@
         0,
         1,
         2,
-        1,
         1
       ],
       "wc_wins": 4,
@@ -322,19 +326,20 @@
         "F. Wirtz",
         "M. Neuer"
       ],
-      "avg_goals_scored": 7.0,
+      "avg_goals_scored": 4.5,
       "avg_goals_conceded": 1.0,
       "injury_factor": 0.98,
-      "matches_played_wc": 1
+      "matches_played_wc": 2
     },
     "Belgium": {
       "flag": "🇧🇪",
       "confederation": "UEFA",
       "fifa_rank": 4,
-      "elo": 1935,
-      "attack": 1.55,
-      "defense": 0.72,
+      "elo": 1929.0,
+      "attack": 1.513,
+      "defense": 0.729,
       "recent_form": [
+        1,
         2,
         1,
         2,
@@ -343,8 +348,7 @@
         0,
         2,
         1,
-        2,
-        1
+        2
       ],
       "wc_wins": 0,
       "best_result": "Third place (1986,2018)",
@@ -353,18 +357,20 @@
         "K. De Bruyne",
         "T. Courtois"
       ],
-      "avg_goals_scored": 1.9,
-      "avg_goals_conceded": 0.8,
-      "injury_factor": 0.96
+      "avg_goals_scored": 1.0,
+      "avg_goals_conceded": 1.0,
+      "injury_factor": 0.96,
+      "matches_played_wc": 1
     },
     "Netherlands": {
       "flag": "🇳🇱",
       "confederation": "UEFA",
       "fifa_rank": 7,
-      "elo": 1928.2,
-      "attack": 1.554,
-      "defense": 0.774,
+      "elo": 1937.7,
+      "attack": 1.671,
+      "defense": 0.755,
       "recent_form": [
+        2,
         1,
         2,
         1,
@@ -373,8 +379,7 @@
         0,
         1,
         2,
-        1,
-        2
+        1
       ],
       "wc_wins": 0,
       "best_result": "Runner-up (1974,1978,2010)",
@@ -383,19 +388,20 @@
         "C. Gakpo",
         "F. de Jong"
       ],
-      "avg_goals_scored": 2.0,
-      "avg_goals_conceded": 2.0,
+      "avg_goals_scored": 3.5,
+      "avg_goals_conceded": 1.5,
       "injury_factor": 0.99,
-      "matches_played_wc": 1
+      "matches_played_wc": 2
     },
     "Uruguay": {
       "flag": "🇺🇾",
       "confederation": "CONMEBOL",
       "fifa_rank": 10,
-      "elo": 1895,
-      "attack": 1.4,
-      "defense": 0.76,
+      "elo": 1889.8,
+      "attack": 1.371,
+      "defense": 0.764,
       "recent_form": [
+        1,
         2,
         1,
         1,
@@ -404,8 +410,7 @@
         1,
         1,
         2,
-        0,
-        1
+        0
       ],
       "wc_wins": 2,
       "best_result": "Winner (1930,1950)",
@@ -414,18 +419,20 @@
         "R. Bentancur",
         "F. Valverde"
       ],
-      "avg_goals_scored": 1.7,
-      "avg_goals_conceded": 0.9,
-      "injury_factor": 0.97
+      "avg_goals_scored": 1.0,
+      "avg_goals_conceded": 1.0,
+      "injury_factor": 0.97,
+      "matches_played_wc": 1
     },
     "Colombia": {
       "flag": "🇨🇴",
       "confederation": "CONMEBOL",
       "fifa_rank": 15,
-      "elo": 1855,
-      "attack": 1.5,
-      "defense": 0.78,
+      "elo": 1861.4,
+      "attack": 1.543,
+      "defense": 0.79,
       "recent_form": [
+        2,
         2,
         1,
         2,
@@ -434,7 +441,6 @@
         2,
         1,
         2,
-        1,
         1
       ],
       "wc_wins": 0,
@@ -444,18 +450,20 @@
         "L. Díaz",
         "C. Hernández"
       ],
-      "avg_goals_scored": 1.9,
-      "avg_goals_conceded": 0.8,
-      "injury_factor": 0.99
+      "avg_goals_scored": 3.0,
+      "avg_goals_conceded": 1.0,
+      "injury_factor": 0.99,
+      "matches_played_wc": 1
     },
     "Morocco": {
       "flag": "🇲🇦",
       "confederation": "CAF",
       "fifa_rank": 14,
-      "elo": 1844.5,
+      "elo": 1849.8,
       "attack": 1.232,
-      "defense": 0.735,
+      "defense": 0.698,
       "recent_form": [
+        2,
         1,
         1,
         1,
@@ -464,7 +472,6 @@
         0,
         1,
         2,
-        1,
         1
       ],
       "wc_wins": 0,
@@ -475,9 +482,9 @@
         "Y. Bounou"
       ],
       "avg_goals_scored": 1.0,
-      "avg_goals_conceded": 1.0,
+      "avg_goals_conceded": 0.5,
       "injury_factor": 0.99,
-      "matches_played_wc": 1
+      "matches_played_wc": 2
     },
     "Senegal": {
       "flag": "🇸🇳",
@@ -514,10 +521,11 @@
       "flag": "🇯🇵",
       "confederation": "AFC",
       "fifa_rank": 18,
-      "elo": 1866.8,
-      "attack": 1.367,
-      "defense": 0.849,
+      "elo": 1876.6,
+      "attack": 1.435,
+      "defense": 0.807,
       "recent_form": [
+        2,
         1,
         1,
         2,
@@ -526,8 +534,7 @@
         0,
         2,
         1,
-        2,
-        1
+        2
       ],
       "wc_wins": 0,
       "best_result": "Quarter-final (2022)",
@@ -536,19 +543,21 @@
         "D. Kamada",
         "S. Gonda"
       ],
-      "avg_goals_scored": 2.0,
-      "avg_goals_conceded": 2.0,
+      "avg_goals_scored": 3.0,
+      "avg_goals_conceded": 1.0,
       "injury_factor": 1.0,
-      "matches_played_wc": 1
+      "matches_played_wc": 2
     },
     "Switzerland": {
       "flag": "🇨🇭",
       "confederation": "UEFA",
       "fifa_rank": 19,
-      "elo": 1790,
-      "attack": 1.2,
-      "defense": 0.8,
+      "elo": 1795.3,
+      "attack": 1.354,
+      "defense": 0.804,
       "recent_form": [
+        2,
+        1,
         1,
         2,
         1,
@@ -556,9 +565,7 @@
         0,
         2,
         1,
-        1,
-        1,
-        2
+        1
       ],
       "wc_wins": 0,
       "best_result": "Quarter-final (1954)",
@@ -567,18 +574,20 @@
         "X. Shaqiri",
         "Y. Sommer"
       ],
-      "avg_goals_scored": 1.6,
-      "avg_goals_conceded": 0.9,
-      "injury_factor": 0.99
+      "avg_goals_scored": 2.5,
+      "avg_goals_conceded": 1.0,
+      "injury_factor": 0.99,
+      "matches_played_wc": 2
     },
     "Croatia": {
       "flag": "🇭🇷",
       "confederation": "UEFA",
       "fifa_rank": 12,
-      "elo": 1825,
-      "attack": 1.3,
-      "defense": 0.8,
+      "elo": 1816.5,
+      "attack": 1.322,
+      "defense": 0.938,
       "recent_form": [
+        0,
         1,
         1,
         2,
@@ -587,7 +596,6 @@
         2,
         1,
         0,
-        1,
         1
       ],
       "wc_wins": 0,
@@ -597,9 +605,10 @@
         "I. Perišić",
         "D. Livaković"
       ],
-      "avg_goals_scored": 1.5,
-      "avg_goals_conceded": 0.9,
-      "injury_factor": 0.97
+      "avg_goals_scored": 2.0,
+      "avg_goals_conceded": 4.0,
+      "injury_factor": 0.97,
+      "matches_played_wc": 1
     },
     "Mexico": {
       "flag": "🇲🇽",
@@ -636,11 +645,12 @@
       "flag": "🇳🇴",
       "confederation": "UEFA",
       "fifa_rank": 28,
-      "elo": 1760,
-      "attack": 1.45,
+      "elo": 1768.7,
+      "attack": 1.522,
       "defense": 0.85,
       "recent_form": [
         2,
+        2,
         1,
         0,
         2,
@@ -648,8 +658,7 @@
         1,
         2,
         0,
-        1,
-        2
+        1
       ],
       "wc_wins": 0,
       "best_result": "Quarter-final (1938)",
@@ -658,18 +667,20 @@
         "M. Ødegaard",
         "A. Sørloth"
       ],
-      "avg_goals_scored": 2.0,
+      "avg_goals_scored": 4.0,
       "avg_goals_conceded": 1.0,
-      "injury_factor": 0.99
+      "injury_factor": 0.99,
+      "matches_played_wc": 1
     },
     "USA": {
       "flag": "🇺🇸",
       "confederation": "CONCACAF",
       "fifa_rank": 14,
-      "elo": 1813.7,
+      "elo": 1826.3,
       "attack": 1.311,
-      "defense": 0.807,
+      "defense": 0.767,
       "recent_form": [
+        2,
         2,
         1,
         1,
@@ -678,8 +689,7 @@
         1,
         2,
         1,
-        1,
-        0
+        1
       ],
       "wc_wins": 0,
       "best_result": "Semi-final (1930)",
@@ -691,7 +701,7 @@
       "avg_goals_scored": 2.0,
       "avg_goals_conceded": 0.0,
       "injury_factor": 0.97,
-      "matches_played_wc": 1
+      "matches_played_wc": 2
     },
     "Austria": {
       "flag": "🇦🇹",
@@ -787,10 +797,12 @@
       "flag": "🇦🇺",
       "confederation": "AFC",
       "fifa_rank": 24,
-      "elo": 1745,
-      "attack": 1.1,
-      "defense": 0.95,
+      "elo": 1746.1,
+      "attack": 1.073,
+      "defense": 1.037,
       "recent_form": [
+        0,
+        2,
         1,
         0,
         1,
@@ -798,8 +810,6 @@
         1,
         1,
         0,
-        1,
-        2,
         1
       ],
       "wc_wins": 0,
@@ -809,18 +819,21 @@
         "M. Duke",
         "A. Mooy"
       ],
-      "avg_goals_scored": 1.3,
-      "avg_goals_conceded": 1.1,
-      "injury_factor": 1.0
+      "avg_goals_scored": 1.0,
+      "avg_goals_conceded": 1.0,
+      "injury_factor": 1.0,
+      "matches_played_wc": 2
     },
     "Türkiye": {
       "flag": "🇹🇷",
       "confederation": "UEFA",
       "fifa_rank": 31,
-      "elo": 1715,
-      "attack": 1.15,
-      "defense": 0.95,
+      "elo": 1689.6,
+      "attack": 1.037,
+      "defense": 0.972,
       "recent_form": [
+        0,
+        0,
         2,
         1,
         1,
@@ -828,9 +841,7 @@
         1,
         2,
         1,
-        0,
-        1,
-        1
+        0
       ],
       "wc_wins": 0,
       "best_result": "Third place (2002)",
@@ -839,18 +850,21 @@
         "H. Çalhanoğlu",
         "M. Demiral"
       ],
-      "avg_goals_scored": 1.5,
-      "avg_goals_conceded": 1.0,
-      "injury_factor": 0.99
+      "avg_goals_scored": 0.0,
+      "avg_goals_conceded": 1.5,
+      "injury_factor": 0.99,
+      "matches_played_wc": 2
     },
     "Sweden": {
       "flag": "🇸🇪",
       "confederation": "UEFA",
       "fifa_rank": 22,
-      "elo": 1740,
-      "attack": 1.15,
-      "defense": 0.9,
+      "elo": 1747.0,
+      "attack": 1.246,
+      "defense": 1.08,
       "recent_form": [
+        0,
+        2,
         1,
         1,
         0,
@@ -858,9 +872,7 @@
         1,
         1,
         2,
-        0,
-        1,
-        1
+        0
       ],
       "wc_wins": 0,
       "best_result": "Third place (1950,1994)",
@@ -868,18 +880,20 @@
         "A. Isak",
         "D. Kulusevski"
       ],
-      "avg_goals_scored": 1.4,
-      "avg_goals_conceded": 1.0,
-      "injury_factor": 1.0
+      "avg_goals_scored": 3.0,
+      "avg_goals_conceded": 3.0,
+      "injury_factor": 1.0,
+      "matches_played_wc": 2
     },
     "Ivory Coast": {
       "flag": "🇨🇮",
       "confederation": "CAF",
       "fifa_rank": 42,
-      "elo": 1730.7,
+      "elo": 1726.3,
       "attack": 1.16,
-      "defense": 0.921,
+      "defense": 1.059,
       "recent_form": [
+        0,
         2,
         1,
         2,
@@ -888,8 +902,7 @@
         1,
         2,
         1,
-        0,
-        1
+        0
       ],
       "wc_wins": 0,
       "best_result": "Group Stage",
@@ -898,18 +911,19 @@
         "F. Kessié"
       ],
       "avg_goals_scored": 1.0,
-      "avg_goals_conceded": 0.0,
+      "avg_goals_conceded": 1.0,
       "injury_factor": 0.98,
-      "matches_played_wc": 1
+      "matches_played_wc": 2
     },
     "Canada": {
       "flag": "🇨🇦",
       "confederation": "CONCACAF",
       "fifa_rank": 36,
-      "elo": 1713.2,
-      "attack": 1.124,
-      "defense": 0.896,
+      "elo": 1727.0,
+      "attack": 1.405,
+      "defense": 0.851,
       "recent_form": [
+        2,
         1,
         1,
         1,
@@ -918,7 +932,6 @@
         0,
         1,
         2,
-        1,
         1
       ],
       "wc_wins": 0,
@@ -928,10 +941,10 @@
         "J. David",
         "C. Larin"
       ],
-      "avg_goals_scored": 1.0,
-      "avg_goals_conceded": 1.0,
+      "avg_goals_scored": 3.5,
+      "avg_goals_conceded": 0.5,
       "injury_factor": 1.0,
-      "matches_played_wc": 1
+      "matches_played_wc": 2
     },
     "Czechia": {
       "flag": "🇨🇿",
@@ -967,10 +980,11 @@
       "flag": "🇩🇿",
       "confederation": "CAF",
       "fifa_rank": 44,
-      "elo": 1655,
-      "attack": 1.0,
-      "defense": 1.0,
+      "elo": 1651.8,
+      "attack": 0.95,
+      "defense": 1.132,
       "recent_form": [
+        0,
         1,
         0,
         2,
@@ -979,8 +993,7 @@
         1,
         1,
         0,
-        2,
-        1
+        2
       ],
       "wc_wins": 0,
       "best_result": "Round of 16 (2014)",
@@ -988,18 +1001,21 @@
         "R. Mahrez",
         "A. Delort"
       ],
-      "avg_goals_scored": 1.2,
-      "avg_goals_conceded": 1.1,
-      "injury_factor": 0.99
+      "avg_goals_scored": 0.0,
+      "avg_goals_conceded": 4.0,
+      "injury_factor": 0.99,
+      "matches_played_wc": 1
     },
     "Tunisia": {
       "flag": "🇹🇳",
       "confederation": "CAF",
       "fifa_rank": 35,
-      "elo": 1720,
-      "attack": 1.0,
-      "defense": 0.98,
+      "elo": 1693.7,
+      "attack": 0.942,
+      "defense": 1.142,
       "recent_form": [
+        0,
+        0,
         0,
         1,
         1,
@@ -1007,9 +1023,7 @@
         2,
         1,
         1,
-        0,
-        1,
-        2
+        0
       ],
       "wc_wins": 0,
       "best_result": "Group Stage",
@@ -1017,18 +1031,20 @@
         "Y. Msakni",
         "W. Khazri"
       ],
-      "avg_goals_scored": 1.2,
-      "avg_goals_conceded": 1.1,
-      "injury_factor": 1.0
+      "avg_goals_scored": 0.5,
+      "avg_goals_conceded": 4.5,
+      "injury_factor": 1.0,
+      "matches_played_wc": 2
     },
     "Scotland": {
       "flag": "🏴󠁧󠁢󠁳󠁣󠁴󠁿",
       "confederation": "UEFA",
       "fifa_rank": 38,
-      "elo": 1665.5,
-      "attack": 1.038,
-      "defense": 0.95,
+      "elo": 1660.2,
+      "attack": 0.986,
+      "defense": 0.997,
       "recent_form": [
+        0,
         2,
         0,
         1,
@@ -1037,8 +1053,7 @@
         0,
         1,
         0,
-        1,
-        2
+        1
       ],
       "wc_wins": 0,
       "best_result": "Group Stage",
@@ -1046,20 +1061,21 @@
         "A. Robertson",
         "S. McTominay"
       ],
-      "avg_goals_scored": 1.0,
-      "avg_goals_conceded": 0.0,
+      "avg_goals_scored": 0.5,
+      "avg_goals_conceded": 0.5,
       "injury_factor": 0.99,
-      "matches_played_wc": 1
+      "matches_played_wc": 2
     },
     "Egypt": {
       "flag": "🇪🇬",
       "confederation": "CAF",
       "fifa_rank": 34,
-      "elo": 1695,
-      "attack": 1.05,
+      "elo": 1701.0,
+      "attack": 1.038,
       "defense": 0.97,
       "recent_form": [
         1,
+        1,
         0,
         2,
         1,
@@ -1067,8 +1083,7 @@
         0,
         1,
         2,
-        0,
-        1
+        0
       ],
       "wc_wins": 0,
       "best_result": "Group Stage",
@@ -1076,19 +1091,21 @@
         "M. Salah",
         "M. El-Shenawy"
       ],
-      "avg_goals_scored": 1.3,
+      "avg_goals_scored": 1.0,
       "avg_goals_conceded": 1.0,
-      "injury_factor": 0.98
+      "injury_factor": 0.98,
+      "matches_played_wc": 1
     },
     "Iran": {
       "flag": "🇮🇷",
       "confederation": "AFC",
       "fifa_rank": 26,
-      "elo": 1660,
-      "attack": 1.05,
-      "defense": 0.95,
+      "elo": 1656.5,
+      "attack": 1.078,
+      "defense": 0.989,
       "recent_form": [
         1,
+        1,
         2,
         0,
         1,
@@ -1096,8 +1113,7 @@
         0,
         2,
         1,
-        0,
-        1
+        0
       ],
       "wc_wins": 0,
       "best_result": "Group Stage",
@@ -1105,18 +1121,20 @@
         "M. Taremi",
         "S. Azmoun"
       ],
-      "avg_goals_scored": 1.3,
-      "avg_goals_conceded": 1.1,
-      "injury_factor": 0.99
+      "avg_goals_scored": 2.0,
+      "avg_goals_conceded": 2.0,
+      "injury_factor": 0.99,
+      "matches_played_wc": 1
     },
     "Ghana": {
       "flag": "🇬🇭",
       "confederation": "CAF",
       "fifa_rank": 56,
-      "elo": 1675,
-      "attack": 0.95,
-      "defense": 1.02,
+      "elo": 1682.2,
+      "attack": 0.942,
+      "defense": 0.969,
       "recent_form": [
+        2,
         0,
         1,
         2,
@@ -1125,8 +1143,7 @@
         1,
         0,
         1,
-        2,
-        0
+        2
       ],
       "wc_wins": 0,
       "best_result": "Quarter-final (2010)",
@@ -1134,18 +1151,20 @@
         "M. Kudus",
         "T. Partey"
       ],
-      "avg_goals_scored": 1.2,
-      "avg_goals_conceded": 1.2,
-      "injury_factor": 0.99
+      "avg_goals_scored": 1.0,
+      "avg_goals_conceded": 0.0,
+      "injury_factor": 0.99,
+      "matches_played_wc": 1
     },
     "Congo DR": {
       "flag": "🇨🇩",
       "confederation": "CAF",
       "fifa_rank": 61,
-      "elo": 1665,
-      "attack": 0.9,
-      "defense": 1.05,
+      "elo": 1671.7,
+      "attack": 0.896,
+      "defense": 1.041,
       "recent_form": [
+        1,
         1,
         0,
         1,
@@ -1154,8 +1173,7 @@
         1,
         0,
         1,
-        1,
-        0
+        1
       ],
       "wc_wins": 0,
       "best_result": "Quarter-final (1974 as Zaire)",
@@ -1163,18 +1181,20 @@
         "C. Bakambu",
         "Y. Bolasie"
       ],
-      "avg_goals_scored": 1.1,
-      "avg_goals_conceded": 1.2,
-      "injury_factor": 1.0
+      "avg_goals_scored": 1.0,
+      "avg_goals_conceded": 1.0,
+      "injury_factor": 1.0,
+      "matches_played_wc": 1
     },
     "Paraguay": {
       "flag": "🇵🇾",
       "confederation": "CONMEBOL",
       "fifa_rank": 67,
-      "elo": 1641.3,
-      "attack": 0.874,
-      "defense": 1.054,
+      "elo": 1653.0,
+      "attack": 0.918,
+      "defense": 1.001,
       "recent_form": [
+        2,
         0,
         0,
         1,
@@ -1183,8 +1203,7 @@
         1,
         0,
         1,
-        0,
-        1
+        0
       ],
       "wc_wins": 0,
       "best_result": "Quarter-final (1962)",
@@ -1192,19 +1211,20 @@
         "M. Almirón",
         "J. Alonso"
       ],
-      "avg_goals_scored": 0.0,
-      "avg_goals_conceded": 2.0,
+      "avg_goals_scored": 0.5,
+      "avg_goals_conceded": 1.0,
       "injury_factor": 1.0,
-      "matches_played_wc": 1
+      "matches_played_wc": 2
     },
     "Bosnia-Herzegovina": {
       "flag": "🇧🇦",
       "confederation": "UEFA",
       "fifa_rank": 53,
-      "elo": 1651.8,
+      "elo": 1642.3,
       "attack": 0.893,
-      "defense": 1.038,
+      "defense": 1.194,
       "recent_form": [
+        0,
         1,
         0,
         1,
@@ -1213,7 +1233,6 @@
         2,
         1,
         0,
-        1,
         1
       ],
       "wc_wins": 0,
@@ -1223,28 +1242,28 @@
         "M. Pjanić"
       ],
       "avg_goals_scored": 1.0,
-      "avg_goals_conceded": 1.0,
+      "avg_goals_conceded": 2.5,
       "injury_factor": 0.98,
-      "matches_played_wc": 1
+      "matches_played_wc": 2
     },
     "Saudi Arabia": {
       "flag": "🇸🇦",
       "confederation": "AFC",
       "fifa_rank": 56,
-      "elo": 1695,
-      "attack": 0.95,
-      "defense": 1.02,
+      "elo": 1700.2,
+      "attack": 0.942,
+      "defense": 1.008,
       "recent_form": [
-        0,
-        2,
-        1,
-        0,
         1,
         0,
         2,
         1,
         0,
-        1
+        1,
+        0,
+        2,
+        1,
+        0
       ],
       "wc_wins": 0,
       "best_result": "Round of 16 (1994)",
@@ -1252,18 +1271,20 @@
         "S. Al-Dawsari",
         "M. Al-Burayk"
       ],
-      "avg_goals_scored": 1.2,
-      "avg_goals_conceded": 1.3,
-      "injury_factor": 1.0
+      "avg_goals_scored": 1.0,
+      "avg_goals_conceded": 1.0,
+      "injury_factor": 1.0,
+      "matches_played_wc": 1
     },
     "Uzbekistan": {
       "flag": "🇺🇿",
       "confederation": "AFC",
       "fifa_rank": 65,
-      "elo": 1630,
-      "attack": 0.88,
-      "defense": 1.05,
+      "elo": 1623.6,
+      "attack": 0.876,
+      "defense": 1.129,
       "recent_form": [
+        0,
         1,
         0,
         1,
@@ -1272,8 +1293,7 @@
         1,
         1,
         0,
-        1,
-        2
+        1
       ],
       "wc_wins": 0,
       "best_result": "WC debut",
@@ -1281,18 +1301,21 @@
         "E. Shomurodov",
         "J. Yakhshiboev"
       ],
-      "avg_goals_scored": 1.1,
-      "avg_goals_conceded": 1.2,
-      "injury_factor": 1.0
+      "avg_goals_scored": 1.0,
+      "avg_goals_conceded": 3.0,
+      "injury_factor": 1.0,
+      "matches_played_wc": 1
     },
     "Qatar": {
       "flag": "🇶🇦",
       "confederation": "AFC",
       "fifa_rank": 58,
-      "elo": 1635,
-      "attack": 0.85,
-      "defense": 1.1,
+      "elo": 1625.4,
+      "attack": 0.804,
+      "defense": 1.355,
       "recent_form": [
+        0,
+        1,
         0,
         1,
         0,
@@ -1300,9 +1323,7 @@
         1,
         0,
         0,
-        1,
-        0,
-        2
+        1
       ],
       "wc_wins": 0,
       "best_result": "Group Stage (2022)",
@@ -1310,28 +1331,29 @@
         "A. Afif",
         "A. Ali"
       ],
-      "avg_goals_scored": 1.1,
-      "avg_goals_conceded": 1.4,
-      "injury_factor": 1.0
+      "avg_goals_scored": 0.5,
+      "avg_goals_conceded": 3.5,
+      "injury_factor": 1.0,
+      "matches_played_wc": 2
     },
     "Iraq": {
       "flag": "🇮🇶",
       "confederation": "AFC",
       "fifa_rank": 59,
-      "elo": 1605,
+      "elo": 1596.3,
       "attack": 0.85,
-      "defense": 1.08,
+      "defense": 1.192,
       "recent_form": [
-        1,
         0,
         1,
-        0,
-        2,
         0,
         1,
         0,
         2,
-        1
+        0,
+        1,
+        0,
+        2
       ],
       "wc_wins": 0,
       "best_result": "Group Stage (1986)",
@@ -1340,8 +1362,9 @@
         "A. Attwan"
       ],
       "avg_goals_scored": 1.0,
-      "avg_goals_conceded": 1.3,
-      "injury_factor": 1.0
+      "avg_goals_conceded": 4.0,
+      "injury_factor": 1.0,
+      "matches_played_wc": 1
     },
     "South Africa": {
       "flag": "🇿🇦",
@@ -1406,72 +1429,14 @@
       "flag": "🇨🇻",
       "confederation": "CAF",
       "fifa_rank": 70,
-      "elo": 1585,
-      "attack": 0.8,
-      "defense": 1.1,
+      "elo": 1592.7,
+      "attack": 0.76,
+      "defense": 1.045,
       "recent_form": [
         1,
-        0,
-        1,
-        2,
-        0,
         1,
         0,
         1,
-        0,
-        2
-      ],
-      "wc_wins": 0,
-      "best_result": "WC debut",
-      "key_players": [
-        "R. Mendes",
-        "G. Rodrigues"
-      ],
-      "avg_goals_scored": 1.0,
-      "avg_goals_conceded": 1.2,
-      "injury_factor": 1.0
-    },
-    "Panama": {
-      "flag": "🇵🇦",
-      "confederation": "CONCACAF",
-      "fifa_rank": 73,
-      "elo": 1575,
-      "attack": 0.75,
-      "defense": 1.15,
-      "recent_form": [
-        0,
-        1,
-        0,
-        2,
-        0,
-        1,
-        0,
-        0,
-        1,
-        2
-      ],
-      "wc_wins": 0,
-      "best_result": "Group Stage",
-      "key_players": [
-        "I. Díaz",
-        "R. Blackburn"
-      ],
-      "avg_goals_scored": 0.9,
-      "avg_goals_conceded": 1.5,
-      "injury_factor": 1.0
-    },
-    "New Zealand": {
-      "flag": "🇳🇿",
-      "confederation": "OFC",
-      "fifa_rank": 90,
-      "elo": 1535,
-      "attack": 0.7,
-      "defense": 1.2,
-      "recent_form": [
-        0,
-        1,
-        0,
-        0,
         2,
         0,
         1,
@@ -1480,27 +1445,28 @@
         0
       ],
       "wc_wins": 0,
-      "best_result": "Group Stage",
+      "best_result": "WC debut",
       "key_players": [
-        "C. Wood",
-        "R. Thomas"
+        "R. Mendes",
+        "G. Rodrigues"
       ],
-      "avg_goals_scored": 0.9,
-      "avg_goals_conceded": 1.5,
-      "injury_factor": 1.0
+      "avg_goals_scored": 0.0,
+      "avg_goals_conceded": 0.0,
+      "injury_factor": 1.0,
+      "matches_played_wc": 1
     },
-    "Haiti": {
-      "flag": "🇭🇹",
+    "Panama": {
+      "flag": "🇵🇦",
       "confederation": "CONCACAF",
-      "fifa_rank": 97,
-      "elo": 1484.5,
-      "attack": 0.617,
-      "defense": 1.227,
+      "fifa_rank": 73,
+      "elo": 1567.8,
+      "attack": 0.712,
+      "defense": 1.131,
       "recent_form": [
         0,
         0,
-        0,
         1,
+        0,
         2,
         0,
         1,
@@ -1509,14 +1475,74 @@
         1
       ],
       "wc_wins": 0,
-      "best_result": "Group Stage (1974)",
+      "best_result": "Group Stage",
       "key_players": [
-        "D. Nazon"
+        "I. Díaz",
+        "R. Blackburn"
       ],
       "avg_goals_scored": 0.0,
       "avg_goals_conceded": 1.0,
       "injury_factor": 1.0,
       "matches_played_wc": 1
+    },
+    "New Zealand": {
+      "flag": "🇳🇿",
+      "confederation": "OFC",
+      "fifa_rank": 90,
+      "elo": 1538.5,
+      "attack": 0.743,
+      "defense": 1.22,
+      "recent_form": [
+        1,
+        0,
+        1,
+        0,
+        0,
+        2,
+        0,
+        1,
+        0,
+        1
+      ],
+      "wc_wins": 0,
+      "best_result": "Group Stage",
+      "key_players": [
+        "C. Wood",
+        "R. Thomas"
+      ],
+      "avg_goals_scored": 2.0,
+      "avg_goals_conceded": 2.0,
+      "injury_factor": 1.0,
+      "matches_played_wc": 1
+    },
+    "Haiti": {
+      "flag": "🇭🇹",
+      "confederation": "CONCACAF",
+      "fifa_rank": 97,
+      "elo": 1483.1,
+      "attack": 0.586,
+      "defense": 1.35,
+      "recent_form": [
+        0,
+        0,
+        0,
+        0,
+        1,
+        2,
+        0,
+        1,
+        0,
+        0
+      ],
+      "wc_wins": 0,
+      "best_result": "Group Stage (1974)",
+      "key_players": [
+        "D. Nazon"
+      ],
+      "avg_goals_scored": 0.0,
+      "avg_goals_conceded": 2.0,
+      "injury_factor": 1.0,
+      "matches_played_wc": 2
     },
     "Curaçao": {
       "flag": "🇨🇼",

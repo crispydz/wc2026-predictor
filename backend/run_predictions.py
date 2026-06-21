@@ -161,7 +161,7 @@ def main():
     p.add_argument("--validate", action="store_true", help="Backtest on WC 2022")
     args = p.parse_args()
 
-    n = 10000 if args.fast else (100000 if args.full else 50000)
+    n = 50000 if args.fast else (100000 if args.full else 50000)
 
     print("\n" + "█"*55)
     print("  🏆 FIFA WORLD CUP 2026 — AI PREDICTION ENGINE")
