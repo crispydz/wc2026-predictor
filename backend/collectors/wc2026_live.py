@@ -63,12 +63,9 @@ KNOWN_RESULTS = [
     {"h":"Norway",        "a":"Iraq",                "hg":4,"ag":1,"date":"2026-06-16","stage":"GROUP"},
 
     # Groupe J — 16 juin
-    {"h":"Argentina",     "a":"Algeria",             "hg":4,"ag":0,"date":"2026-06-16","stage":"GROUP"},  # Messi hat-trick
-
-    # ════════════════════════════════════════════════════
-    # MATCHDAY 2
-    # ════════════════════════════════════════════════════
-
+    {"h":"Argentina",     "a":"Algeria",             "hg":3,"ag":0,"date":"2026-06-16","stage":"GROUP"},  # Messi hat-trick
+    {"h":"Austria",     "a":"Jordan",                "hg":3,"ag":1,"date":"2026-06-16","stage":"GROUP"},
+  
     # Groupe K — 17 juin
     {"h":"Portugal",      "a":"Congo DR",            "hg":1,"ag":1,"date":"2026-06-17","stage":"GROUP"},
     {"h":"Uzbekistan",    "a":"Colombia",            "hg":1,"ag":3,"date":"2026-06-17","stage":"GROUP"},
@@ -76,6 +73,14 @@ KNOWN_RESULTS = [
     # Groupe L — 17 juin
     {"h":"England",       "a":"Croatia",             "hg":4,"ag":2,"date":"2026-06-17","stage":"GROUP"},
     {"h":"Ghana",         "a":"Panama",              "hg":1,"ag":0,"date":"2026-06-17","stage":"GROUP"},
+
+    # ════════════════════════════════════════════════════
+    # MATCHDAY 2
+    # ═════════════════════════════════════════════════╗  
+
+    # Groupe A — 18 juin
+    {"h":"Mexico",       "a":"Czechia",             "hg":1,"ag":1,"date":"2026-06-18","stage":"GROUP"},
+    {"h":"South Africa", "a":"South Korea",         "hg":0,"ag":2,"date":"2026-06-18","stage":"GROUP"},
 
     # Groupe B — 18 juin
     {"h":"Switzerland",   "a":"Bosnia-Herzegovina",  "hg":4,"ag":1,"date":"2026-06-18","stage":"GROUP"},
@@ -89,12 +94,40 @@ KNOWN_RESULTS = [
     {"h":"USA",           "a":"Australia",           "hg":2,"ag":0,"date":"2026-06-19","stage":"GROUP"},
     {"h":"Türkiye",       "a":"Paraguay",            "hg":0,"ag":1,"date":"2026-06-19","stage":"GROUP"},
 
-    # Groupe F — 20 juin
-    {"h":"Netherlands",   "a":"Sweden",              "hg":5,"ag":1,"date":"2026-06-20","stage":"GROUP"},
-    {"h":"Japan",         "a":"Tunisia",             "hg":4,"ag":0,"date":"2026-06-20","stage":"GROUP"},
-
     # Groupe E — 20-21 juin
     {"h":"Germany",       "a":"Ivory Coast",         "hg":2,"ag":1,"date":"2026-06-20","stage":"GROUP"},
+    {"h":"Ecuador",       "a":"Curacao",             "hg":0,"ag":0,"date":"2026-06-20","stage":"GROUP"},
+
+    # Groupe F — 20 juin
+    {"h":"Netherlands",   "a":"Sweden",             "hg":5,"ag":1,"date":"2026-06-20","stage":"GROUP"},
+    {"h":"Japan",         "a":"Tunisia",            "hg":4,"ag":0,"date":"2026-06-20","stage":"GROUP"},
+
+    # Groupe G — 21 juin
+    {"h":"Belgium",       "a":"Iran",               "hg":0,"ag":0,"date":"2026-06-21","stage":"GROUP"},
+    {"h":"New Zealand",   "a":"Egypt",              "hg":1,"ag":3,"date":"2026-06-21","stage":"GROUP"},
+
+    # Groupe H — 21 juin
+    {"h":"Spain",         "a":"Saudi Arabia",       "hg":4,"ag":0,"date":"2026-06-21","stage":"GROUP"},
+    {"h":"Uruguay",       "a":"Cabo Verde",         "hg":2,"ag":2,"date":"2026-06-21","stage":"GROUP"},
+
+    # Groupe I — 22 juin
+    {"h":"France",        "a":"Iraq",              "hg":3,"ag":0,"date":"2026-06-22","stage":"GROUP"},
+    {"h":"Norway",        "a":"Senegal",           "hg":3,"ag":2,"date":"2026-06-22","stage":"GROUP"},
+
+    # Groupe J — 22 juin
+    {"h":"Argentina",     "a":"Austria",           "hg":3,"ag":0,"date":"2026-06-22","stage":"GROUP"},
+    {"h":"Jordan",        "a":"Algeria",           "hg":3,"ag":2,"date":"2026-06-22","stage":"GROUP"},
+
+
+
+
+
+
+
+
+
+
+ 
 
     # ════════════════════════════════════════════════════
     # AJOUTER ICI les prochains résultats au fur et à mesure
