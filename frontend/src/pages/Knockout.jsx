@@ -2,54 +2,73 @@ import React, { useMemo } from 'react'
 import { predictions } from '../data/predictions_static'
 import { GROUPS } from '../data/tournament'
 import Flag from '../components/Flag'
-import { useIsMobile } from '../hooks/useIsMobile'
 
-const cp = predictions.champion_probabilities || {}
+// ── Layout ────────────────────────────────────────────────────
+const SLOT   = 76    // px : hauteur d'un "slot" R32 (match + espace)
+const MH     = 54    // px : hauteur d'un match box
+const CW     = 182   // px : largeur d'une colonne
+const LW     = 28    // px : largeur du connecteur entre colonnes
+const HEADER = 30    // px : hauteur des headers
+const CHAMP_W = 118  // px : largeur de la carte champion
+const TOTAL_H = SLOT * 16          // = 1216 px
+const TOTAL_W = 5*(CW+LW) + CHAMP_W + 20
+
+// Centre Y d'un match dans la grille
+function matchCenterY(round, idx) {
+  const span = Math.pow(2, round)
+  return span * SLOT * idx + span * SLOT / 2
+}
+// Top Y du match box (centré dans son slot)
+function matchTopY(round, idx) {
+  return matchCenterY(round, idx) - MH / 2
+}
+// X de début d'une colonne
+function colX(round) { return round * (CW + LW) }
 
 // ── Helpers ───────────────────────────────────────────────────
+const cp = predictions.champion_probabilities || {}
+
 function getGroupForTeam(name) {
   return Object.entries(GROUPS).find(([, g]) => g.teams.includes(name))?.[0] || null
 }
-function getWinProb(team) {
-  return team ? (cp[team]?.win_tournament || 0) : 0
-}
-function pickWinner(ta, tb) {
-  if (!ta && !tb) return null
-  if (!ta) return tb
-  if (!tb) return ta
-  return getWinProb(ta) >= getWinProb(tb) ? ta : tb
+function winProb(t) { return t ? (cp[t]?.win_tournament || 0) : 0 }
+function pickWinner(a, b) {
+  if (!a && !b) return null
+  if (!a) return b
+  if (!b) return a
+  return winProb(a) >= winProb(b) ? a : b
 }
 
-// ── Official FIFA 2026 R32 Bracket ───────────────────────────
-// Sources: FIFA.com official bracket, ESPN, Fox Sports
-// 16 matches confirmed (M73–M88)
+// ── Bracket officiel FIFA 2026 (M73–M88) ─────────────────────
+// Ordre : paires 0-1 → R16[0], paires 2-3 → R16[1] → QF[0]  (côté France)
+//         paires 4-5 → R16[2], paires 6-7 → R16[3] → QF[1]  (côté England)
+//         QF[0]+QF[1] → SF[0]
+//         paires 8-11 → QF[2] (côté Spain), paires 12-15 → QF[3] (côté Argentina)
+//         QF[2]+QF[3] → SF[1]   |   SF[0] vs SF[1] → Final
 const R32_PAIRS = [
-  // ═══════════ QF1 QUADRANT (top-left) ═══════════
-  { m:'M74', posA:'1E',       posB:'3(ABCDF)' },  // 0 Germany vs best 3rd
-  { m:'M77', posA:'1I',       posB:'3(CDFGH)' },  // 1 France vs best 3rd
-  { m:'M73', posA:'2A',       posB:'2B'       },  // 2 runner-up A vs B
-  { m:'M75', posA:'1F',       posB:'2C'       },  // 3 1F vs runner-up C
-
-  // ═══════════ QF2 QUADRANT (bottom-left) ═══════════
-  { m:'M76', posA:'1C',       posB:'2F'       },  // 4 1C vs runner-up F
-  { m:'M79', posA:'1A',       posB:'3(CEFHI)' },  // 5 Mexico vs best 3rd
-  { m:'M78', posA:'2E',       posB:'2I'       },  // 6 runner-up E vs I
-  { m:'M80', posA:'1L',       posB:'3(EHIJK)' },  // 7 England vs best 3rd
-
-  // ═══════════ QF3 QUADRANT (top-right) ═══════════
-  { m:'M83', posA:'2K',       posB:'2L'       },  // 8  runner-up K vs L
-  { m:'M84', posA:'1H',       posB:'2J'       },  // 9  Spain vs runner-up J
-  { m:'M81', posA:'1D',       posB:'3(BEFIJ)' },  // 10 USA vs best 3rd
-  { m:'M82', posA:'1G',       posB:'3(AEHIJ)' },  // 11 1G vs best 3rd
-
-  // ═══════════ QF4 QUADRANT (bottom-right) ═══════════
-  { m:'M85', posA:'1K',       posB:'3(DEIJL)' },  // 12 1K vs best 3rd
-  { m:'M86', posA:'1J',       posB:'2H'       },  // 13 Argentina vs runner-up H
-  { m:'M87', posA:'1B',       posB:'3(ABCFG)' },  // 14 1B vs best 3rd
-  { m:'M88', posA:'2D',       posB:'2G'       },  // 15 runner-up D vs G
+  // ─── QF1 — France quadrant ────────────────────────────────
+  { m:'M74', posA:'1E',  posB:'3(ABCDF)' },  // 0  Germany vs 3rd
+  { m:'M77', posA:'1I',  posB:'3(CDFGH)' },  // 1  France  vs 3rd ← FRANCE
+  { m:'M73', posA:'2A',  posB:'2B'       },  // 2  2A vs 2B
+  { m:'M75', posA:'1F',  posB:'2C'       },  // 3  1F vs 2C
+  // ─── QF2 — England quadrant ───────────────────────────────
+  { m:'M76', posA:'1C',  posB:'2F'       },  // 4  1C vs 2F
+  { m:'M79', posA:'1A',  posB:'3(CEFHI)' },  // 5  Mexico  vs 3rd
+  { m:'M78', posA:'2E',  posB:'2I'       },  // 6  2E vs 2I
+  { m:'M80', posA:'1L',  posB:'3(EHIJK)' },  // 7  England vs 3rd ← ENGLAND
+  // ─── QF3 — Spain quadrant ─────────────────────────────────
+  { m:'M83', posA:'2K',  posB:'2L'       },  // 8  2K vs 2L
+  { m:'M84', posA:'1H',  posB:'2J'       },  // 9  Spain   vs 2J  ← SPAIN
+  { m:'M81', posA:'1D',  posB:'3(BEFIJ)' },  // 10 USA     vs 3rd
+  { m:'M82', posA:'1G',  posB:'3(AEHIJ)' },  // 11 1G      vs 3rd
+  // ─── QF4 — Argentina quadrant ─────────────────────────────
+  { m:'M85', posA:'1K',  posB:'3(DEIJL)' },  // 12 1K      vs 3rd
+  { m:'M86', posA:'1J',  posB:'2H'       },  // 13 Argentina vs 2H ← ARGENTINA
+  { m:'M87', posA:'1B',  posB:'3(EFGIJ)' },  // 14 1B      vs 3rd
+  { m:'M88', posA:'2D',  posB:'2G'       },  // 15 2D vs 2G
 ]
 
-// Third-place eligible groups per slot
+// Groupes éligibles pour chaque slot de 3e place
 const THIRD_SLOTS = {
   '3(ABCDF)': ['A','B','C','D','F'],
   '3(CDFGH)': ['C','D','F','G','H'],
@@ -58,25 +77,22 @@ const THIRD_SLOTS = {
   '3(BEFIJ)': ['B','E','F','I','J'],
   '3(AEHIJ)': ['A','E','H','I','J'],
   '3(DEIJL)': ['D','E','I','J','L'],
-  '3(ABCFG)': ['A','B','C','F','G'],
+  '3(EFGIJ)': ['E','F','G','I','J'],
 }
 
-// Assign best 8 thirds to eligible slots (greedy, most constrained first)
 function assignThirds(bestThirds) {
   const assigned = {}
   const used = new Set()
-  // Sort by most constrained (fewest eligible groups)
   const sorted = Object.entries(THIRD_SLOTS).sort((a, b) => a[1].length - b[1].length)
   for (const [key, eligible] of sorted) {
     const pick = bestThirds.find(t => !used.has(t) && eligible.includes(getGroupForTeam(t)))
-            || bestThirds.find(t => !used.has(t))
-            || null
+              || bestThirds.find(t => !used.has(t))
+              || null
     if (pick) { assigned[key] = pick; used.add(pick) }
   }
   return assigned
 }
 
-// Resolve position string to actual team
 function resolvePos(pos, bracket, thirds) {
   if (!pos) return null
   if (pos.startsWith('1') || pos.startsWith('2')) return bracket[pos] || null
@@ -84,375 +100,362 @@ function resolvePos(pos, bracket, thirds) {
   return null
 }
 
-// Build entire knockout bracket from group stage results
 function buildKnockout(bracket, bestThirds) {
   const thirds = assignThirds(bestThirds)
 
-  // Resolve all 32 R32 participants
+  // R32 — résoudre les 16 paires
   const r32 = R32_PAIRS.map(p => ({
     ...p,
     teamA: resolvePos(p.posA, bracket, thirds),
     teamB: resolvePos(p.posB, bracket, thirds),
   }))
-
-  // R32 → 16 winners
   const r32W = r32.map(p => pickWinner(p.teamA, p.teamB))
 
-  // R16: adjacent pairs within each quadrant
-  // Pairs [0,1] → R16 M0, [2,3] → R16 M1, [4,5] → R16 M2 ... [14,15] → R16 M7
-  const r16W = []
-  for (let i = 0; i < 8; i++)
-    r16W.push(pickWinner(r32W[i*2], r32W[i*2+1]))
+  // R16 — 8 matchs (paires adjacentes de R32)
+  const r16 = Array.from({ length:8 }, (_, j) => ({
+    teamA: r32W[j*2], teamB: r32W[j*2+1],
+  }))
+  const r16W = r16.map(p => pickWinner(p.teamA, p.teamB))
 
-  // QF: pairs [0,1]→QF1, [2,3]→QF2, [4,5]→QF3, [6,7]→QF4
-  const qfW = []
-  for (let i = 0; i < 4; i++)
-    qfW.push(pickWinner(r16W[i*2], r16W[i*2+1]))
+  // QF — 4 matchs
+  const qf = Array.from({ length:4 }, (_, k) => ({
+    teamA: r16W[k*2], teamB: r16W[k*2+1],
+  }))
+  const qfW = qf.map(p => pickWinner(p.teamA, p.teamB))
 
-  // SF: QF1+QF2 → SF1, QF3+QF4 → SF2
-  const sf1 = pickWinner(qfW[0], qfW[1])
-  const sf2 = pickWinner(qfW[2], qfW[3])
+  // SF — 2 matchs (QF0+QF1 → SF0, QF2+QF3 → SF1)
+  const sf = [
+    { teamA: qfW[0], teamB: qfW[1] },   // SF1 : côté France + England
+    { teamA: qfW[2], teamB: qfW[3] },   // SF2 : côté Spain + Argentina
+  ]
+  const sfW = sf.map(p => pickWinner(p.teamA, p.teamB))
 
-  // Final & Champion — TOUJOURS cohérents
-  const champion = pickWinner(sf1, sf2)
+  // Finale
+  const final = { teamA: sfW[0], teamB: sfW[1] }
+  const champion = pickWinner(final.teamA, final.teamB)
 
-  return { r32, r32W, r16W, qfW, sf1, sf2, champion }
+  return {
+    allRounds: [r32, r16, qf, sf, [final]],
+    r32W, r16W, qfW, sfW, champion,
+  }
 }
 
-// ── UI Components ─────────────────────────────────────────────
-function TeamRow({ team, isWinner, showProb = true }) {
-  if (!team) return (
-    <div style={{ display:'flex', alignItems:'center', gap:7, padding:'5px 0',
-                  opacity:0.35, borderBottom:'1px solid var(--border)' }}>
-      <div style={{ width:24, height:16, borderRadius:3, background:'var(--surface4)' }}/>
-      <span style={{ fontSize:11, color:'var(--text3)' }}>TBD</span>
-    </div>
-  )
+// ── Match Box ─────────────────────────────────────────────────
+function MatchBox({ teamA, teamB, round, idx }) {
+  const w    = pickWinner(teamA, teamB)
+  const rowH = Math.floor((MH - 1) / 2)
+  const top  = matchTopY(round, idx)
+  const left = colX(round)
+
   return (
     <div style={{
-      display:'flex', alignItems:'center', gap:7, padding:'5px 0',
-      opacity: isWinner === false ? 0.40 : 1,
+      position:'absolute', top, left,
+      width:CW, height:MH, zIndex:2,
+      background:'var(--surface2)',
+      border:'1px solid rgba(255,255,255,0.10)',
+      borderRadius:8, overflow:'hidden',
     }}>
-      <Flag team={team} size={16} radius={2} />
-      <span style={{ fontSize:11, fontWeight: isWinner ? 700 : 500,
-                     color: isWinner ? 'var(--text1)' : 'var(--text2)',
-                     flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>
-        {team}
-      </span>
-      {showProb && isWinner && (
-        <span style={{ fontSize:10, color:'var(--gold)', fontWeight:700, flexShrink:0 }}>
-          {(getWinProb(team)*100).toFixed(0)}%
-        </span>
-      )}
+      {[teamA, teamB].map((team, i) => {
+        const isW = !!team && team === w
+        return (
+          <React.Fragment key={i}>
+            <div style={{
+              display:'flex', alignItems:'center', gap:7,
+              padding:'0 9px', height:rowH,
+              background: isW ? 'rgba(245,166,35,0.09)' : 'transparent',
+              opacity: (team && !isW) ? 0.38 : 1,
+            }}>
+              {team
+                ? <Flag team={team} size={13} radius={2} style={{ flexShrink:0 }} />
+                : <div style={{ width:19, height:13, borderRadius:2,
+                                background:'var(--surface4)', flexShrink:0 }} />
+              }
+              <span style={{
+                fontSize:11, fontWeight: isW ? 700 : 400,
+                color: isW ? 'var(--text1)' : 'var(--text2)',
+                flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap',
+              }}>
+                {team || 'TBD'}
+              </span>
+              {isW && team && (
+                <span style={{ fontSize:9, color:'var(--gold)', fontWeight:800, flexShrink:0 }}>
+                  {(winProb(team)*100).toFixed(0)}%
+                </span>
+              )}
+            </div>
+            {i === 0 && (
+              <div style={{ height:1, background:'rgba(255,255,255,0.07)' }} />
+            )}
+          </React.Fragment>
+        )
+      })}
     </div>
   )
 }
 
-function MatchBox({ teamA, teamB, match = '' }) {
-  const winner = pickWinner(teamA, teamB)
+// ── Lignes de connexion SVG ────────────────────────────────────
+function BracketLines() {
+  const segs = []
+  const S  = 'rgba(255,255,255,0.13)'
+  const SW = 1.5
+
+  // R32→R16, R16→QF, QF→SF, SF→Final
+  for (let r = 0; r < 4; r++) {
+    const n   = Math.pow(2, 4 - r)   // 16, 8, 4, 2
+    const xR  = colX(r) + CW          // bord droit match
+    const xM  = xR + LW / 2           // milieu connecteur
+    const xNL = colX(r + 1)           // bord gauche colonne suivante
+
+    for (let i = 0; i < n; i++) {
+      const cy = matchCenterY(r, i)
+
+      // Horizontale : match → milieu
+      segs.push(
+        <line key={`h-${r}-${i}`}
+              x1={xR} y1={cy} x2={xM} y2={cy}
+              stroke={S} strokeWidth={SW} />
+      )
+
+      // Paires : verticale + horizontale sortante
+      if (i % 2 === 0 && i+1 < n) {
+        const cy2  = matchCenterY(r, i+1)
+        const cyMid = (cy + cy2) / 2
+
+        segs.push(
+          <line key={`v-${r}-${i}`}
+                x1={xM} y1={cy} x2={xM} y2={cy2}
+                stroke={S} strokeWidth={SW} />
+        )
+        segs.push(
+          <line key={`hn-${r}-${i}`}
+                x1={xM} y1={cyMid} x2={xNL} y2={cyMid}
+                stroke={S} strokeWidth={SW} />
+        )
+      }
+    }
+  }
+
+  // Connecteur Final → Champion
+  const finalCy = matchCenterY(4, 0)
+  const xFR     = colX(4) + CW
+  segs.push(
+    <line key="champ"
+          x1={xFR} y1={finalCy} x2={xFR + LW} y2={finalCy}
+          stroke="rgba(245,166,35,0.5)" strokeWidth={2} />
+  )
+
+  return (
+    <svg style={{ position:'absolute', top:0, left:0,
+                  pointerEvents:'none', overflow:'visible' }}
+         width={TOTAL_W} height={TOTAL_H}>
+      {segs}
+    </svg>
+  )
+}
+
+// ── Carte Champion (extrémité droite) ─────────────────────────
+function ChampionCard({ team }) {
+  if (!team) return null
+  const cy = matchCenterY(4, 0)
   return (
     <div style={{
-      background:'var(--surface2)', border:'1px solid var(--border)',
-      borderRadius:10, padding:'8px 12px', marginBottom:6, minWidth:180,
+      position:'absolute',
+      top: cy,
+      left: colX(4) + CW + LW,
+      transform:'translateY(-50%)',
+      width: CHAMP_W - 10, zIndex:2,
+      background:'linear-gradient(135deg,rgba(245,166,35,0.22),rgba(245,166,35,0.06))',
+      border:'1px solid rgba(245,166,35,0.52)',
+      borderRadius:12, padding:'10px 10px 12px',
+      textAlign:'center',
     }}>
-      {match && (
-        <div style={{ fontSize:9, color:'var(--text3)', fontWeight:700,
-                      letterSpacing:'0.07em', marginBottom:4 }}>{match}</div>
-      )}
-      <TeamRow team={teamA} isWinner={winner === teamA} />
-      <div style={{ borderBottom:'1px solid var(--border)', margin:'1px 0' }}/>
-      <TeamRow team={teamB} isWinner={winner === teamB} />
-    </div>
-  )
-}
-
-function QuadrantSection({ title, color, pairs, r16Match1, r16Match2, qfWinner }) {
-  return (
-    <div style={{ minWidth:210 }}>
-      <div style={{ fontSize:11, fontWeight:800, color, letterSpacing:'0.08em',
-                    marginBottom:10, paddingBottom:6,
-                    borderBottom:`2px solid ${color}` }}>
-        {title}
+      <div style={{ fontSize:18, marginBottom:4 }}>🏆</div>
+      <div style={{ display:'flex', justifyContent:'center', margin:'4px 0 6px' }}>
+        <Flag team={team} size={28} />
       </div>
-      {/* R32 */}
-      <div style={{ fontSize:9, color:'var(--text3)', fontWeight:700,
-                    letterSpacing:'0.06em', marginBottom:6 }}>ROUND OF 32</div>
-      {pairs.map((p, i) => (
-        <MatchBox key={i} teamA={p.teamA} teamB={p.teamB} match={p.m} />
-      ))}
-      {/* R16 */}
-      <div style={{ fontSize:9, color:'var(--text3)', fontWeight:700,
-                    letterSpacing:'0.06em', marginBottom:6, marginTop:12 }}>ROUND OF 16</div>
-      <MatchBox teamA={r16Match1} teamB={r16Match2} />
-      {/* QF winner */}
-      <div style={{ fontSize:9, color:'var(--text3)', fontWeight:700,
-                    letterSpacing:'0.06em', marginBottom:6, marginTop:12 }}>QUARTER-FINAL</div>
-      {qfWinner ? (
-        <div style={{
-          padding:'10px 14px', borderRadius:10,
-          background:`${color}18`, border:`1px solid ${color}44`,
-          display:'flex', alignItems:'center', gap:8,
-        }}>
-          <Flag team={qfWinner} size={20} />
-          <span style={{ fontSize:12, fontWeight:800, color:'var(--text1)', flex:1 }}>
-            {qfWinner}
-          </span>
-          <span style={{ fontSize:11, color:'var(--gold)', fontWeight:700 }}>
-            {(getWinProb(qfWinner)*100).toFixed(1)}%
-          </span>
-        </div>
-      ) : (
-        <div style={{ padding:'10px 14px', borderRadius:10,
-                      background:'var(--surface3)', border:'1px solid var(--border)',
-                      fontSize:11, color:'var(--text3)' }}>TBD</div>
-      )}
+      <div style={{ fontSize:11, fontWeight:800, color:'var(--text1)',
+                    lineHeight:1.2, marginBottom:4 }}>{team}</div>
+      <div style={{ fontSize:14, fontWeight:900, color:'var(--gold)' }}>
+        {(winProb(team)*100).toFixed(1)}%
+      </div>
     </div>
   )
 }
 
-// ── Main component ─────────────────────────────────────────────
+// ── Composant principal ───────────────────────────────────────
 export default function Knockout() {
-  const isMobile = useIsMobile()
-  const bracket  = predictions.predicted_bracket || {}
+  const bracket    = predictions.predicted_bracket || {}
   const bestThirds = bracket.best_thirds || []
 
-  // ✅ TOUT calculé depuis une seule source → cohérence garantie
-  const { r32, r32W, r16W, qfW, sf1, sf2, champion } = useMemo(
+  const { allRounds, champion, sfW, qfW } = useMemo(
     () => buildKnockout(bracket, bestThirds),
-    [bracket, bestThirds]
+    // eslint-disable-next-line
+    []
   )
 
-  const QUADRANTS = [
-    {
-      title: 'QUADRANT 1', color: '#3b82f6',
-      pairs:    r32.slice(0, 4),
-      r16a:     r32W[0], r16b: r32W[1],
-      r16c:     r32W[2], r16d: r32W[3],
-      qfWinner: qfW[0],
-    },
-    {
-      title: 'QUADRANT 2', color: '#8b5cf6',
-      pairs:    r32.slice(4, 8),
-      r16a:     r32W[4], r16b: r32W[5],
-      r16c:     r32W[6], r16d: r32W[7],
-      qfWinner: qfW[1],
-    },
-    {
-      title: 'QUADRANT 3', color: '#f97316',
-      pairs:    r32.slice(8, 12),
-      r16a:     r32W[8], r16b: r32W[9],
-      r16c:     r32W[10], r16d: r32W[11],
-      qfWinner: qfW[2],
-    },
-    {
-      title: 'QUADRANT 4', color: '#ef4444',
-      pairs:    r32.slice(12, 16),
-      r16a:     r32W[12], r16b: r32W[13],
-      r16c:     r32W[14], r16d: r32W[15],
-      qfWinner: qfW[3],
-    },
+  const ROUND_LABELS = [
+    { txt:'Round of 32',    col:'#3b82f6' },
+    { txt:'Round of 16',    col:'#8b5cf6' },
+    { txt:'Quarter-finals', col:'#f97316' },
+    { txt:'Semi-finals',    col:'#ef4444' },
+    { txt:'Final',          col:'#f59e0b' },
+  ]
+
+  const QF_LABELS = [
+    { label:'QF1', color:'#3b82f6', note:'🇫🇷 side' },
+    { label:'QF2', color:'#8b5cf6', note:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 side' },
+    { label:'QF3', color:'#f97316', note:'🇪🇸 side' },
+    { label:'QF4', color:'#ef4444', note:'🇦🇷 side' },
   ]
 
   return (
     <div className="fade-up">
+
+      {/* Titre */}
       <div style={{ marginBottom:28 }}>
-        <h1 style={{ fontSize: isMobile?22:30, fontWeight:900,
-                     color:'var(--text1)', marginBottom:6 }}>
+        <h1 style={{ fontSize:30, fontWeight:900, color:'var(--text1)', marginBottom:6 }}>
           🏆 Knockout Bracket
         </h1>
         <p style={{ fontSize:14, color:'var(--text2)' }}>
-          Official FIFA 2026 bracket · Matches M73–M88 · 50,000 simulations
+          Official FIFA 2026 structure · Matches M73–M88 · 50,000 Monte Carlo simulations
         </p>
       </div>
 
-      {/* ── CHAMPION ── */}
+      {/* Carte Champion */}
       {champion && (
         <div style={{
-          borderRadius:20, padding: isMobile?'24px':'36px',
-          textAlign:'center', marginBottom:24,
+          borderRadius:20, padding:'28px', textAlign:'center', marginBottom:24,
           background:'linear-gradient(135deg,#1a1000,#2d2000,#1a1000)',
           border:'1px solid rgba(245,166,35,0.45)',
-          boxShadow:'0 0 60px rgba(245,166,35,0.12)',
-        }} className="fade-up">
-          <div style={{ fontSize:40, marginBottom:8,
-                        filter:'drop-shadow(0 0 20px rgba(245,166,35,0.6))' }}>🏆</div>
+          boxShadow:'0 0 60px rgba(245,166,35,0.10)',
+        }}>
+          <div style={{ fontSize:38, marginBottom:6,
+                        filter:'drop-shadow(0 0 18px rgba(245,166,35,0.6))' }}>🏆</div>
           <div style={{ fontSize:11, color:'var(--text3)', fontWeight:700,
                         letterSpacing:'0.12em', marginBottom:12 }}>PREDICTED CHAMPION</div>
-          <div style={{ display:'flex', justifyContent:'center', marginBottom:10 }}>
-            <Flag team={champion} size={isMobile?56:72} />
+          <div style={{ display:'flex', justifyContent:'center', marginBottom:8 }}>
+            <Flag team={champion} size={64} />
           </div>
-          <div style={{ fontSize: isMobile?20:26, fontWeight:900,
-                        color:'var(--text1)', marginBottom:6 }}>{champion}</div>
-          <div style={{ fontSize: isMobile?28:36, fontWeight:900, color:'var(--gold)' }}>
-            {(getWinProb(champion)*100).toFixed(1)}%
+          <div style={{ fontSize:22, fontWeight:900, color:'var(--text1)', marginBottom:4 }}>
+            {champion}
           </div>
-          <div style={{ display:'flex', justifyContent:'center', gap:24, marginTop:14 }}>
-            {[['Final', cp[champion]?.qualify_final],
-              ['SF',    cp[champion]?.qualify_sf],
-              ['QF',    cp[champion]?.qualify_qf]].map(([l,v])=>(
-              <div key={l} style={{ textAlign:'center' }}>
-                <div style={{ fontSize:14, fontWeight:700, color:'var(--gold)' }}>
-                  {((v||0)*100).toFixed(0)}%
+          <div style={{ fontSize:30, fontWeight:900, color:'var(--gold)', marginBottom:16 }}>
+            {(winProb(champion)*100).toFixed(1)}%
+          </div>
+
+          {/* Finalistes */}
+          <div style={{ display:'flex', justifyContent:'center', gap:32 }}>
+            {sfW.map((finalist, i) => (
+              <div key={i} style={{ textAlign:'center', opacity: finalist===champion ? 1 : 0.65 }}>
+                <div style={{ display:'flex', justifyContent:'center', marginBottom:4 }}>
+                  <Flag team={finalist} size={24} />
                 </div>
-                <div style={{ fontSize:11, color:'var(--text3)' }}>{l}</div>
+                <div style={{ fontSize:11, color:'var(--text2)', fontWeight:600, marginBottom:2 }}>
+                  {finalist}
+                </div>
+                <div style={{ fontSize:11, fontWeight:700,
+                              color: finalist===champion ? 'var(--gold)' : 'var(--text3)' }}>
+                  {finalist===champion ? '🏆 Champion' : '🥈 Runner-up'}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Semi-finalistes */}
+          <div style={{ display:'flex', justifyContent:'center', gap:16, marginTop:16,
+                        flexWrap:'wrap' }}>
+            {qfW.map((team, i) => (
+              <div key={i} style={{
+                display:'flex', alignItems:'center', gap:6, padding:'4px 10px',
+                borderRadius:99, background:'rgba(255,255,255,0.05)',
+                border:'1px solid rgba(255,255,255,0.08)',
+              }}>
+                <Flag team={team} size={14} />
+                <span style={{ fontSize:11, color:'var(--text2)' }}>{team}</span>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* ── FINAL ── */}
-      <div className="card" style={{ padding:'20px', marginBottom:20 }}>
-        <div style={{ fontSize:13, fontWeight:800, color:'var(--gold)',
-                      letterSpacing:'0.07em', marginBottom:14 }}>🏆 PREDICTED FINAL</div>
-        <div style={{ display:'grid', gridTemplateColumns:'1fr auto 1fr', gap:12, alignItems:'center' }}>
-          {/* Finalist 1 */}
+      {/* ── Bracket principal ── */}
+      <div className="card" style={{ padding:'20px 16px', overflowX:'auto' }}>
+
+        {/* Labels QF quadrants (sur la gauche du bracket) */}
+        <div style={{ display:'flex', gap:8, marginBottom:10 }}>
+          {QF_LABELS.map((q, i) => (
+            <div key={i} style={{
+              flex:1, textAlign:'center', fontSize:9, fontWeight:700,
+              color:q.color, letterSpacing:'0.07em', padding:'3px 0',
+              borderBottom:`1px solid ${q.color}44`,
+            }}>
+              {q.label} · {q.note}
+            </div>
+          ))}
+        </div>
+
+        {/* Headers des colonnes */}
+        <div style={{ position:'relative', height:HEADER, minWidth:TOTAL_W, marginBottom:8 }}>
+          {ROUND_LABELS.map((r, i) => (
+            <div key={i} style={{
+              position:'absolute', left:colX(i), width:CW,
+              textAlign:'center', fontSize:10, fontWeight:800,
+              color:r.col, letterSpacing:'0.07em', textTransform:'uppercase',
+            }}>
+              {r.txt}
+            </div>
+          ))}
           <div style={{
-            padding:'14px', borderRadius:12, textAlign:'center',
-            background:'rgba(245,166,35,0.08)',
-            border:`1px solid rgba(245,166,35,${sf1===champion?0.4:0.15})`,
+            position:'absolute',
+            left: colX(4) + CW + LW,
+            width: CHAMP_W,
+            textAlign:'center', fontSize:10, fontWeight:800,
+            color:'#f59e0b', letterSpacing:'0.07em',
           }}>
-            <div style={{ display:'flex', justifyContent:'center', marginBottom:8 }}>
-              <Flag team={sf1} size={36} />
-            </div>
-            <div style={{ fontSize:13, fontWeight:800, color:'var(--text1)' }}>{sf1 || 'TBD'}</div>
-            <div style={{ fontSize:16, fontWeight:900,
-                          color: sf1===champion ? 'var(--gold)' : 'var(--text2)', marginTop:4 }}>
-              {sf1 ? `${(getWinProb(sf1)*100).toFixed(1)}%` : ''}
-            </div>
-            {sf1===champion && (
-              <div style={{ fontSize:10, color:'var(--gold)', fontWeight:700, marginTop:4 }}>
-                🏆 CHAMPION
-              </div>
-            )}
-          </div>
-
-          <div style={{ textAlign:'center', fontSize:18, fontWeight:900,
-                        color:'var(--text3)', flexShrink:0 }}>VS</div>
-
-          {/* Finalist 2 */}
-          <div style={{
-            padding:'14px', borderRadius:12, textAlign:'center',
-            background:'rgba(245,166,35,0.08)',
-            border:`1px solid rgba(245,166,35,${sf2===champion?0.4:0.15})`,
-          }}>
-            <div style={{ display:'flex', justifyContent:'center', marginBottom:8 }}>
-              <Flag team={sf2} size={36} />
-            </div>
-            <div style={{ fontSize:13, fontWeight:800, color:'var(--text1)' }}>{sf2 || 'TBD'}</div>
-            <div style={{ fontSize:16, fontWeight:900,
-                          color: sf2===champion ? 'var(--gold)' : 'var(--text2)', marginTop:4 }}>
-              {sf2 ? `${(getWinProb(sf2)*100).toFixed(1)}%` : ''}
-            </div>
-            {sf2===champion && (
-              <div style={{ fontSize:10, color:'var(--gold)', fontWeight:700, marginTop:4 }}>
-                🏆 CHAMPION
-              </div>
-            )}
+            CHAMPION
           </div>
         </div>
-      </div>
 
-      {/* ── SEMI-FINALS ── */}
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:16, marginBottom:20 }}>
-        {[[sf1, qfW[0], qfW[1], 'SEMI-FINAL 1'], [sf2, qfW[2], qfW[3], 'SEMI-FINAL 2']].map(
-          ([winner, ta, tb, label], idx) => (
-          <div key={label} className="card" style={{ padding:'16px' }}>
-            <div style={{ fontSize:10, fontWeight:700, color:'var(--text3)',
-                          letterSpacing:'0.07em', marginBottom:10 }}>{label}</div>
-            {[[ta, winner===ta], [tb, winner===tb]].map(([team, isW], i) => (
-              <div key={i} style={{
-                display:'flex', alignItems:'center', gap:8, padding:'6px 0',
-                borderBottom: i===0?'1px solid var(--border)':'none',
-                opacity: team&&!isW ? 0.45 : 1,
-              }}>
-                <Flag team={team} size={18} />
-                <span style={{ fontSize:12, fontWeight: isW?800:500,
-                               color: isW?'var(--text1)':'var(--text2)', flex:1 }}>
-                  {team || 'TBD'}
-                </span>
-                {isW && (
-                  <span style={{ fontSize:10, color:'var(--gold)', fontWeight:700 }}>
-                    → Final
-                  </span>
-                )}
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
+        {/* Corps du bracket */}
+        <div style={{ position:'relative', height:TOTAL_H, minWidth:TOTAL_W }}>
 
-      {/* ── FULL BRACKET by Quadrant ── */}
-      <div className="card" style={{ padding:'24px', marginBottom:20 }}>
-        <div style={{ fontSize:16, fontWeight:800, color:'var(--text1)', marginBottom:6 }}>
-          📋 Full Bracket — Official FIFA Structure
-        </div>
-        <div style={{ fontSize:12, color:'var(--text2)', marginBottom:20 }}>
-          Official match numbers M73–M88 · QF1+QF2 → SF1 · QF3+QF4 → SF2
-        </div>
-        <div style={{ overflowX:'auto', paddingBottom:8 }}>
-          <div style={{ display:'flex', gap:20, minWidth:'max-content' }}>
-            {QUADRANTS.map(q => (
-              <QuadrantSection
-                key={q.title}
-                title={q.title}
-                color={q.color}
-                pairs={q.pairs}
-                r16Match1={pickWinner(q.r16a, q.r16b)}
-                r16Match2={pickWinner(q.r16c, q.r16d)}
-                qfWinner={q.qfWinner}
+          {/* Zones colorées des quadrants (background guides) */}
+          {[0,1,2,3].map(qi => {
+            const top   = qi * SLOT * 4
+            const h     = SLOT * 4
+            const color = ['#3b82f6','#8b5cf6','#f97316','#ef4444'][qi]
+            return (
+              <div key={qi} style={{
+                position:'absolute', left:0, top, height:h,
+                width:4, borderRadius:99,
+                background: color, opacity:0.35,
+              }} />
+            )
+          })}
+
+          {/* Lignes SVG connecteurs */}
+          <BracketLines />
+
+          {/* Match boxes — toutes les rondes */}
+          {allRounds.map((matches, round) =>
+            matches.map((match, idx) => (
+              <MatchBox
+                key={`r${round}-m${idx}`}
+                teamA={match.teamA}
+                teamB={match.teamB}
+                round={round}
+                idx={idx}
               />
-            ))}
+            ))
+          )}
 
-            {/* Semi-finals + Final column */}
-            <div style={{ minWidth:200, display:'flex', flexDirection:'column', justifyContent:'center' }}>
-              <div style={{ fontSize:11, fontWeight:800, color:'var(--gold)',
-                            letterSpacing:'0.08em', marginBottom:10,
-                            paddingBottom:6, borderBottom:'2px solid var(--gold)' }}>
-                SF → FINAL → 🏆
-              </div>
-
-              {/* SF1 */}
-              <div style={{ fontSize:9, color:'var(--text3)', fontWeight:700,
-                            letterSpacing:'0.06em', marginBottom:6 }}>SEMI-FINAL 1</div>
-              <MatchBox teamA={qfW[0]} teamB={qfW[1]} />
-
-              {/* SF2 */}
-              <div style={{ fontSize:9, color:'var(--text3)', fontWeight:700,
-                            letterSpacing:'0.06em', marginBottom:6, marginTop:12 }}>SEMI-FINAL 2</div>
-              <MatchBox teamA={qfW[2]} teamB={qfW[3]} />
-
-              {/* Final */}
-              <div style={{ fontSize:9, color:'var(--gold)', fontWeight:700,
-                            letterSpacing:'0.06em', marginBottom:6, marginTop:12 }}>FINAL</div>
-              <MatchBox teamA={sf1} teamB={sf2} />
-
-              {/* Champion */}
-              {champion && (
-                <div style={{
-                  marginTop:12, padding:'12px', borderRadius:12, textAlign:'center',
-                  background:'linear-gradient(135deg,rgba(245,166,35,0.2),rgba(245,166,35,0.05))',
-                  border:'1px solid rgba(245,166,35,0.4)',
-                }}>
-                  <div style={{ fontSize:20, marginBottom:4 }}>🏆</div>
-                  <div style={{ display:'flex', justifyContent:'center', marginBottom:6 }}>
-                    <Flag team={champion} size={28} />
-                  </div>
-                  <div style={{ fontSize:12, fontWeight:900, color:'var(--text1)' }}>
-                    {champion}
-                  </div>
-                  <div style={{ fontSize:14, fontWeight:900, color:'var(--gold)', marginTop:4 }}>
-                    {(getWinProb(champion)*100).toFixed(1)}%
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
+          {/* Carte Champion (droite) */}
+          <ChampionCard team={champion} />
         </div>
       </div>
 
-      {/* ── Probability Table ── */}
-      <div className="card" style={{ padding:'24px' }}>
+      {/* Tableau des probabilités */}
+      <div className="card" style={{ padding:'24px', marginTop:20 }}>
         <div style={{ fontSize:16, fontWeight:800, color:'var(--text1)', marginBottom:16 }}>
           📊 Full Probabilities — All Stages
         </div>
@@ -460,7 +463,7 @@ export default function Knockout() {
           <table className="wc-table">
             <thead>
               <tr>
-                {['#','Team','R32','R16','QF','SF','Final','🏆 Title'].map(h=>(
+                {['#','Team','R32','R16','QF','SF','Final','🏆 Title'].map(h => (
                   <th key={h}>{h}</th>
                 ))}
               </tr>
@@ -471,17 +474,17 @@ export default function Knockout() {
                 .slice(0, 24)
                 .map(([team, prob], i) => (
                 <tr key={team}
-                  style={{ background: team===champion ? 'rgba(245,166,35,0.05)' : undefined }}>
+                    style={{ background: team===champion ? 'rgba(245,166,35,0.05)' : undefined }}>
                   <td style={{ color:'var(--text3)', fontWeight:600 }}>{i+1}</td>
                   <td>
                     <div style={{ display:'flex', alignItems:'center', gap:8 }}>
                       <Flag team={team} size={18} />
                       <span style={{ fontWeight:600, color:'var(--text1)' }}>{team}</span>
-                      {team===champion && <span style={{ fontSize:10 }}>🏆</span>}
+                      {team === champion && <span style={{ fontSize:10 }}>🏆</span>}
                     </div>
                   </td>
                   {[prob.qualify_r32, prob.qualify_r16, prob.qualify_qf,
-                    prob.qualify_sf, prob.qualify_final].map((v, j) => (
+                    prob.qualify_sf,  prob.qualify_final].map((v, j) => (
                     <td key={j} style={{ color:'var(--text2)' }}>
                       {((v||0)*100).toFixed(0)}%
                     </td>
