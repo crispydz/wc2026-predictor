@@ -1,150 +1,163 @@
 import React from 'react'
-import { RadarChart, Radar, PolarGrid, PolarAngleAxis, ResponsiveContainer, Legend } from 'recharts'
-import Flag from '../components/Flag'
+import {
+  RadarChart, Radar, PolarGrid, PolarAngleAxis,
+  ResponsiveContainer, Legend,
+} from 'recharts'
+import Flag from './Flag'
 
-const TD = {
-  Argentina:{elo:2055,att:1.85,def:0.60,wc:18,titles:3},
-  France:{elo:2025,att:1.80,def:0.62,wc:16,titles:2},
-  Brazil:{elo:2010,att:1.75,def:0.65,wc:22,titles:5},
-  England:{elo:1985,att:1.65,def:0.70,wc:16,titles:1},
-  Spain:{elo:1940,att:1.65,def:0.68,wc:16,titles:1},
-  Portugal:{elo:1945,att:1.70,def:0.67,wc:9,titles:0},
-  Germany:{elo:1950,att:1.60,def:0.70,wc:20,titles:4},
-  Belgium:{elo:1935,att:1.55,def:0.72,wc:14,titles:0},
-  Netherlands:{elo:1930,att:1.55,def:0.72,wc:11,titles:0},
-  Uruguay:{elo:1895,att:1.40,def:0.76,wc:14,titles:2},
-  Colombia:{elo:1855,att:1.50,def:0.78,wc:6,titles:0},
-  Morocco:{elo:1840,att:1.25,def:0.72,wc:6,titles:0},
-  Senegal:{elo:1840,att:1.30,def:0.80,wc:4,titles:0},
-  Japan:{elo:1865,att:1.35,def:0.80,wc:8,titles:0},
-  Croatia:{elo:1825,att:1.30,def:0.80,wc:8,titles:0},
-  Switzerland:{elo:1790,att:1.20,def:0.80,wc:11,titles:0},
-  Mexico:{elo:1820,att:1.35,def:0.82,wc:17,titles:0},
-  Norway:{elo:1760,att:1.45,def:0.85,wc:3,titles:0},
-  USA:{elo:1805,att:1.30,def:0.85,wc:11,titles:0},
-  Türkiye:{elo:1755,att:1.42,def:0.80,wc:3,titles:0},
-  Austria:{elo:1745,att:1.15,def:0.92,wc:7,titles:0},
-  Ecuador:{elo:1745,att:1.12,def:0.98,wc:4,titles:0},
-  "South Korea":{elo:1755,att:1.20,def:0.93,wc:11,titles:0},
-  Australia:{elo:1745,att:1.10,def:0.95,wc:6,titles:0},
-  Sweden:{elo:1740,att:1.15,def:0.90,wc:12,titles:0},
-  "Ivory Coast":{elo:1720,att:1.18,def:0.97,wc:4,titles:0},
-  Canada:{elo:1715,att:1.15,def:0.90,wc:2,titles:0},
-  Czechia:{elo:1685,att:1.10,def:0.95,wc:9,titles:0},
-  Algeria:{elo:1655,att:1.00,def:1.00,wc:4,titles:0},
-  Tunisia:{elo:1720,att:1.00,def:0.98,wc:6,titles:0},
-  Egypt:{elo:1695,att:1.05,def:0.97,wc:3,titles:0},
-  "South Africa":{elo:1580,att:0.78,def:1.05,wc:3,titles:0},
-  Scotland:{elo:1660,att:1.05,def:1.00,wc:8,titles:0},
-  Ghana:{elo:1675,att:0.95,def:1.02,wc:4,titles:0},
-  Iran:{elo:1660,att:1.05,def:0.95,wc:6,titles:0},
-  "Congo DR":{elo:1665,att:0.90,def:1.05,wc:1,titles:0},
-  Paraguay:{elo:1650,att:0.92,def:1.02,wc:9,titles:0},
-  "Bosnia-Herzegovina":{elo:1650,att:0.90,def:1.05,wc:1,titles:0},
-  "Saudi Arabia":{elo:1695,att:0.95,def:1.02,wc:6,titles:0},
-  Uzbekistan:{elo:1630,att:0.88,def:1.05,wc:0,titles:0},
-  Qatar:{elo:1635,att:0.85,def:1.10,wc:1,titles:0},
-  Iraq:{elo:1605,att:0.85,def:1.08,wc:1,titles:0},
-  Jordan:{elo:1580,att:0.78,def:1.12,wc:0,titles:0},
-  "Cabo Verde":{elo:1585,att:0.80,def:1.10,wc:0,titles:0},
-  Panama:{elo:1575,att:0.75,def:1.15,wc:2,titles:0},
-  "New Zealand":{elo:1535,att:0.70,def:1.20,wc:2,titles:0},
-  Haiti:{elo:1490,att:0.65,def:1.25,wc:1,titles:0},
-  "Curaçao":{elo:1490,att:0.62,def:1.28,wc:0,titles:0},
+const TEAM_STATS = {
+  Argentina:{att:1.85,def:0.60,elo:2055,wc:18,titles:3},
+  France:{att:1.83,def:0.60,elo:2033,wc:16,titles:2},
+  Brazil:{att:1.72,def:0.67,elo:2006,wc:22,titles:5},
+  England:{att:1.65,def:0.70,elo:1985,wc:16,titles:1},
+  Spain:{att:1.65,def:0.68,elo:1940,wc:16,titles:1},
+  Portugal:{att:1.70,def:0.67,elo:1945,wc:9,titles:0},
+  Germany:{att:1.62,def:0.69,elo:1952,wc:20,titles:4},
+  Belgium:{att:1.55,def:0.72,elo:1935,wc:14,titles:0},
+  Netherlands:{att:1.54,def:0.74,elo:1927,wc:11,titles:0},
+  Uruguay:{att:1.40,def:0.76,elo:1895,wc:14,titles:2},
+  Colombia:{att:1.50,def:0.78,elo:1855,wc:6,titles:0},
+  Morocco:{att:1.28,def:0.70,elo:1845,wc:6,titles:0},
+  Senegal:{att:1.27,def:0.83,elo:1831,wc:4,titles:0},
+  Japan:{att:1.38,def:0.78,elo:1869,wc:8,titles:0},
+  Croatia:{att:1.30,def:0.80,elo:1825,wc:8,titles:0},
+  Switzerland:{att:1.20,def:0.80,elo:1790,wc:11,titles:0},
+  Mexico:{att:1.38,def:0.80,elo:1827,wc:17,titles:0},
+  Norway:{att:1.45,def:0.85,elo:1760,wc:3,titles:0},
+  USA:{att:1.32,def:0.84,elo:1814,wc:11,titles:0},
+  Türkiye:{att:1.42,def:0.80,elo:1755,wc:3,titles:0},
+  'South Korea':{att:1.24,def:0.91,elo:1768,wc:11,titles:0},
+  Austria:{att:1.15,def:0.92,elo:1745,wc:7,titles:0},
+  Ecuador:{att:1.10,def:1.00,elo:1729,wc:4,titles:0},
+  Sweden:{att:1.15,def:0.90,elo:1740,wc:12,titles:0},
+  'Ivory Coast':{att:1.24,def:0.94,elo:1737,wc:4,titles:0},
+  Canada:{att:1.14,def:0.91,elo:1713,wc:2,titles:0},
+  Australia:{att:1.10,def:0.95,elo:1745,wc:6,titles:0},
+  Czechia:{att:1.08,def:0.97,elo:1672,wc:9,titles:0},
+  Algeria:{att:1.00,def:1.00,elo:1655,wc:4,titles:0},
+  Tunisia:{att:1.00,def:0.98,elo:1720,wc:6,titles:0},
+  Egypt:{att:1.05,def:0.97,elo:1695,wc:3,titles:0},
+  Scotland:{att:1.06,def:0.99,elo:1664,wc:8,titles:0},
+  Ghana:{att:0.95,def:1.02,elo:1675,wc:4,titles:0},
+  Iran:{att:1.05,def:0.95,elo:1660,wc:6,titles:0},
+  'Congo DR':{att:0.90,def:1.05,elo:1665,wc:1,titles:0},
+  Paraguay:{att:0.90,def:1.05,elo:1641,wc:9,titles:0},
+  'Bosnia-Herzegovina':{att:0.91,def:1.04,elo:1652,wc:1,titles:0},
+  'Saudi Arabia':{att:0.95,def:1.02,elo:1695,wc:6,titles:0},
+  Uzbekistan:{att:0.88,def:1.05,elo:1630,wc:0,titles:0},
+  Qatar:{att:0.85,def:1.10,elo:1635,wc:1,titles:0},
+  Iraq:{att:0.85,def:1.08,elo:1605,wc:1,titles:0},
+  Jordan:{att:0.78,def:1.12,elo:1580,wc:0,titles:0},
+  'Cabo Verde':{att:0.80,def:1.10,elo:1585,wc:0,titles:0},
+  Panama:{att:0.75,def:1.15,elo:1575,wc:2,titles:0},
+  'New Zealand':{att:0.70,def:1.20,elo:1535,wc:2,titles:0},
+  'South Africa':{att:0.76,def:1.07,elo:1573,wc:3,titles:0},
+  Haiti:{att:0.63,def:1.27,elo:1486,wc:1,titles:0},
+  'Curaçao':{att:0.60,def:1.31,elo:1488,wc:0,titles:0},
 }
 
-function norm(v, min, max) { return Math.round(Math.min(100,Math.max(0,(v-min)/(max-min)*100))) }
-
-function getRadar(team) {
-  const d = TD[team] || {elo:1600,att:0.90,def:1.05,wc:2,titles:0}
-  return [
-    { dim:'⚽ Attaque',    val: norm(d.att, 0.60, 1.90) },
-    { dim:'🛡 Défense',    val: norm(1.35-d.def, 0.00, 0.75) },
-    { dim:'📈 ELO',        val: norm(d.elo, 1450, 2100) },
-    { dim:'🏟 Expérience', val: norm(d.wc, 0, 22) },
-    { dim:'🏆 Palmarès',   val: Math.min(100, norm(d.titles, 0, 5)+10) },
-  ]
+function norm(v, min, max) {
+  return Math.round(Math.min(100, Math.max(0, (v-min)/(max-min)*100)))
 }
+
+function getRadarData(team) {
+  const d = TEAM_STATS[team] || { att:0.90, def:1.05, elo:1600, wc:2, titles:0 }
+  return {
+    attack:     norm(d.att, 0.60, 1.90),
+    defense:    norm(1.40-d.def, 0, 0.80),
+    elo:        norm(d.elo, 1450, 2100),
+    experience: norm(d.wc, 0, 22),
+    palmares:   Math.min(100, norm(d.titles, 0, 5) + 10),
+  }
+}
+
+const DIMS = [
+  { key:'attack',     label:'⚽ Attack'     },
+  { key:'defense',    label:'🛡 Defense'    },
+  { key:'elo',        label:'📈 ELO'        },
+  { key:'experience', label:'🏟 Experience' },
+  { key:'palmares',   label:'🏆 Trophies'  },
+]
+
+const CustomTick = ({ x, y, payload }) => (
+  <text x={x} y={y} textAnchor="middle" dominantBaseline="middle"
+    style={{ fontSize:11, fontWeight:600, fill:'var(--text2)' }}>
+    {payload.value}
+  </text>
+)
 
 export default function RadarComparison({ teamA, teamB }) {
-  const ra = getRadar(teamA)
-  const rb = getRadar(teamB)
+  const raA = getRadarData(teamA)
+  const raB = getRadarData(teamB)
 
-  const data = ra.map((d,i) => ({
-    dimension: d.dim,
-    [teamA]: d.val,
-    [teamB]: rb[i].val,
+  const data = DIMS.map(d => ({
+    dimension: d.label,
+    [teamA]: raA[d.key],
+    [teamB]: raB[d.key],
   }))
-
-  const CustomTick = ({ x, y, payload }) => (
-    <text x={x} y={y} textAnchor="middle" dominantBaseline="middle"
-      style={{ fontSize:12, fontWeight:600, fill:'var(--text2)' }}>
-      {payload.value}
-    </text>
-  )
 
   return (
     <div>
       {/* Team headers */}
-      <div style={{ display:'flex', justifyContent:'space-around', marginBottom:16 }}>
-        {[teamA, teamB].map((t,i)=>(
-          <div key={t} style={{ textAlign:'center' }}>
-            <Flag team={t} size={36} />
-            <div style={{ fontSize:14, fontWeight:800, color:'var(--text1)', marginTop:4 }}>{t}</div>
+      <div style={{ display:'flex', justifyContent:'space-around', marginBottom:20 }}>
+        {[teamA, teamB].map((team, i) => (
+          <div key={team} style={{ textAlign:'center' }}>
+            <div style={{ display:'flex', justifyContent:'center', marginBottom:6 }}>
+              <Flag team={team} size={36} />
+            </div>
+            <div style={{ fontSize:14, fontWeight:800, color:'var(--text1)', marginTop:4 }}>
+              {team}
+            </div>
             <div style={{ width:60, height:4, borderRadius:99, margin:'8px auto 0',
-                          background: i===0?'#E8271B':'#0066CC' }}/>
+                          background:i===0?'#E8271B':'#0066CC' }}/>
           </div>
         ))}
       </div>
 
-      <ResponsiveContainer width="100%" height={320}>
-        <RadarChart data={data} margin={{top:10,right:30,bottom:10,left:30}}>
-          <PolarGrid stroke="rgba(255,255,255,0.08)" />
-          <PolarAngleAxis dataKey="dimension" tick={<CustomTick/>} />
+      {/* Radar */}
+      <ResponsiveContainer width="100%" height={300}>
+        <RadarChart data={data} margin={{ top:10, right:30, bottom:10, left:30 }}>
+          <PolarGrid stroke="rgba(255,255,255,0.08)"/>
+          <PolarAngleAxis dataKey="dimension" tick={<CustomTick/>}/>
           <Radar name={teamA} dataKey={teamA}
-            stroke="#E8271B" fill="#E8271B" fillOpacity={0.18} strokeWidth={2.5} dot />
+            stroke="#E8271B" fill="#E8271B" fillOpacity={0.18} strokeWidth={2.5} dot/>
           <Radar name={teamB} dataKey={teamB}
-            stroke="#0066CC" fill="#0066CC" fillOpacity={0.18} strokeWidth={2.5} dot />
-          <Legend
-  formatter={(value) => (
-    <span
-      style={{
-        color: 'var(--text2)',
-        fontSize: 13,
-        fontWeight: 600,
-      }}
-    >
-      {value}
-    </span>
-  )}
-/>
+            stroke="#0066CC" fill="#0066CC" fillOpacity={0.18} strokeWidth={2.5} dot/>
+          <Legend formatter={v => (
+            <span style={{ color:'var(--text2)', fontSize:13, fontWeight:600 }}>
+              {v}
+            </span>
+          )}/>
         </RadarChart>
       </ResponsiveContainer>
 
       {/* Dimension scores */}
-      <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr 1fr 1fr 1fr', gap:8, marginTop:8 }}>
-        {data.map(d => {
-          const winsA = d[teamA] > d[teamB]
-          const tie   = d[teamA] === d[teamB]
+      <div style={{ display:'grid', gridTemplateColumns:'repeat(5,1fr)', gap:8, marginTop:12 }}>
+        {DIMS.map(d => {
+          const vA = raA[d.key], vB = raB[d.key]
+          const winsA = vA > vB
+          const tie   = vA === vB
           return (
-            <div key={d.dimension} style={{ textAlign:'center', padding:'8px',
-                                             background:'var(--surface3)', borderRadius:10 }}>
-              <div style={{ fontSize:11, color:'var(--text3)', marginBottom:6 }}>{d.dimension}</div>
-              <div style={{ display:'flex', justifyContent:'center', alignItems:'center', gap:6 }}>
-                <span style={{ fontSize:15, fontWeight:800,
-                               color: winsA?'#E8271B':tie?'var(--text3)':'var(--text2)' }}>
-                  {d[teamA]}
+            <div key={d.key} style={{
+              textAlign:'center', padding:'8px',
+              background:'var(--surface3)', borderRadius:10,
+            }}>
+              <div style={{ fontSize:10, color:'var(--text3)', marginBottom:5 }}>{d.label}</div>
+              <div style={{ display:'flex', justifyContent:'center', alignItems:'center', gap:5 }}>
+                <span style={{ fontSize:14, fontWeight:800,
+                               color:winsA?'#E8271B':tie?'var(--text3)':'var(--text2)' }}>
+                  {vA}
                 </span>
-                <span style={{ fontSize:11, color:'var(--text3)' }}>vs</span>
-                <span style={{ fontSize:15, fontWeight:800,
-                               color: !winsA&&!tie?'#0066CC':tie?'var(--text3)':'var(--text2)' }}>
-                  {d[teamB]}
+                <span style={{ fontSize:10, color:'var(--text3)' }}>vs</span>
+                <span style={{ fontSize:14, fontWeight:800,
+                               color:!winsA&&!tie?'#0066CC':tie?'var(--text3)':'var(--text2)' }}>
+                  {vB}
                 </span>
               </div>
               {!tie && (
-                <div style={{ fontSize:10, marginTop:4,
-                              color: winsA?'#E8271B':'#0066CC', fontWeight:700 }}>
-                  {winsA?`✓ ${teamA}`:`✓ ${teamB}`}
+                <div style={{ fontSize:9, marginTop:3, fontWeight:700,
+                              color:winsA?'#E8271B':'#0066CC' }}>
+                  {winsA ? `✓ ${teamA.split(' ')[0]}` : `✓ ${teamB.split(' ')[0]}`}
                 </div>
               )}
             </div>

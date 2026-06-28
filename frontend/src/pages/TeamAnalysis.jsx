@@ -4,39 +4,31 @@ import { getChampionProb } from '../data/predictions_static'
 import Flag from '../components/Flag'
 import ProbabilityBar from '../components/ProbabilityBar'
 import { useIsMobile } from '../hooks/useIsMobile'
+import { useLanguage } from '../context/LanguageContext'
 
 const ALL_TEAMS = Object.values(GROUPS).flatMap(g=>g.teams).sort()
-
-const STAGES = [
-  {key:'qualify_r32',  label:'Round of 32', color:'#3b82f6'},
-  {key:'qualify_r16',  label:'Round of 16', color:'#60a5fa'},
-  {key:'qualify_qf',   label:'Quarts',      color:'#8b5cf6'},
-  {key:'qualify_sf',   label:'Demies',      color:'#f97316'},
-  {key:'qualify_final',label:'Finale',      color:'#ef4444'},
-  {key:'win_tournament',label:'🏆 Titre',   color:'#f59e0b'},
-]
 
 function getGroupForTeam(name) {
   return Object.entries(GROUPS).find(([,g])=>g.teams.includes(name))?.[0] || null
 }
 
-function TeamCard({ team }) {
+function TeamCard({ team, stages, t }) {
   const prob = getChampionProb(team)
   const grp  = getGroupForTeam(team)
   return (
     <div className="card" style={{padding:'24px',flex:1,minWidth:0}}>
       <div style={{textAlign:'center',marginBottom:20}}>
         <div style={{display:'flex',justifyContent:'center',marginBottom:12}}>
-          <Flag team={team} size={64} />
+          <Flag team={team} size={64}/>
         </div>
         <div style={{fontSize:20,fontWeight:900,color:'var(--text1)',marginBottom:6}}>{team}</div>
-        <span className="badge badge-gold">Groupe {grp}</span>
+        <span className="badge badge-gold">{t('common.group')} {grp}</span>
       </div>
       {prob && (
         <div style={{display:'flex',flexDirection:'column',gap:12}}>
-          {STAGES.map(s=>(
+          {stages.map(s=>(
             <ProbabilityBar key={s.key} label={s.label}
-              value={prob[s.key]||0} color={s.color} showPct />
+              value={prob[s.key]||0} color={s.color} showPct/>
           ))}
         </div>
       )}
@@ -45,32 +37,43 @@ function TeamCard({ team }) {
 }
 
 export default function TeamAnalysis() {
-  const [teamA, setTeamA] = useState('Argentina')
-  const [teamB, setTeamB] = useState('France')
+  const [teamA,setTeamA] = useState('Argentina')
+  const [teamB,setTeamB] = useState('France')
   const isMobile = useIsMobile()
+  const { t }    = useLanguage()
+
   const probA = getChampionProb(teamA)
   const probB = getChampionProb(teamB)
+
+  const stages = [
+    {key:'qualify_r32',  label:t('teams.r32'),   color:'#3b82f6'},
+    {key:'qualify_r16',  label:t('teams.r16'),   color:'#60a5fa'},
+    {key:'qualify_qf',   label:t('teams.qf'),    color:'#8b5cf6'},
+    {key:'qualify_sf',   label:t('teams.sf'),    color:'#f97316'},
+    {key:'qualify_final',label:t('teams.final'), color:'#ef4444'},
+    {key:'win_tournament',label:t('teams.title2'),color:'#f59e0b'},
+  ]
 
   return (
     <div className="fade-up">
       <div style={{marginBottom:28}}>
-        <h1 style={{fontSize: isMobile?22:30,fontWeight:900,color:'var(--text1)',marginBottom:6}}>
-          🔍 Analyse & Comparaison
+        <h1 style={{fontSize:isMobile?22:30,fontWeight:900,color:'var(--text1)',marginBottom:6}}>
+          {t('teams.title')}
         </h1>
-        <p style={{fontSize:14,color:'var(--text2)'}}>Compare deux équipes par phase</p>
+        <p style={{fontSize:14,color:'var(--text2)'}}>{t('teams.sub')}</p>
       </div>
 
       {/* Selectors */}
       <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:16,marginBottom:20}}>
-        {[[teamA,setTeamA,'🔴 ÉQUIPE A'],[teamB,setTeamB,'🔴 ÉQUIPE B']].map(([t,set,label])=>(
+        {[[teamA,setTeamA,t('teams.A')],[teamB,setTeamB,t('teams.B')]].map(([tm,setTm,label])=>(
           <div key={label}>
             <div style={{fontSize:11,color:'var(--text3)',fontWeight:700,
                          letterSpacing:'0.07em',marginBottom:8}}>{label}</div>
-            <select value={t} onChange={e=>set(e.target.value)}
+            <select value={tm} onChange={e=>setTm(e.target.value)}
               style={{width:'100%',padding:'12px 16px',borderRadius:12,
                      border:'1px solid var(--border)',background:'var(--surface2)',
                      color:'var(--text1)',fontSize:14,fontWeight:600,cursor:'pointer'}}>
-              {ALL_TEAMS.map(tm=><option key={tm} value={tm}>{tm}</option>)}
+              {ALL_TEAMS.map(t2=><option key={t2} value={t2}>{t2}</option>)}
             </select>
           </div>
         ))}
@@ -79,34 +82,34 @@ export default function TeamAnalysis() {
       {/* Comparison */}
       <div style={{
         display:'flex',gap:16,marginBottom:20,alignItems:'stretch',
-        flexDirection: isMobile?'column':'row',
+        flexDirection:isMobile?'column':'row',
       }}>
-        <TeamCard team={teamA} />
+        <TeamCard team={teamA} stages={stages} t={t}/>
         <div style={{display:'flex',alignItems:'center',padding:'0 8px'}}>
-          <div style={{fontSize:18,fontWeight:900,color:'var(--text3)'}}>VS</div>
+          <div style={{fontSize:18,fontWeight:900,color:'var(--text3)'}}>
+            {t('common.vs')}
+          </div>
         </div>
-        <TeamCard team={teamB} />
+        <TeamCard team={teamB} stages={stages} t={t}/>
       </div>
 
-      {/* Head to head bar */}
+      {/* Head to head */}
       {probA && probB && (() => {
-        const total = (probA.win_tournament||0) + (probB.win_tournament||0) || 1
-        const pA = ((probA.win_tournament||0)/total*100)
+        const total=(probA.win_tournament||0)+(probB.win_tournament||0)||1
+        const pA=((probA.win_tournament||0)/total*100)
         return (
           <div className="card" style={{padding:'20px',marginBottom:20}}>
             <div style={{fontSize:13,fontWeight:700,color:'var(--text3)',
                          letterSpacing:'0.06em',marginBottom:12}}>
-              RAPPORT DE FORCE — CHANCES DE TITRE
+              {t('teams.h2h')}
             </div>
             <div style={{display:'flex',alignItems:'center',gap:12}}>
-              <span style={{fontSize:12,fontWeight:700,color:'#60a5fa',width:80,textAlign:'right',
-                            overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>
-                {teamA}
-              </span>
+              <span style={{fontSize:12,fontWeight:700,color:'#60a5fa',width:80,
+                            textAlign:'right',overflow:'hidden',
+                            textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{teamA}</span>
               <div style={{flex:1,height:20,borderRadius:99,overflow:'hidden',display:'flex'}}>
                 <div style={{
-                  width:`${pA}%`,
-                  background:'linear-gradient(90deg,#1d4ed8,#3b82f6)',
+                  width:`${pA}%`,background:'linear-gradient(90deg,#1d4ed8,#3b82f6)',
                   display:'flex',alignItems:'center',justifyContent:'flex-end',
                   paddingRight:8,fontSize:11,fontWeight:800,color:'white',
                   transition:'width 0.8s ease',
@@ -129,24 +132,24 @@ export default function TeamAnalysis() {
       {/* All teams */}
       <div className="card" style={{padding:'24px'}}>
         <div style={{fontSize:16,fontWeight:800,color:'var(--text1)',marginBottom:16}}>
-          📋 Toutes les équipes
+          {t('teams.all')}
         </div>
-        <div style={{display:'grid',gridTemplateColumns: isMobile?'1fr':'1fr 1fr',gap:4}}>
+        <div style={{display:'grid',gridTemplateColumns:isMobile?'1fr':'1fr 1fr',gap:4}}>
           {ALL_TEAMS.map(team=>{
-            const prob = getChampionProb(team)
-            const grp  = getGroupForTeam(team)
-            const pct  = prob ? (prob.win_tournament*100).toFixed(2) : '0.00'
+            const prob=getChampionProb(team)
+            const grp=getGroupForTeam(team)
+            const pct=prob?(prob.win_tournament*100).toFixed(2):'0.00'
             return (
               <div key={team} onClick={()=>setTeamA(team)}
-                style={{display:'flex',alignItems:'center',gap:10,padding:'10px 14px',
-                        borderRadius:10,cursor:'pointer',transition:'background 0.15s'}}
+                style={{display:'flex',alignItems:'center',gap:10,
+                        padding:'10px 14px',borderRadius:10,cursor:'pointer',transition:'background 0.15s'}}
                 onMouseEnter={e=>e.currentTarget.style.background='rgba(255,255,255,0.04)'}
                 onMouseLeave={e=>e.currentTarget.style.background='transparent'}>
-                <Flag team={team} size={20} />
-                <span style={{fontSize:13,fontWeight:600,color:'var(--text1)',flex:1}}>
-                  {team}
+                <Flag team={team} size={20}/>
+                <span style={{fontSize:13,fontWeight:600,color:'var(--text1)',flex:1}}>{team}</span>
+                <span style={{fontSize:11,color:'var(--text3)'}}>
+                  {t('common.group')}.{grp}
                 </span>
-                <span style={{fontSize:11,color:'var(--text3)'}}>Gr.{grp}</span>
                 <span style={{fontSize:12,fontWeight:800,color:'var(--gold)',
                               width:44,textAlign:'right'}}>{pct}%</span>
               </div>

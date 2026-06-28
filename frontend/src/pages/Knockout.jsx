@@ -175,7 +175,7 @@ function MatchBox({ teamA, teamB, round, idx }) {
                 color: isW ? 'var(--text1)' : 'var(--text2)',
                 flex:1, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap',
               }}>
-                {team || 'TBD'}
+                {team || t('ko.tbd')}
               </span>
               {isW && team && (
                 <span style={{ fontSize:9, color:'var(--gold)', fontWeight:800, flexShrink:0 }}>
@@ -294,11 +294,11 @@ export default function Knockout() {
   )
 
   const ROUND_LABELS = [
-    { txt:'Round of 32',    col:'#3b82f6' },
-    { txt:'Round of 16',    col:'#8b5cf6' },
-    { txt:'Quarter-finals', col:'#f97316' },
-    { txt:'Semi-finals',    col:'#ef4444' },
-    { txt:'Final',          col:'#f59e0b' },
+    { txt:t('ko.r32'),    col:'#3b82f6' },
+    { txt:t('ko.r16'),    col:'#8b5cf6' },
+    { txt:t('ko.qf'), col:'#f97316' },
+    { txt:t('ko.sf'),    col:'#ef4444' },
+    { txt:t('ko.final'),          col:'#f59e0b' },
   ]
 
   const QF_LABELS = [
@@ -314,10 +314,10 @@ export default function Knockout() {
       {/* Titre */}
       <div style={{ marginBottom:28 }}>
         <h1 style={{ fontSize:30, fontWeight:900, color:'var(--text1)', marginBottom:6 }}>
-          🏆 Knockout Bracket
+           t('ko.title')
         </h1>
         <p style={{ fontSize:14, color:'var(--text2)' }}>
-          Official FIFA 2026 structure · Matches M73–M88 · 50,000 Monte Carlo simulations
+           t('ko.sub')
         </p>
       </div>
 
@@ -332,7 +332,7 @@ export default function Knockout() {
           <div style={{ fontSize:38, marginBottom:6,
                         filter:'drop-shadow(0 0 18px rgba(245,166,35,0.6))' }}>🏆</div>
           <div style={{ fontSize:11, color:'var(--text3)', fontWeight:700,
-                        letterSpacing:'0.12em', marginBottom:12 }}>PREDICTED CHAMPION</div>
+                        letterSpacing:'0.12em', marginBottom:12 }}>t('ko.champion')</div>
           <div style={{ display:'flex', justifyContent:'center', marginBottom:8 }}>
             <Flag team={champion} size={64} />
           </div>
@@ -457,7 +457,7 @@ export default function Knockout() {
       {/* Tableau des probabilités */}
       <div className="card" style={{ padding:'24px', marginTop:20 }}>
         <div style={{ fontSize:16, fontWeight:800, color:'var(--text1)', marginBottom:16 }}>
-          📊 Full Probabilities — All Stages
+           t('ko.prob')
         </div>
         <div style={{ overflowX:'auto' }}>
           <table className="wc-table">

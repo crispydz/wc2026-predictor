@@ -2,8 +2,9 @@ import React, { useState, useMemo } from 'react'
 import { GROUPS } from '../data/tournament'
 import { getChampionProb, computeMatch } from '../data/predictions_static'
 import Flag from '../components/Flag'
-import { useIsMobile } from '../hooks/useIsMobile'
 import RadarComparison from '../components/RadarComparison'
+import { useIsMobile } from '../hooks/useIsMobile'
+import { useLanguage } from '../context/LanguageContext'
 
 const ALL_TEAMS = Object.values(GROUPS).flatMap(g=>g.teams).sort()
 
@@ -74,24 +75,29 @@ function computeAdjusted(teamA,teamB,injuredA,injuredB){
     if(i>j)hw+=mat[i][j];else if(i===j)d+=mat[i][j];else aw+=mat[i][j]
     if(mat[i][j]>maxP){maxP=mat[i][j];bI=i;bJ=j}
   }
-  const scores=[];for(let i=0;i<N;i++)for(let j=0;j<N;j++)scores.push({s:`${i}-${j}`,p:mat[i][j]})
+  const scores=[];for(let i=0;i<N;i++)for(let j=0;j<N;j++)scores.push({score:`${i}-${j}`,p:mat[i][j],ga:i,gb:j})
   scores.sort((a,b)=>b.p-a.p)
-  const top5=scores.slice(0,5).map(x=>`${x.s} (${(x.p*100).toFixed(1)}%)`)
+  const top5=scores.slice(0,5).map(x=>`${x.score} (${(x.p*100).toFixed(1)}%)`)
   const hwR=Math.round(hw*100),awR=Math.round(aw*100),dR=Math.max(0,100-hwR-awR)
   return{team_a:teamA,team_b:teamB,home_win_prob:hwR/100,draw_prob:dR/100,
     away_win_prob:awR/100,expected_goals_a:Math.round(lamA*100)/100,
-    expected_goals_b:Math.round(lamB*100)/100,most_likely_score:`${bI}-${bJ}`,top5_scores:top5}
+    expected_goals_b:Math.round(lamB*100)/100,most_likely_score:`${bI}-${bJ}`,
+    top5_scores:top5,score_distribution:scores.slice(0,6)}
 }
-
-const TABS=[{id:'proba',label:'📊 Probabilités'},{id:'radar',label:'🕸️ Radar'}]
 
 export default function Simulator(){
   const isMobile=useIsMobile()
+  const { t }=useLanguage()
   const [teamA,setTeamA]=useState('France')
   const [teamB,setTeamB]=useState('Argentina')
   const [injuredA,setInjuredA]=useState([])
   const [injuredB,setInjuredB]=useState([])
   const [tab,setTab]=useState('proba')
+
+  const TABS = [
+    { id:'proba', label: t('sim.analysis') },
+    { id:'radar', label: '🕸️ Radar' },
+  ]
 
   const base=useMemo(()=>computeMatch(teamA,teamB),[teamA,teamB])
   const adjusted=useMemo(()=>computeAdjusted(teamA,teamB,injuredA,injuredB),[teamA,teamB,injuredA,injuredB])
@@ -101,6 +107,7 @@ export default function Simulator(){
   const hw=Math.round(result.home_win_prob*100)
   const aw=Math.round(result.away_win_prob*100)
   const dw=Math.max(0,100-hw-aw)
+
   const probA=getChampionProb(teamA)
   const probB=getChampionProb(teamB)
 
@@ -113,31 +120,31 @@ export default function Simulator(){
     <div style={{flex:1,minWidth:0}}>
       <div style={{fontSize:11,color:'var(--text3)',fontWeight:700,
                    letterSpacing:'0.07em',marginBottom:8}}>
-        {side==='A'?'🔴':'🔵'} ÉQUIPE {side}
+        {side==='A'?t('sim.teamA'):t('sim.teamB')}
       </div>
       <select value={team} onChange={e=>{setTeam(e.target.value);side==='A'?setInjuredA([]):setInjuredB([])}}
         style={{width:'100%',padding:'11px 16px',borderRadius:12,
                border:`1px solid ${color}44`,background:'var(--surface3)',
                color:'var(--text1)',fontSize:14,fontWeight:600,cursor:'pointer'}}>
-        {ALL_TEAMS.map(t=><option key={t} value={t}>{t}</option>)}
+        {ALL_TEAMS.map(t2=><option key={t2} value={t2}>{t2}</option>)}
       </select>
       <div style={{textAlign:'center',marginTop:16}}>
         <div style={{display:'flex',justifyContent:'center',marginBottom:8}}>
-          <Flag team={team} size={isMobile?48:64} />
+          <Flag team={team} size={isMobile?48:64}/>
         </div>
         <div style={{fontSize:isMobile?15:17,fontWeight:900,color:'var(--text1)',marginTop:6}}>
           {team}
         </div>
         {(side==='A'?probA:probB)&&(
           <div style={{fontSize:13,color:'var(--gold)',marginTop:4}}>
-            🏆 {(((side==='A'?probA:probB).win_tournament)*100).toFixed(1)}% de titre
+            {(((side==='A'?probA:probB).win_tournament)*100).toFixed(1)}% {t('sim.title_prob')}
           </div>
         )}
       </div>
       {KEY_PLAYERS[team]&&(
         <div style={{marginTop:16,padding:'12px',background:'var(--surface3)',borderRadius:10}}>
           <div style={{fontSize:11,color:'var(--text3)',fontWeight:700,
-                       letterSpacing:'0.06em',marginBottom:8}}>🩹 BLESSURES</div>
+                       letterSpacing:'0.06em',marginBottom:8}}>{t('sim.injuries')}</div>
           {KEY_PLAYERS[team].map(p=>(
             <label key={p} style={{display:'flex',alignItems:'center',gap:8,
                                    cursor:'pointer',marginBottom:6,fontSize:12}}>
@@ -148,7 +155,7 @@ export default function Simulator(){
                             fontWeight:injured.includes(p)?700:400}}>{p}</span>
               {INJURY_IMPACT[p]&&(
                 <span style={{marginLeft:'auto',fontSize:10,color:'var(--text3)'}}>
-                  -{Math.round(INJURY_IMPACT[p]*100)}% att.
+                  -{Math.round(INJURY_IMPACT[p]*100)}% {t('sim.att')}
                 </span>
               )}
             </label>
@@ -162,11 +169,9 @@ export default function Simulator(){
     <div className="fade-up">
       <div style={{marginBottom:28}}>
         <h1 style={{fontSize:isMobile?22:30,fontWeight:900,color:'var(--text1)',marginBottom:6}}>
-          ⚽ Simulateur de Match
+          {t('sim.title')}
         </h1>
-        <p style={{fontSize:14,color:'var(--text2)'}}>
-          Simule n'importe quel match · Gère les blessures · Analyse détaillée
-        </p>
+        <p style={{fontSize:14,color:'var(--text2)'}}>{t('sim.sub')}</p>
       </div>
 
       {/* Team selectors */}
@@ -178,34 +183,36 @@ export default function Simulator(){
                        alignItems:'center',justifyContent:'center',
                        gap:12,paddingTop:isMobile?0:48,flexShrink:0,
                        width:isMobile?'100%':'auto'}}>
-            <div style={{fontSize:18,fontWeight:900,color:'var(--text3)'}}>VS</div>
+            <div style={{fontSize:18,fontWeight:900,color:'var(--text3)'}}>
+              {t('common.vs')}
+            </div>
             <div style={{padding:'10px 18px',background:'var(--surface3)',
                          borderRadius:12,border:'1px solid var(--border2)',
                          textAlign:'center',flex:isMobile?1:undefined}}>
               <div style={{fontSize:10,color:'var(--text3)',fontWeight:700,
-                           letterSpacing:'0.06em',marginBottom:4}}>SCORE PRÉDIT</div>
+                           letterSpacing:'0.06em',marginBottom:4}}>{t('sim.predicted')}</div>
               <div style={{fontSize:26,fontWeight:900,color:'var(--gold)',fontFamily:'monospace'}}>
                 {result.most_likely_score}
               </div>
             </div>
-            {hasInj&&<div className="badge badge-red" style={{fontSize:10}}>⚠️ Blessures</div>}
+            {hasInj&&<div className="badge badge-red" style={{fontSize:10}}>{t('sim.inj.active')}</div>}
           </div>
           <TeamPanel team={teamB} setTeam={setTeamB} injured={injuredB} side="B" color="var(--blue-light)"/>
         </div>
       </div>
 
-      {/* Blessures impact */}
+      {/* Injury impact */}
       {hasInj&&(
         <div className="card" style={{padding:'20px',marginBottom:20,
                                       border:'1px solid rgba(232,39,27,0.3)',
                                       background:'rgba(232,39,27,0.04)'}}>
           <div style={{fontSize:13,fontWeight:700,color:'var(--red)',marginBottom:12}}>
-            ⚠️ Impact des blessures
+            {t('sim.inj.impact')}
           </div>
           <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:12}}>
             {[
               [`✓ ${teamA}`,base.home_win_prob,adjusted.home_win_prob,'#3b82f6'],
-              ['Match nul',base.draw_prob,adjusted.draw_prob,'#64748b'],
+              [t('sim.draw2'),base.draw_prob,adjusted.draw_prob,'#64748b'],
               [`✓ ${teamB}`,base.away_win_prob,adjusted.away_win_prob,'#ef4444'],
             ].map(([label,before,after,color])=>{
               const diff=Math.round((after-before)*100)
@@ -216,7 +223,7 @@ export default function Simulator(){
                   <div style={{fontSize:20,fontWeight:900,color}}>{Math.round(after*100)}%</div>
                   <div style={{fontSize:11,marginTop:4,fontWeight:700,
                                color:diff>0?'#4ade80':diff<0?'#f87171':'var(--text3)'}}>
-                    {diff>0?`+${diff}`:diff}% vs sans blessures
+                    {diff>0?`+${diff}`:diff}% {t('sim.inj.vs')}
                   </div>
                 </div>
               )
@@ -225,10 +232,10 @@ export default function Simulator(){
         </div>
       )}
 
-      {/* Résultat bar */}
+      {/* Win/draw/loss bar */}
       <div className="card" style={{padding:'20px',marginBottom:20}}>
         <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:10}}>
-          <Flag team={teamA} size={22} />
+          <Flag team={teamA} size={22}/>
           <div style={{flex:1}}>
             <div style={{display:'flex',height:14,borderRadius:99,overflow:'hidden',gap:2}}>
               <div style={{width:`${hw}%`,background:'linear-gradient(90deg,#1A56DB,#3B82F6)',
@@ -241,7 +248,7 @@ export default function Simulator(){
                            alignItems:'center',justifyContent:'center',
                            fontSize:11,fontWeight:700,color:'var(--text2)',
                            transition:'width 0.8s ease',minWidth:dw>10?'auto':0}}>
-                {dw>10?`Nul ${dw}%`:''}
+                {dw>10?`${t('sim.draw')} ${dw}%`:''}
               </div>
               <div style={{width:`${aw}%`,background:'linear-gradient(90deg,#C53030,#E53E3E)',
                            borderRadius:'0 99px 99px 0',display:'flex',alignItems:'center',
@@ -251,11 +258,11 @@ export default function Simulator(){
               </div>
             </div>
           </div>
-          <Flag team={teamB} size={22} />
+          <Flag team={teamB} size={22}/>
         </div>
         <div style={{display:'flex',justifyContent:'space-between',fontSize:13}}>
           <span style={{fontWeight:800,color:'#63B3ED'}}>{teamA} — {hw}%</span>
-          <span style={{color:'var(--text3)'}}>Nul — {dw}%</span>
+          <span style={{color:'var(--text3)'}}>{t('sim.draw')} {dw}%</span>
           <span style={{fontWeight:800,color:'#FC8181'}}>{teamB} — {aw}%</span>
         </div>
         {result.top5_scores&&(
@@ -267,219 +274,88 @@ export default function Simulator(){
       </div>
 
       {/* Tabs */}
-<div style={{display:'flex',gap:8,marginBottom:20}}>
-  {TABS.map(t=>(
-    <button
-      key={t.id}
-      onClick={()=>setTab(t.id)}
-      style={{
-        padding:'10px 20px',
-        borderRadius:10,
-        border:'none',
-        cursor:'pointer',
-        fontSize:13,
-        fontWeight:600,
-        transition:'all .15s',
-        background:tab===t.id
-          ? 'rgba(232,39,27,0.15)'
-          : 'var(--surface2)',
-        color:tab===t.id
-          ? 'var(--red)'
-          : 'var(--text2)',
-        outline:tab===t.id
-          ? '1px solid rgba(232,39,27,0.3)'
-          : '1px solid var(--border)',
-      }}
-    >
-      {t.label}
-    </button>
-  ))}
-</div>
-
-      {/* Tab content */}
-<div className="card" style={{padding:'28px'}}>
-
-  {tab==='proba' && (
-    <>
-      <div style={{
-        fontSize:16,
-        fontWeight:800,
-        color:'var(--text1)',
-        marginBottom:20
-      }}>
-        📊 Analyse détaillée
-      </div>
-
-      <div style={{
-        display:'grid',
-        gridTemplateColumns:'1fr 1fr 1fr',
-        gap:16,
-        marginBottom:24
-      }}>
-        {[
-          {l:`✅ ${teamA} gagne`,v:hw,c:'#3b82f6'},
-          {l:'🤝 Match nul',v:dw,c:'#64748b'},
-          {l:`✅ ${teamB} gagne`,v:aw,c:'#ef4444'},
-        ].map(({l,v,c})=>(
-          <div
-            key={l}
-            style={{
-              textAlign:'center',
-              padding:'20px',
-              borderRadius:14,
-              background:'var(--surface3)',
-              border:'1px solid var(--border)'
-            }}
-          >
-            <div style={{
-              fontSize:11,
-              color:'var(--text2)',
-              marginBottom:10,
-              fontWeight:600
-            }}>
-              {l}
-            </div>
-
-            <div style={{
-              fontSize:isMobile?28:36,
-              fontWeight:900,
-              color:c
-            }}>
-              {v}%
-            </div>
-
-            <div style={{
-              height:4,
-              borderRadius:99,
-              background:'rgba(255,255,255,0.06)',
-              overflow:'hidden',
-              marginTop:10
-            }}>
-              <div
-                style={{
-                  width:`${v}%`,
-                  height:'100%',
-                  background:c,
-                  borderRadius:99,
-                  transition:'width .9s ease'
-                }}
-              />
-            </div>
-          </div>
+      <div style={{display:'flex',gap:8,marginBottom:20}}>
+        {TABS.map(tab2=>(
+          <button key={tab2.id} onClick={()=>setTab(tab2.id)} style={{
+            padding:'10px 20px',borderRadius:10,border:'none',cursor:'pointer',
+            fontSize:13,fontWeight:600,transition:'all 0.15s',
+            background:tab===tab2.id?'rgba(232,39,27,0.15)':'var(--surface2)',
+            color:tab===tab2.id?'var(--red)':'var(--text2)',
+            outline:tab===tab2.id?'1px solid rgba(232,39,27,0.3)':'1px solid var(--border)',
+          }}>{tab2.label}</button>
         ))}
       </div>
 
-      {result.top5_scores && (
-        <div>
-          <div style={{
-            fontSize:14,
-            fontWeight:700,
-            color:'var(--text2)',
-            marginBottom:12
-          }}>
-            ⚽ Scores les plus probables
-          </div>
+      {/* Tab content */}
+      <div className="card" style={{padding:'28px'}}>
 
-          <div style={{
-            display:'grid',
-            gridTemplateColumns:`repeat(${isMobile?3:5},1fr)`,
-            gap:10
-          }}>
-            {result.top5_scores
-              .slice(0,isMobile?3:5)
-              .map((s,i)=>{
-                const [score,prob]=s.split(' ')
-                const [ga,gb]=score.split('-').map(Number)
-
-                const col=
-                  ga>gb
-                    ? '#3b82f6'
-                    : ga<gb
-                    ? '#ef4444'
-                    : '#64748b'
-
-                return(
-                  <div
-                    key={i}
-                    style={{
-                      padding:'14px 8px',
-                      borderRadius:12,
-                      textAlign:'center',
-                      background:i===0
-                        ? 'rgba(245,166,35,0.12)'
-                        : 'var(--surface3)',
-                      border:`1px solid ${
-                        i===0
-                          ? 'rgba(245,166,35,0.35)'
-                          : 'var(--border)'
-                      }`
-                    }}
-                  >
-                    {i===0 && (
-                      <div style={{
-                        fontSize:9,
-                        color:'var(--gold)',
-                        fontWeight:700,
-                        marginBottom:4
-                      }}>
-                        + PROBABLE
-                      </div>
-                    )}
-
-                    <div style={{
-                      fontSize:20,
-                      fontWeight:900,
-                      color:'var(--text1)',
-                      fontFamily:'monospace'
-                    }}>
-                      {score}
-                    </div>
-
-                    <div style={{
-                      fontSize:10,
-                      color:col,
-                      fontWeight:600,
-                      marginTop:4
-                    }}>
-                      {ga>gb?teamA:ga<gb?teamB:'Nul'}
-                    </div>
-
-                    <div style={{
-                      fontSize:12,
-                      fontWeight:700,
-                      color:'var(--gold)',
-                      marginTop:4
-                    }}>
-                      {prob}
-                    </div>
+        {tab==='proba'&&(
+          <div>
+            <div style={{fontSize:16,fontWeight:800,color:'var(--text1)',marginBottom:20}}>
+              {t('sim.analysis')}
+            </div>
+            <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:16,marginBottom:24}}>
+              {[
+                {l:`✅ ${teamA} ${t('sim.wins')}`,v:hw,c:'#3b82f6'},
+                {l:`🤝 ${t('sim.draw2')}`,v:dw,c:'#64748b'},
+                {l:`✅ ${teamB} ${t('sim.wins')}`,v:aw,c:'#ef4444'},
+              ].map(({l,v,c})=>(
+                <div key={l} style={{textAlign:'center',padding:'20px',borderRadius:14,
+                                     background:'var(--surface3)',border:'1px solid var(--border)'}}>
+                  <div style={{fontSize:11,color:'var(--text2)',marginBottom:10,fontWeight:600}}>{l}</div>
+                  <div style={{fontSize:isMobile?28:36,fontWeight:900,color:c}}>{v}%</div>
+                  <div style={{height:4,borderRadius:99,background:'rgba(255,255,255,0.06)',
+                               overflow:'hidden',marginTop:10}}>
+                    <div style={{width:`${v}%`,height:'100%',background:c,borderRadius:99,
+                                 transition:'width 0.9s ease'}}/>
                   </div>
-                )
-              })}
+                </div>
+              ))}
+            </div>
+            {result.score_distribution&&(
+              <div>
+                <div style={{fontSize:14,fontWeight:700,color:'var(--text2)',marginBottom:12}}>
+                  {t('sim.likely')}
+                </div>
+                <div style={{display:'grid',
+                             gridTemplateColumns:`repeat(${isMobile?3:5},1fr)`,gap:10}}>
+                  {result.score_distribution.slice(0,isMobile?3:5).map((s,i)=>{
+                    const col=s.ga>s.gb?'#3b82f6':s.ga<s.gb?'#ef4444':'#64748b'
+                    const label=s.ga>s.gb?teamA:s.ga<s.gb?teamB:t('mc.draw')
+                    return(
+                      <div key={i} style={{
+                        padding:'14px 8px',borderRadius:12,textAlign:'center',
+                        background:i===0?'rgba(245,166,35,0.12)':'var(--surface3)',
+                        border:`1px solid ${i===0?'rgba(245,166,35,0.35)':'var(--border)'}`,
+                      }}>
+                        {i===0&&<div style={{fontSize:9,color:'var(--gold)',fontWeight:700,marginBottom:4}}>
+                          {t('sim.best')}
+                        </div>}
+                        <div style={{fontSize:20,fontWeight:900,color:'var(--text1)',fontFamily:'monospace'}}>
+                          {s.score}
+                        </div>
+                        <div style={{fontSize:10,color:col,fontWeight:600,marginTop:4}}>{label}</div>
+                        <div style={{fontSize:12,fontWeight:700,color:'var(--gold)',marginTop:4}}>
+                          {(s.p*100).toFixed(1)}%
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
+            )}
           </div>
-        </div>
-      )}
-    </>
-  )}
+        )}
 
-  {tab==='radar' && (
-    <div>
-      <div style={{
-        fontSize:16,
-        fontWeight:800,
-        color:'var(--text1)',
-        marginBottom:20
-      }}>
-        🕸️ Comparaison Radar — 5 dimensions
+        {tab==='radar'&&(
+          <div>
+            <div style={{fontSize:16,fontWeight:800,color:'var(--text1)',marginBottom:20}}>
+              🕸️ Radar — 5 dimensions
+            </div>
+            <RadarComparison teamA={teamA} teamB={teamB}/>
+          </div>
+        )}
       </div>
-
-      <RadarComparison
-        teamA={teamA}
-        teamB={teamB}
-      />
     </div>
-  )}
-
-</div>
-</div>
-)
+  )
 }
