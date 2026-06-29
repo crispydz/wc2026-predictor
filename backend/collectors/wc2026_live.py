@@ -118,6 +118,58 @@ KNOWN_RESULTS = [
     {"h":"Argentina",     "a":"Austria",           "hg":3,"ag":0,"date":"2026-06-22","stage":"GROUP"},
     {"h":"Jordan",        "a":"Algeria",           "hg":3,"ag":2,"date":"2026-06-22","stage":"GROUP"},
 
+     # ════════════════════════════════════════════════════
+    # MATCHDAY 3
+    # ═════════════════════════════════════════════════╗  
+
+    # Group A — 24 June
+    {"h":"Mexico",        "a":"South Africa",         "hg":2,"ag":1,"date":"2026-06-24","stage":"GROUP"},
+    {"h":"Czechia",       "a":"South Korea",          "hg":0,"ag":1,"date":"2026-06-24","stage":"GROUP"},
+
+    # Group B — 25 June
+    {"h":"Canada",        "a":"Switzerland",          "hg":1,"ag":2,"date":"2026-06-25","stage":"GROUP"},
+    {"h":"Bosnia and Herzegovina","a":"Qatar",        "hg":3,"ag":1,"date":"2026-06-25","stage":"GROUP"},
+
+    # Group C — 25 June
+    {"h":"Scotland",      "a":"Brazil",               "hg":0,"ag":3,"date":"2026-06-25","stage":"GROUP"},
+    {"h":"Morocco",       "a":"Haiti",                "hg":4,"ag":2,"date":"2026-06-25","stage":"GROUP"},
+
+    # Group D — 26 June
+    {"h":"Turkey",        "a":"United States",        "hg":3,"ag":2,"date":"2026-06-26","stage":"GROUP"},
+    {"h":"Paraguay",      "a":"Australia",            "hg":0,"ag":0,"date":"2026-06-26","stage":"GROUP"},
+
+    # Group E — 26 June
+    {"h":"Ecuador",       "a":"Germany",              "hg":2,"ag":1,"date":"2026-06-26","stage":"GROUP"},
+    {"h":"Curacao",       "a":"Ivory Coast",          "hg":0,"ag":2,"date":"2026-06-26","stage":"GROUP"},
+
+    # Group F — 26 June
+    {"h":"Netherlands",   "a":"Tunisia",              "hg":3,"ag":1,"date":"2026-06-26","stage":"GROUP"},
+    {"h":"Japan",         "a":"Sweden",               "hg":1,"ag":1,"date":"2026-06-26","stage":"GROUP"},
+
+    # Group G — 27 June
+    {"h":"Belgium",       "a":"New Zealand",          "hg":5,"ag":1,"date":"2026-06-27","stage":"GROUP"},
+    {"h":"Egypt",         "a":"Iran",                 "hg":2,"ag":2,"date":"2026-06-27","stage":"GROUP"},
+
+    # Group H — 27 June
+    {"h":"Spain",         "a":"Uruguay",              "hg":1,"ag":0,"date":"2026-06-27","stage":"GROUP"},
+    {"h":"Cape Verde",    "a":"Saudi Arabia",         "hg":0,"ag":0,"date":"2026-06-27","stage":"GROUP"},
+
+    # Group I — 27 June
+    {"h":"France",        "a":"Norway",               "hg":4,"ag":1,"date":"2026-06-27","stage":"GROUP"},
+    {"h":"Senegal",       "a":"Iraq",                 "hg":5,"ag":0,"date":"2026-06-27","stage":"GROUP"},
+
+    # Group J — 27 June
+    {"h":"Argentina",     "a":"Jordan",               "hg":3,"ag":1,"date":"2026-06-27","stage":"GROUP"},
+    {"h":"Austria",       "a":"Algeria",              "hg":3,"ag":3,"date":"2026-06-27","stage":"GROUP"},
+
+    # Group K — 28 June
+    {"h":"Portugal",      "a":"DR Congo",             "hg":1,"ag":1,"date":"2026-06-28","stage":"GROUP"},
+    {"h":"Uzbekistan",    "a":"Colombia",             "hg":1,"ag":3,"date":"2026-06-28","stage":"GROUP"},
+
+    # Group L — 28 June
+    {"h":"England",       "a":"Croatia",              "hg":4,"ag":2,"date":"2026-06-28","stage":"GROUP"},
+    {"h":"Ghana",         "a":"Panama",               "hg":1,"ag":0,"date":"2026-06-28","stage":"GROUP"},
+
 
 
 
