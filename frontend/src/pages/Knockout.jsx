@@ -45,28 +45,36 @@ function pickWinner(a, b) {
 //         QF[0]+QF[1] → SF[0]
 //         paires 8-11 → QF[2] (côté Spain), paires 12-15 → QF[3] (côté Argentina)
 //         QF[2]+QF[3] → SF[1]   |   SF[0] vs SF[1] → Final
-const R32_PAIRS = [
-  // ─── QF1 — France quadrant ────────────────────────────────
-  { m:'M74', posA:'1E',  posB:'3(ABCDF)' },  // 0  Germany vs 3rd
-  { m:'M77', posA:'1I',  posB:'3(CDFGH)' },  // 1  France  vs 3rd ← FRANCE
-  { m:'M73', posA:'2A',  posB:'2B'       },  // 2  2A vs 2B
-  { m:'M75', posA:'1F',  posB:'2C'       },  // 3  1F vs 2C
-  // ─── QF2 — England quadrant ───────────────────────────────
-  { m:'M76', posA:'1C',  posB:'2F'       },  // 4  1C vs 2F
-  { m:'M79', posA:'1A',  posB:'3(CEFHI)' },  // 5  Mexico  vs 3rd
-  { m:'M78', posA:'2E',  posB:'2I'       },  // 6  2E vs 2I
-  { m:'M80', posA:'1L',  posB:'3(EHIJK)' },  // 7  England vs 3rd ← ENGLAND
-  // ─── QF3 — Spain quadrant ─────────────────────────────────
-  { m:'M83', posA:'2K',  posB:'2L'       },  // 8  2K vs 2L
-  { m:'M84', posA:'1H',  posB:'2J'       },  // 9  Spain   vs 2J  ← SPAIN
-  { m:'M81', posA:'1D',  posB:'3(BEFIJ)' },  // 10 USA     vs 3rd
-  { m:'M82', posA:'1G',  posB:'3(AEHIJ)' },  // 11 1G      vs 3rd
-  // ─── QF4 — Argentina quadrant ─────────────────────────────
-  { m:'M85', posA:'1K',  posB:'3(DEIJL)' },  // 12 1K      vs 3rd
-  { m:'M86', posA:'1J',  posB:'2H'       },  // 13 Argentina vs 2H ← ARGENTINA
-  { m:'M87', posA:'1B',  posB:'3(EFGIJ)' },  // 14 1B      vs 3rd
-  { m:'M88', posA:'2D',  posB:'2G'       },  // 15 2D vs 2G
-]
+const QUADRANTS = [
+    {
+      title:'QUADRANT 1', color:'#3b82f6',
+      pairs: r32?.slice(0,4) || [],
+      r16a: r32W?.[0], r16b: r32W?.[1],
+      r16c: r32W?.[2], r16d: r32W?.[3],
+      qfWinner: qfW?.[0],
+    },
+    {
+      title:'QUADRANT 2', color:'#8b5cf6',
+      pairs: r32?.slice(4,8) || [],
+      r16a: r32W?.[4], r16b: r32W?.[5],
+      r16c: r32W?.[6], r16d: r32W?.[7],
+      qfWinner: qfW?.[1],
+    },
+    {
+      title:'QUADRANT 3', color:'#f97316',
+      pairs: r32?.slice(8,12) || [],
+      r16a: r32W?.[8],  r16b: r32W?.[9],
+      r16c: r32W?.[10], r16d: r32W?.[11],
+      qfWinner: qfW?.[2],
+    },
+    {
+      title:'QUADRANT 4', color:'#ef4444',
+      pairs: r32?.slice(12,16) || [],
+      r16a: r32W?.[12], r16b: r32W?.[13],
+      r16c: r32W?.[14], r16d: r32W?.[15],
+      qfWinner: qfW?.[3],
+    },
+  ]
 
 // Groupes éligibles pour chaque slot de 3e place
 const THIRD_SLOTS = {
@@ -287,10 +295,11 @@ export default function Knockout() {
   const bracket    = predictions.predicted_bracket || {}
   const bestThirds = bracket.best_thirds || []
 
-  const { allRounds, champion, sfW, qfW } = useMemo(
+  const {
+    allRounds, r32, r32W, r16W, qfW, sfW, champion,
+  } = useMemo(
     () => buildKnockout(bracket, bestThirds),
-    // eslint-disable-next-line
-    []
+    [JSON.stringify(bracket), JSON.stringify(bestThirds)]
   )
 
   const ROUND_LABELS = [
