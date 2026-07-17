@@ -8,6 +8,10 @@ import Knockout     from './pages/Knockout'
 import TeamAnalysis from './pages/TeamAnalysis'
 import Simulator    from './pages/Simulator'
 
+<button onClick={() => alert('lang: ' + lang)} style={{color:'white',padding:'4px 8px',background:'red'}}>
+  TEST
+</button>
+
 export default function App() {
   const { t } = useLanguage()
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768)
