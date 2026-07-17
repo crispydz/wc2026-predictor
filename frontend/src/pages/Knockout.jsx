@@ -295,12 +295,18 @@ export default function Knockout() {
   const bracket    = predictions.predicted_bracket || {}
   const bestThirds = bracket.best_thirds || []
 
-  const {
-    allRounds, r32, r32W, r16W, qfW, sfW, champion,
-  } = useMemo(
-    () => buildKnockout(bracket, bestThirds),
-    [JSON.stringify(bracket), JSON.stringify(bestThirds)]
-  )
+  const result = useMemo(() => {
+  try { return buildKnockout(bracket, bestThirds) }
+  catch(e) { console.error('Knockout crash:', e); return null }
+}, [])
+
+if (!result) return (
+  <div style={{padding:40,textAlign:'center',color:'var(--text2)'}}>
+    Loading bracket...
+  </div>
+)
+
+const { allRounds, r32, r32W, r16W, qfW, sfW, champion } = result
 
   const ROUND_LABELS = [
     { txt:t('ko.r32'),    col:'#3b82f6' },

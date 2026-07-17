@@ -170,6 +170,64 @@ KNOWN_RESULTS = [
     {"h":"England",       "a":"Croatia",              "hg":4,"ag":2,"date":"2026-06-28","stage":"GROUP"},
     {"h":"Ghana",         "a":"Panama",               "hg":1,"ag":0,"date":"2026-06-28","stage":"GROUP"},
 
+    # ════════════════════════════════════════════════════
+# ROUND OF 32
+# ════════════════════════════════════════════════════
+
+{"h":"South Africa", "a":"Canada",                 "hg":0,"ag":1,"date":"2026-06-28","stage":"R32"},
+
+{"h":"Brazil",       "a":"Japan",                  "hg":2,"ag":1,"date":"2026-06-29","stage":"R32"},
+{"h":"Germany",      "a":"Paraguay",               "hg":1,"ag":1,"date":"2026-06-29","stage":"R32","pens":"3-4"},
+{"h":"Netherlands",  "a":"Morocco",                "hg":1,"ag":1,"date":"2026-06-29","stage":"R32","pens":"2-3"},
+
+{"h":"Ivory Coast",  "a":"Norway",                 "hg":1,"ag":2,"date":"2026-06-30","stage":"R32"},
+{"h":"France",       "a":"Sweden",                 "hg":3,"ag":0,"date":"2026-06-30","stage":"R32"},
+{"h":"Mexico",       "a":"Ecuador",                "hg":2,"ag":0,"date":"2026-06-30","stage":"R32"},
+
+{"h":"England",      "a":"DR Congo",               "hg":2,"ag":1,"date":"2026-07-01","stage":"R32"},
+{"h":"Belgium",      "a":"Senegal",                "hg":3,"ag":2,"date":"2026-07-01","stage":"R32"},
+{"h":"United States","a":"Bosnia and Herzegovina", "hg":2,"ag":0,"date":"2026-07-01","stage":"R32"},
+
+{"h":"Spain",        "a":"Austria",                "hg":3,"ag":0,"date":"2026-07-02","stage":"R32"},
+{"h":"Portugal",     "a":"Croatia",                "hg":2,"ag":1,"date":"2026-07-02","stage":"R32"},
+{"h":"Switzerland",  "a":"Algeria",                "hg":2,"ag":0,"date":"2026-07-02","stage":"R32"},
+
+{"h":"Australia",    "a":"Egypt",                  "hg":1,"ag":1,"date":"2026-07-03","stage":"R32","pens":"2-4"},
+{"h":"Argentina",    "a":"Cape Verde",             "hg":3,"ag":2,"date":"2026-07-03","stage":"R32"},
+{"h":"Colombia",     "a":"Ghana",                  "hg":1,"ag":0,"date":"2026-07-03","stage":"R32"},
+
+# ════════════════════════════════════════════════════
+# ROUND OF 16
+# ════════════════════════════════════════════════════
+
+{"h":"Canada",       "a":"Morocco",                "hg":0,"ag":3,"date":"2026-07-04","stage":"R16"},
+{"h":"Paraguay",     "a":"France",                 "hg":0,"ag":1,"date":"2026-07-04","stage":"R16"},
+
+{"h":"Brazil",       "a":"Norway",                 "hg":1,"ag":2,"date":"2026-07-05","stage":"R16"},
+{"h":"Mexico",       "a":"England",                "hg":2,"ag":3,"date":"2026-07-05","stage":"R16"},
+
+{"h":"Portugal",     "a":"Spain",                  "hg":0,"ag":1,"date":"2026-07-06","stage":"R16"},
+{"h":"United States", "a":"Belgium",                "hg":1,"ag":4,"date":"2026-07-06","stage":"R16"},
+
+{"h":"Argentina",    "a":"Egypt",                  "hg":3,"ag":2,"date":"2026-07-07","stage":"R16"},
+{"h":"Switzerland",  "a":"Colombia",               "hg":0,"ag":0,"date":"2026-07-07","stage":"R16","pens":"4-3"},
+
+# ════════════════════════════════════════════════════
+# QUARTER-FINALS
+# ════════════════════════════════════════════════════
+
+{"h":"France",       "a":"Morocco",                "hg":2,"ag":0,"date":"2026-07-09","stage":"QF"},
+{"h":"Spain",        "a":"Belgium",                "hg":2,"ag":1,"date":"2026-07-10","stage":"QF"},
+{"h":"Norway",       "a":"England",                "hg":1,"ag":2,"date":"2026-07-11","stage":"QF"},
+{"h":"Argentina",    "a":"Switzerland",            "hg":3,"ag":1,"date":"2026-07-11","stage":"QF"},
+
+# ════════════════════════════════════════════════════
+# SEMI-FINALS
+# ════════════════════════════════════════════════════
+
+{"h":"France",       "a":"Spain",                  "hg":0,"ag":2,"date":"2026-07-14","stage":"SF"},
+{"h":"England",      "a":"Argentina",              "hg":1,"ag":2,"date":"2026-07-15","stage":"SF"},
+
 
 
 
